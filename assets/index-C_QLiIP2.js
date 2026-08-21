@@ -1,0 +1,1 @@
+import{r as s,ah as o,ak as u}from"./index-Conycg3g.js";var i=u[" useId ".trim().toString()]||(()=>{}),c=0;function n(a){const[t,r]=s.useState(i());return o(()=>{r(e=>e??String(c++))},[a]),t?`radix-${t}`:""}export{n as u};

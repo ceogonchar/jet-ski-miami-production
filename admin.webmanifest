@@ -1,0 +1,25 @@
+{
+  "name": "Jetski Miami 7 Admin",
+  "short_name": "JetSki Admin",
+  "description": "Admin & operations app for the Jetski Miami 7 team.",
+  "start_url": "/admin",
+  "scope": "/admin",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0B2A3B",
+  "theme_color": "#0B2A3B",
+  "icons": [
+    {
+      "src": "/admin-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/admin-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
