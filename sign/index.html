@@ -1,24 +1,1156 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sign papers · Jet Ski Miami</title>
 <meta name="robots" content="noindex,nofollow">
-<title>Jet Ski Miami · signed papers</title>
 <style>
-:root{--bg:#f3f1ec;--ink:#12151a;--mut:#5e6772;--line:#d8d3c8;--card:#fff;--sea:#0b6b74}
+:root{
+  --bg:#f3f1ec; --ink:#12151a; --mut:#5e6772; --line:#d8d3c8;
+  --card:#fff; --sea:#0b6b74; --sea2:#0a4f56; --hot:#b3400c;
+  --ok:#0d6b39; --warn:#8a5a00; --soft:#eef6f6; --caps:#1a1a1a;
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-.shell{max-width:520px;margin:0 auto;min-height:100dvh;background:var(--card);box-shadow:0 0 0 1px var(--line);padding:22px 18px 48px}
-.chip{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:#eef6f6;color:var(--sea);padding:4px 8px;border-radius:99px}
-h1{font-size:24px;letter-spacing:-.02em;margin:10px 0 8px}
-p{font-size:14.5px;color:var(--mut)}
-a.card{display:block;border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0;text-decoration:none;color:var(--ink);background:#fafafa}
-a.card b{display:block;font-size:16px}
-a.card span{display:block;font-size:12px;color:var(--mut);margin-top:4px;word-break:break-all}
+html,body{margin:0;background:var(--bg);color:var(--ink);
+  font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+button,input,textarea{font:inherit}
+.shell{max-width:430px;margin:0 auto;min-height:100dvh;background:var(--card);
+  box-shadow:0 0 0 1px var(--line),0 18px 50px rgba(16,24,32,.08)}
+.bar{position:sticky;top:0;z-index:20;background:#12151a;color:#fff;padding:10px 14px 12px}
+.bar .who{font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.65}
+.bar .ttl{font-weight:750;font-size:15px;margin-top:2px}
+.bar .meta{display:flex;justify-content:space-between;gap:8px;font-size:12px;margin-top:8px;opacity:.85}
+.prog{height:3px;background:#2a3038;margin-top:10px;border-radius:99px;overflow:hidden}
+.prog>i{display:block;height:100%;background:#3ecad4;width:0;transition:width .25s}
+.pad{padding:16px 16px 110px}
+h1{font-size:22px;line-height:1.2;margin:0 0 8px;letter-spacing:-.02em}
+h2{font-size:17px;margin:22px 0 8px}
+h3{font-size:14px;margin:16px 0 6px;letter-spacing:.02em}
+p,li{font-size:14.5px}
+.mut{color:var(--mut)}
+.chip{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  background:var(--soft);color:var(--sea);padding:4px 8px;border-radius:99px}
+.warnbox{border:2px solid #111;background:#f4f1ea;padding:12px;margin:12px 0}
+.warnbox.hot{border-color:var(--hot);background:#fff4ef}
+.warnbox.ok{border-color:var(--ok);background:#f1faf4}
+.caps{font-weight:800;text-transform:uppercase;font-size:13.5px;line-height:1.4}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.field{margin:8px 0}
+.field label{display:block;font-size:11px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.06em}
+.field .val,.field input{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 10px;background:#fafafa}
+.field input{background:#fff}
+.ro{background:#f6f6f4!important}
+.init{border:1.5px dashed #9aa;border-radius:12px;padding:10px;margin:14px 0;background:#fbfaf7}
+.init.on{border-style:solid;border-color:var(--ok);background:#f1faf4}
+.init b{display:block;font-size:13px;margin-bottom:8px}
+.init canvas,.sig canvas{width:100%;height:88px;background:#fff;border:1px solid var(--line);border-radius:8px;touch-action:none}
+.sig canvas{height:120px}
+.sig{margin:12px 0}
+.tools{display:flex;gap:8px;margin-top:6px}
+.tools button,.ghost{background:none;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:12px}
+.check{display:flex;gap:10px;align-items:flex-start;margin:8px 0;font-size:14px}
+.check input{margin-top:4px;transform:scale(1.15)}
+.topic{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.sticky{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:430px;
+  background:linear-gradient(transparent, #fff 28%);padding:18px 16px 18px;z-index:30}
+.btn{width:100%;border:0;background:var(--sea);color:#fff;border-radius:12px;padding:14px 16px;font-weight:750;font-size:16px}
+.btn:disabled{background:#b7c2c3}
+.btn.sec{background:#12151a}
+.sms{background:#12151a;color:#e8eef4;border-radius:16px;padding:14px 16px;margin:16px 0;font-size:14.5px;line-height:1.45}
+.sms .from{font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.55;margin-bottom:8px}
+.hidden{display:none}
+.done-card{border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0;background:#fafafa}
+.done-card img{max-width:100%;border:1px solid var(--line);border-radius:8px;background:#fff}
+.nav{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 0}
+.nav button{font-size:11px;padding:4px 8px;border-radius:99px}
+.note{font-size:12.5px;color:var(--mut)}
+hr{border:0;border-top:1px solid var(--line);margin:18px 0}
+.cam{position:relative;background:#0b0f14;border-radius:14px;overflow:hidden}
+.cam video{width:100%;display:block;max-height:280px;object-fit:cover}
+.cam .oval{position:absolute;inset:12% 18%;border:2px solid #3ecad4;border-radius:50%;pointer-events:none}
+.kyc-prev{width:100%;border-radius:12px;max-height:200px;object-fit:contain;background:#0b0f14;margin:10px 0}
+.drop{margin:12px 0;border:2px dashed #b7b1a6;border-radius:16px;padding:18px 14px;text-align:center;background:#fafaf7}
+.drop input{display:none}
+.badge{font-size:10px;border-radius:99px;padding:2px 7px}
+.high{background:#e5f7ec;color:var(--ok)}
+.medium{background:#fff4d6;color:var(--warn)}
+.missing{background:#ffe8e0;color:var(--hot)}
+.faces{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.faces figure{margin:0;text-align:center}
+.faces img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;background:#0b0f14;border:2px solid var(--line)}
+.faces figcaption{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin-top:6px}
+.scorebig{font-size:28px;font-weight:800;letter-spacing:-.03em;margin:8px 0 4px}
+.notice{font-weight:800;text-transform:uppercase;font-size:15.5px;line-height:1.35;letter-spacing:.01em}
+.roster{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:10px 0;background:#fafafa}
+.roster .who{font-weight:700}
+.kid{color:var(--hot);font-weight:800}
+.sitebar{max-width:430px;margin:0 auto;background:#050b14;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;font-size:13px}
+.sitebar a{color:#8bd9ff;text-decoration:none;font-weight:650}
+.sitebar .brand{color:#fff;font-weight:800;letter-spacing:-.02em}
 </style>
-</head><body><div class="shell">
-<span class="chip">jet-ski-miami.com/sign</span>
-<h1>Signed papers</h1>
-<p>This is the pack link. Open a booking, then download each signed PDF.</p>
-<a class="card" href="/sign/GTT-STAFF-CHILD/"><b>GTT-STAFF-CHILD</b><span>1 signed PDFs</span></a><a class="card" href="/sign/GTT-TEST-016/"><b>GTT-TEST-016</b><span>5 signed PDFs</span></a><a class="card" href="/sign/GTT-TEST-WORM/"><b>GTT-TEST-WORM</b><span>1 signed PDFs</span></a><a class="card" href="/sign/GTT000226/"><b>GTT000226</b><span>7 signed PDFs</span></a>
-<p>Staff / owner test. Not live for paying guests.</p>
-</div></body></html>
+<script src="/sign/kyc.js"></script>
+</head>
+<body>
+<div class="sitebar">
+  <a class="brand" href="/">Jet Ski Miami 7</a>
+  <nav>
+    <a href="/">Home</a>
+    &nbsp;·&nbsp;
+    <a href="/sign/">Sign papers</a>
+    &nbsp;·&nbsp;
+    <a href="/book">Book</a>
+  </nav>
+</div>
+<div class="shell">
+  <div class="bar">
+    <div class="who">jet-ski-miami.com/sign · staff test</div>
+    <div class="ttl" id="barTitle">Jet Ski Miami</div>
+    <div class="meta"><span id="barStep">Start</span><span id="timer">0:00</span></div>
+    <div class="prog"><i id="barFill"></i></div>
+  </div>
+  <div class="pad" id="app"></div>
+  <div class="sticky" id="sticky"></div>
+</div>
+
+<script>
+const BOOKING = {
+  id: "GTT-TEST-016",
+  date: "Sat, Aug 16, 2026",
+  start: "11:00 AM",
+  arrive: "10:30 AM",
+  back: "12:00 PM",
+  dock: "1819 79th Street Causeway, North Bay Village, FL 33141",
+  price: "$189.00",
+  paid: "$37.80",
+  due: "$151.20",
+  hold: "$38.00",
+  vessel: "Unit 3 · Sea-Doo GTI 130",
+  fl: "FL 2846 JK",
+  hin: "YDV54790A323",
+  cap: "2",
+  map: "GG-MAP-2026-08-A",
+  rate: "RS-2026-08-A",
+  overtime: "$28 / 15 min",
+  fuel: "$25 + pump",
+  recovery: "$180 / hour",
+  damageCap: "$5,000",
+  roster: [],
+};
+const GUEST = {
+  name: "Dmytro Gonchar",
+  dob: "03/17/1992",
+  addr: "1571 Stillwater Drive",
+  city: "Miami Beach",
+  state: "FL",
+  zip: "33141",
+  phone: "786-863-1721",
+  email: "dmytro@test.jetskimiami.local",
+  emName: "Nataly Gonchar",
+  emAddr: "1571 Stillwater Drive, Miami Beach, FL 33141",
+  emPhone: "786-555-0144",
+  emRel: "Spouse",
+  card: "4242",
+};
+
+const D_BLOCKS = [
+  ["1 · Life jacket & wetsuit bottom", "Wear a USCG-approved life jacket at all times. Wear a wetsuit bottom. Regular swimwear does not protect against water forced into the body by the jet nozzle."],
+  ["2 · Lanyard", "Attach the engine cut-off lanyard to your wrist or life jacket before you start, and keep it attached the whole time."],
+  ["3 · Start & stop", "Start: lanyard on, press start. Stop: press stop. Stopping the engine does not stop the craft, and you lose steering."],
+  ["4 · Controls", "Throttle is speed. Handlebars steer by aiming the jet. No thrust = no steering."],
+  ["5 · Throttle to steer", "Do not let go of the throttle when you are trying to steer away from something. You need throttle to turn."],
+  ["6 · Avoid collisions", "Take action early. Jet skis do not have brakes."],
+  ["7 · Scan constantly", "Watch for people, objects and other boats. Be alert when your view is blocked."],
+  ["8 · Ride defensively", "Safe speed. Safe distance. Do not follow directly behind another craft. Do not spray people. No last-second swerves."],
+  ["9 · No wake jumping", "This is not a toy. No jumping wakes or waves. Aggressive turns can cause spinal injury."],
+  ["10 · Intake grate", "Keep hair, straps and clothing away from the intake. Entanglement can drown you."],
+  ["11 · Nobody at the rear", "Do not apply throttle if anyone is at the back or climbing on. The jet can cause severe injury."],
+  ["12 · If it flips", "Swim to the rear, turn it the correct way up, board from the rear. Engine off while anyone is in the water."],
+  ["13 · Our rules & the law", "Do not overload. Do not tow. Follow Florida boating law and the riding-area map."],
+  ["14 · Know these waters", "Stay inside the permitted area. Obey markers. Idle 100 yards at the 79th Street bridge."],
+  ["15 · Other warnings", "Read the labels on the craft. The owner’s manual is at the dock if you want it."],
+];
+const D_EXTRA = [
+  ["P · Pregnancy", "If you are pregnant or might be, you have been warned not to ride. Water-injection injuries can be catastrophic."],
+  ["N · 50-foot no-wake", "No-wake within 50 feet of a pier, dock, ramp, person in the water, or any vessel that is not another jet ski."],
+  ["B · 79th Street bridge", "Idle speed within 100 yards of the 79th Street Causeway bridge. This is the first water you enter from our dock."],
+  ["L · Lanyard — Florida", "Florida law: the lanyard stays on your wrist or jacket. Do not unclip it. Do not hand it to anyone else."],
+];
+const E_TOPICS = [
+  "Operator responsibility: safe operation; avoid careless/reckless/negligent operation; alcohol, drugs and stressors",
+  "Navigation rules: lookout, safe distance, safe speed, defensive operation, give-way, right of way",
+  "Aids to navigation; buoys and other waterway markers",
+  "Special hazards: 300 feet of emergency vessels with lights, or construction vessels with an orange flag",
+  "Weather and water changes, and how to respond",
+  "Waterskiing / similar activity rules — we do not tow; you received this instruction",
+  "Propulsion, steering and stopping of this vessel",
+  "Location and content of manufacturer warning labels",
+  "Location and proper use of safety equipment",
+  "Boarding, falling off, capsize, taking on water, re-boarding, emergencies",
+  "Problems seeing other vessels and being seen",
+  "Dangers of reckless operations such as wake surfing and jumping",
+  "Boating safety ID cards, age and engine requirements",
+  "Photographic identification",
+  "Boating accidents: causes, stay on scene, render aid, report",
+  "Florida divers-down warning device",
+  "Noise, nuisances, environment",
+  "Manatee awareness for this location",
+  "Local ecosystem issues",
+  "Specific operational characteristics of this vessel",
+  "Local waterway: hazards, restricted areas, depths",
+  "PWC rules: PFD, lanyard, whistle, fire extinguisher, minimum age, daylight only",
+  "Care and maintenance / trailering / float plans (N/A — same-day return to our dock)",
+  "Conducted an on-the-water demonstration and check ride",
+];
+
+const CONSENT_TEXT = "Florida law (chapter 668, including s. 668.50) and federal law (the ESIGN Act, 15 U.S.C. §§ 7001–7006) let us do this rental in writing on your phone instead of on paper. To continue you must agree to receive these documents electronically — the rental agreement, each adult’s release, any guardian form, the dock safety card and the FWC card. We will email a copy of whatever you sign to the address on the form, and you can download it from this link. A paper copy is free — ask at the dock or email privacy@jet-ski-miami.com. This consent is for this booking only. You may withdraw it before you sign by closing this page or emailing privacy@jet-ski-miami.com; we will then complete the papers on paper at the dock, which can delay or prevent departure. After you sign, we still keep the signed copy because Florida livery law requires us to. You will need: a current mobile browser (Safari 16 or later, or Chrome 120 or later), JavaScript enabled, and the ability to view a PDF. You must sign your own document. Staff will not sign for you. No adult may sign for another adult.";
+const ESIGN_PAD = "I agree this mark is my electronic signature (Florida ch. 668 and federal ESIGN). I already agreed to receive this record electronically. Paper copy free on request.";
+
+const state = {
+  step: "start",
+  t0: Date.now(),
+  personId: null,
+  initials: {},
+  checks: {},
+  sigs: {},
+  markTimes: {},
+  records: {},
+  ins: null,
+  card: null,
+  sms: false,
+  media: false,
+  wet: null,
+  esign: false,
+  consentAt: null,
+  kyc: { phase:"front", session:null, fields:{}, conf:{}, verdict:null, score:null, faceOnId:false, idFace:"", selfieFace:"", reason:"", docType:"", livenessOk:false, sessionId:null },
+  staffOk: false,
+  staffPin: "",
+  masterInitial: null,
+  masterSig: null,
+};
+function ageYears(dob){
+  const p = String(dob||"").split("/");
+  if(p.length!==3) return 99;
+  const dt = new Date(+p[2], +p[0]-1, +p[1]);
+  const now = new Date();
+  let a = now.getFullYear()-dt.getFullYear();
+  const m = now.getMonth()-dt.getMonth();
+  if(m<0 || (m===0 && now.getDate()<dt.getDate())) a--;
+  return a;
+}
+function roster(){
+  if(BOOKING.roster && BOOKING.roster.length) return BOOKING.roster;
+  return [{name:GUEST.name, dob:GUEST.dob, role:"renter"}];
+}
+function minors(){ return roster().filter(p=>ageYears(p.dob)<18); }
+function hasMinors(){ return minors().length>0; }
+function applyBookingFromUrl(){
+  const m = location.pathname.match(/\/h\/([^/]+)/);
+  const q = new URLSearchParams(location.search);
+  const id = (m && m[1]) || q.get("gtt") || BOOKING.id;
+  BOOKING.id = decodeURIComponent(id);
+  const demo = (q.get("demo") || "").toLowerCase();
+  if(/child/i.test(BOOKING.id) || demo==="child") setScenario("child", true);
+  else if(/pair|two/i.test(BOOKING.id) || demo==="pair") setScenario("pair", true);
+  else if(/GROUP|GTT0/i.test(BOOKING.id) || demo==="group") setScenario("group", true);
+  else setScenario("solo", true);
+}
+function setScenario(kind, silent){
+  if(kind==="child"){
+    BOOKING.roster = [
+      {name:GUEST.name, dob:GUEST.dob, role:"renter"},
+      {name:"Sofia Gonchar", dob:"06/12/2014", role:"minor", relation:"Daughter"},
+    ];
+    if(!silent && !/CHILD/i.test(BOOKING.id)) BOOKING.id = "GTT-STAFF-CHILD";
+  } else if(kind==="pair"){
+    BOOKING.roster = [
+      {name:GUEST.name, dob:GUEST.dob, role:"renter"},
+      {name:"Nataly Gonchar", dob:"05/02/1994", role:"adult"},
+    ];
+    if(!silent && !/PAIR/i.test(BOOKING.id)) BOOKING.id = "GTT-STAFF-PAIR";
+  } else if(kind==="group"){
+    BOOKING.roster = [
+      {name:"Dmytro Gonchar", dob:"03/17/1992", role:"renter"},
+      {name:"Nataly Gonchar", dob:"05/02/1994", role:"adult"},
+      {name:"Alex Petrov", dob:"01/15/1990", role:"adult"},
+      {name:"Maria Petrov", dob:"04/20/1991", role:"adult"},
+      {name:"Ivan Koval", dob:"08/08/1987", role:"adult"},
+      {name:"Oksana Koval", dob:"11/11/1995", role:"adult"},
+      {name:"Sofia Gonchar", dob:"06/12/2014", role:"minor", relation:"Daughter"},
+      {name:"Marco Gonchar", dob:"09/03/2018", role:"minor", relation:"Son"},
+    ];
+    BOOKING.skis = 4;
+    BOOKING.date = "Sat, Aug 22, 2026";
+    BOOKING.start = "11:00 AM";
+    BOOKING.arrive = "10:30 AM";
+    BOOKING.back = "12:00 PM";
+    BOOKING.price = "$649.00";
+    BOOKING.paid = "$129.80";
+    BOOKING.due = "$519.20";
+    BOOKING.hold = "$129.80";
+    if(!silent && !/^GTT/.test(BOOKING.id)) BOOKING.id = "GTT-STAFF-GROUP";
+  } else {
+    BOOKING.roster = [{name:GUEST.name, dob:GUEST.dob, role:"renter"}];
+  }
+  try{ history.replaceState({}, "", "/h/"+encodeURIComponent(BOOKING.id)+location.hash); }catch(e){}
+  if(!silent){ save(); render(); }
+}
+window.setScenario = setScenario;
+const STEPS = ["start","sms","kyc","homeA","homeB","homeC","arrive","dockDR","dockD","ride","dockE","done"];
+const TITLES = {
+  start: "You are the guest",
+  sms: "The text we would send",
+  kyc: "Verify your ID",
+  homeA: "Your rental",
+  homeB: "Your release",
+  homeC: "Your child",
+  arrive: "You arrived at the dock",
+  dockDR: "Wetsuit refusal · you still ride",
+  dockD: "Safety card · tap as we talk",
+  ride: "Check ride",
+  dockE: "After your check ride",
+  done: "That’s the whole path",
+};
+
+function $(id){return document.getElementById(id)}
+function elapsed(){
+  const s = Math.floor((Date.now()-state.t0)/1000);
+  return Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
+}
+function go(step){
+  if(state.step==="kyc" && step!=="kyc" && window.JSMKyc) JSMKyc.stopCamera();
+  state.step = step;
+  location.hash = step;
+  render();
+  window.scrollTo(0,0);
+}
+function mark(k){state.checks[k]=true; save(); render();}
+function save(){ try{ localStorage.setItem("gtt_test_016", JSON.stringify({...state, t0:state.t0})); }catch(e){} }
+function load(){
+  try{
+    const raw = localStorage.getItem("gtt_test_016");
+    if(!raw) return;
+    const o = JSON.parse(raw);
+    Object.assign(state, o);
+    if(!state.t0) state.t0 = Date.now();
+    if(!state.markTimes) state.markTimes = {};
+    if(!state.records) state.records = {};
+  }catch(e){}
+  if(!state.personId){
+    state.personId = (crypto.randomUUID && crypto.randomUUID()) || ("p-"+Date.now());
+    save();
+  }
+}
+function utcIso(ms){
+  return new Date(ms || Date.now()).toISOString().replace(/\.\d{3}Z$/,"Z");
+}
+async function sha256Hex(s){
+  if(!crypto.subtle) return "";
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s || ""));
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+function collectMarks(ids, store, type){
+  return ids.filter(id=>store[id]).map(id=>({
+    field_id: id,
+    mark_type: type,
+    png: store[id],
+    signed_at_utc: state.markTimes[id] || utcIso(),
+  }));
+}
+function instrumentMarks(code){
+  if(code==="HOME-A") return collectMarks(["A1","A2","A3","A4","A5"], state.initials, "initial").concat(collectMarks(["Asig"], state.sigs, "signature"));
+  if(code==="HOME-B") return collectMarks(["B1"], state.initials, "initial").concat(collectMarks(["Bsig"], state.sigs, "signature"));
+  if(code==="HOME-C") return collectMarks(["C1","C2"], state.initials, "initial").concat(collectMarks(["CsigA","CsigB"], state.sigs, "signature"));
+  if(code==="DOCK-DR") return collectMarks(["Wsig"], state.sigs, "signature");
+  if(code==="DOCK-D"){
+    const ids = [];
+    for(let i=1;i<=15;i++) ids.push("D"+i);
+    return collectMarks(ids.concat(["DP","DN","DB","DL"]), state.initials, "initial").concat(collectMarks(["Dsig"], state.sigs, "signature"));
+  }
+  if(code==="DOCK-E") return collectMarks(["Esig","Einstr"], state.sigs, "signature");
+  return [];
+}
+function instrumentFields(code){
+  if(code==="HOME-A") return {ins:state.ins, card:state.card, sms:!!state.sms};
+  if(code==="HOME-B") return {media:!!state.media, age18:!!state.checks.age, self:!!state.checks.self, minors:minors().map(p=>p.name)};
+  if(code==="HOME-C") return {children:minors(), guardian:GUEST.name};
+  if(code==="DOCK-DR") return {wet:"refuse", boards:true};
+  if(code==="DOCK-E"){
+    const boxes={};
+    for(let i=1;i<=24;i++) boxes["E"+i]=!!state.checks["E"+i];
+    return boxes;
+  }
+  return {};
+}
+async function persistInstrument(code){
+  const displayed = (code==="CONSENT") ? CONSENT_TEXT : ($("app").innerText || "");
+  const hash = await sha256Hex(displayed);
+  const payload = {
+    instrument_code: code,
+    booking_id: BOOKING.id,
+    displayed_text: displayed,
+    displayed_text_sha256: hash,
+    who: { person_id: state.personId, name: GUEST.name, role: code==="DOCK-E"?"renter+instructor_test":"renter" },
+    tz_offset_minutes: -new Date().getTimezoneOffset(),
+    marks: instrumentMarks(code),
+    fields: instrumentFields(code),
+    id_session_id: state.kyc.sessionId || state.kyc.session || null,
+    face_score: state.kyc.score,
+    kyc_verdict: state.kyc.verdict,
+    liveness_ok: !!state.kyc.livenessOk,
+    consent_esign_at_utc: state.consentAt,
+    consent_esign_text_sha256: await sha256Hex(CONSENT_TEXT),
+    page_url: location.pathname + "#" + (code==="CONSENT"?"start":state.step),
+  };
+  let data = null;
+  try {
+    const r = await fetch("/api/record", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify(payload)
+    });
+    if (r.ok) data = await r.json();
+  } catch (e) {}
+  if (!data || !data.ok) {
+    const rec_id = utcIso().replace(/[-:]/g,"") + "-" + Math.random().toString(16).slice(2,8);
+    data = {
+      ok: true,
+      record_id: rec_id,
+      instrument_code: code,
+      booking_id: BOOKING.id,
+      signed_at_utc: utcIso(),
+      pdf_url: "/sign/pack.html?b=" + encodeURIComponent(BOOKING.id),
+      pack_url: "/sign/pack.html?b=" + encodeURIComponent(BOOKING.id)
+    };
+    const key = "jsm_pack_" + BOOKING.id;
+    const pack = JSON.parse(localStorage.getItem(key) || "[]");
+    pack.push(Object.assign({}, data, {payload: payload}));
+    localStorage.setItem(key, JSON.stringify(pack));
+  }
+  state.records[code] = data;
+  save();
+  return data;
+}
+async function persistThen(code, next){
+  stampFromMaster();
+  save();
+  const el = $("sticky");
+  if(el) el.innerHTML = `<button class="btn" disabled>Saving ${code}…</button>`;
+  try{
+    await persistInstrument(code);
+    go(next);
+  }catch(err){
+    alert("Could not save "+code+": "+err.message);
+    renderSticky();
+  }
+}
+
+function field(lab, val){
+  return `<div class="field"><label>${lab}</label><div class="val ro">${val}</div></div>`;
+}
+function initialBox(id, text){
+  const on = !!state.initials[id];
+  return `<div class="init ${on?"on":""}">
+    <b>Initial · ${text}</b>
+    <canvas id="cv-${id}" height="88"></canvas>
+    <div class="tools"><button type="button" onclick="clearPad('${id}')">Clear</button>
+    ${on?`<span class="mut">Saved</span>`:""}</div>
+  </div>`;
+}
+function sigBox(id, label){
+  const on = !!state.sigs[id];
+  return `<div class="sig">
+    <b>${label}</b>
+    <canvas id="cv-${id}" height="120"></canvas>
+    <div class="tools"><button type="button" onclick="clearPad('${id}')">Clear</button>
+    ${on?`<span class="mut">Saved</span>`:""}</div>
+  </div>`;
+}
+
+function bindPad(id, store){
+  const cv = $("cv-"+id);
+  if(!cv || cv.dataset.bound) return;
+  cv.dataset.bound = "1";
+  const ctx = cv.getContext("2d");
+  const dpr = window.devicePixelRatio||1;
+  const fit=()=>{
+    const w = cv.clientWidth, h = cv.clientHeight;
+    cv.width = Math.max(1,w*dpr); cv.height = Math.max(1,h*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.lineWidth = 2.2; ctx.lineCap="round"; ctx.strokeStyle="#111";
+    if(store[id]){
+      const img = new Image();
+      img.onload=()=>ctx.drawImage(img,0,0,w,h);
+      img.src=store[id];
+    }
+  };
+  fit();
+  let draw=false, last=null;
+  const pos=e=>{
+    const r=cv.getBoundingClientRect();
+    const t=e.touches?e.touches[0]:e;
+    return {x:t.clientX-r.left,y:t.clientY-r.top};
+  };
+  const start=e=>{draw=true; last=pos(e); e.preventDefault();};
+  const move=e=>{
+    if(!draw) return;
+    const p=pos(e);
+    ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke();
+    last=p; e.preventDefault();
+  };
+  const end=()=>{
+    if(!draw) return;
+    draw=false;
+    store[id]=cv.toDataURL("image/png");
+    state.markTimes[id]=utcIso();
+    if(store===state.initials) state.masterInitial = store[id];
+    if(store===state.sigs && id!=="Einstr") state.masterSig = store[id];
+    stampFromMaster();
+    save();
+    render();
+  };
+  cv.addEventListener("mousedown",start);
+  cv.addEventListener("mousemove",move);
+  cv.addEventListener("mouseup",end);
+  cv.addEventListener("mouseleave",end);
+  cv.addEventListener("touchstart",start,{passive:false});
+  cv.addEventListener("touchmove",move,{passive:false});
+  cv.addEventListener("touchend",end);
+}
+window.clearPad=function(id){
+  delete state.initials[id]; delete state.sigs[id];
+  save(); render();
+};
+function padsOnStep(){
+  const s=state.step;
+  if(s==="homeA") return {init:["A1","A2","A3","A4","A5"], sig:["Asig"]};
+  if(s==="homeB") return {init:["B1"], sig:["Bsig"]};
+  if(s==="homeC") return {init:["C1","C2"], sig:["CsigA","CsigB"]};
+  if(s==="dockDR") return {init:[], sig:["Wsig"]};
+  if(s==="dockD"){
+    const init=[];
+    for(let i=1;i<=15;i++) init.push("D"+i);
+    return {init:init.concat(["DP","DN","DB","DL"]), sig:["Dsig"]};
+  }
+  if(s==="dockE") return {init:[], sig:["Esig"]};
+  return {init:[], sig:[]};
+}
+function stampFromMaster(){
+  const p=padsOnStep();
+  if(state.masterInitial){
+    p.init.forEach(id=>{
+      if(!state.initials[id]){ state.initials[id]=state.masterInitial; state.markTimes[id]=utcIso(); }
+    });
+  }
+  if(state.masterSig){
+    p.sig.forEach(id=>{
+      if(id==="Einstr") return;
+      if(!state.sigs[id]){ state.sigs[id]=state.masterSig; state.markTimes[id]=utcIso(); }
+    });
+  }
+}
+
+function needA(){
+  return ["A1","A2","A3","A4","A5"].every(k=>state.initials[k]) && state.sigs.Asig && state.ins && state.card;
+}
+function needB(){
+  return !!(state.initials.B1 && state.sigs.Bsig && state.checks.age && state.checks.self);
+}
+function needC(){
+  return !!(state.initials.C1 && state.initials.C2 && state.sigs.CsigA && state.sigs.CsigB);
+}
+function needDR(){
+  return !!state.sigs.Wsig;
+}
+function afterB(){
+  persistThen("HOME-B", hasMinors() ? "homeC" : "arrive");
+}
+function needD(){
+  for(let i=1;i<=15;i++) if(!state.initials["D"+i]) return false;
+  return ["DP","DN","DB","DL"].every(k=>state.initials[k]) && state.sigs.Dsig;
+}
+function needE(){
+  for(let i=1;i<=24;i++) if(!state.checks["E"+i]) return false;
+  return state.sigs.Esig && state.sigs.Einstr;
+}
+
+function renderSticky(){
+  const el=$("sticky");
+  const s=state.step;
+  let html="";
+  if(s==="start") html=`<button class="btn" ${state.esign?"":"disabled"} onclick="startWithConsent()">${state.esign?"I’m the guest · start":"Tick the box to sign on this phone"}</button>`;
+  if(s==="sms") html=`<button class="btn" onclick="go('kyc')">Open the link</button>`;
+  if(s==="kyc") html=kycSticky();
+  if(s==="homeA") html=`<button class="btn" ${needA()?"":"disabled"} onclick="persistThen('HOME-A','homeB')">${needA()?"Sign rental · continue to release":"Initial 5 times, answer insurance, sign"}</button>`;
+  if(s==="homeB") html=`<button class="btn" ${needB()?"":"disabled"} onclick="afterB()">${needB()?(hasMinors()?"Sign release · child form next":"Sign release · done at home"):"Initial once, tick both boxes, sign"}</button>`;
+  if(s==="homeC") html=`<button class="btn" ${needC()?"":"disabled"} onclick="persistThen('HOME-C','arrive')">${needC()?"Sign for your child · done at home":"Read the notice, two initials, two signatures"}</button>`;
+  if(s==="arrive") html = state.wet==="wear"
+    ? `<button class="btn" onclick="go('dockD')">Wearing shorts · start briefing</button>`
+    : state.wet==="refuse"
+      ? `<button class="btn" onclick="go('dockDR')">Sign the wetsuit refusal · then briefing</button>`
+      : `<button class="btn" disabled>Choose shorts or refusal</button>`;
+  if(s==="dockDR") html=`<button class="btn" ${needDR()?"":"disabled"} onclick="finishRefusal()">${needDR()?"Save refusal · you still ride":"Sign that you refuse the shorts"}</button>`;
+  if(s==="dockD") html=`<button class="btn" ${needD()?"":"disabled"} onclick="persistThen('DOCK-D','ride')">${needD()?"Save briefing card · check ride":"Initial each card, then sign"}</button>`;
+  if(s==="ride") html=`<button class="btn sec" onclick="go('dockE')">Check ride done · one last signature</button>`;
+  if(s==="dockE") html=`<button class="btn" ${needE()?"":"disabled"} onclick="finish()">${needE()?"Finish the path":"Tick #24 and both of you sign"}</button>`;
+  if(s==="done") html=`<button class="btn sec" onclick="resetAll()">Start over</button>`;
+  el.innerHTML=html;
+}
+
+function finish(){
+  state.finishedAt = elapsed();
+  save();
+  persistThen("DOCK-E","done");
+}
+window.finishRefusal = function(){
+  state.noRide = false;
+  save();
+  persistThen("DOCK-DR","dockD");
+};
+window.startWithConsent = async function(){
+  if(!state.esign) return;
+  state.consentAt = state.consentAt || utcIso();
+  save();
+  const el = $("sticky");
+  if(el) el.innerHTML = `<button class="btn" disabled>Saving consent…</button>`;
+  try{
+    await persistInstrument("CONSENT");
+    go("sms");
+  }catch(err){
+    alert("Could not save consent: "+err.message);
+    renderSticky();
+  }
+};
+window.resetAll=function(){
+  localStorage.removeItem("gtt_test_016");
+  location.hash="";
+  location.reload();
+};
+
+function applyKycFields(fields){
+  if(!fields) return;
+  if(fields.first_name || fields.last_name)
+    GUEST.name = [fields.first_name, fields.last_name].filter(Boolean).join(" ");
+  if(fields.full_name) GUEST.name = fields.full_name;
+  if(fields.dob) GUEST.dob = fields.dob;
+  if(fields.street) GUEST.addr = fields.street;
+  if(fields.city) GUEST.city = fields.city;
+  if(fields.state) GUEST.state = fields.state;
+  if(fields.zip) GUEST.zip = fields.zip;
+  if(fields.address && !fields.street){
+    const parts = String(fields.address).split(",");
+    if(parts[0]) GUEST.addr = parts[0].trim();
+  }
+  state.kyc.fields = fields;
+  save();
+}
+
+function kycApi(){
+  return location.origin;
+}
+function kycSticky(){
+  const k = state.kyc;
+  if(k.verdict==="verified")
+    return `<button class="btn" onclick="kycContinue()">Name looks right · continue</button>`;
+  if(k.verdict==="review")
+    return `<button class="btn sec" onclick="kycContinue()">Staff will check at the dock · continue</button>`;
+  if(k.verdict==="failed")
+    return `<button class="btn sec" onclick="kycStartDidit()">Try Didit again</button><button class="ghost" style="width:100%;margin-top:8px" onclick="kycSkipRehearsal()">Skip ID for this rehearsal</button>`;
+  return `<button class="btn" onclick="kycSkipRehearsal()">Continue — ID checked at the dock</button><button class="ghost" style="width:100%;margin-top:8px" onclick="kycStartDidit()">Verify ID now (Didit)</button>`;
+}
+window.kycSkipRehearsal = function(){
+  state.kyc.verdict = "skipped_test";
+  state.kyc.reason = "Didit key not used. Name stays as the prefilled test guest. Staff must check plastic at the dock.";
+  state.kyc.sessionId = "rehearsal-skip";
+  save();
+  go("homeA");
+};
+window.kycContinue = function(){
+  document.querySelectorAll("input[data-kyc]").forEach((el)=>{
+    if(el.value.trim()) state.kyc.fields[el.dataset.kyc] = el.value.trim();
+  });
+  applyKycFields(state.kyc.fields);
+  go("homeA");
+};
+window.kycStartDidit = async function(){
+  const status = $("kycStatus");
+  if(status) status.textContent = "Opening Didit…";
+  try{
+    const r = await fetch(kycApi()+"/api/didit/start", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({vendor: BOOKING.id})
+    });
+    const data = await r.json();
+    if(data.need_key){
+      location.href = kycApi()+"/";
+      return;
+    }
+    if(!data.ok || !data.url) throw new Error(data.error || "Didit did not start");
+    location.href = data.url;
+  }catch(err){
+    if(status) status.textContent = err.message;
+  }
+};
+
+function kycFieldRows(){
+  const fld = state.kyc.fields || {};
+  const conf = state.kyc.conf || {};
+  const row = (k, lab) => {
+    const c = conf[k] || (fld[k] ? "medium" : "missing");
+    return `<div class="field"><label>${lab}<span class="badge ${c}">${c}</span></label>
+      <input data-kyc="${k}" value="${escHtml(fld[k]||"")}"></div>`;
+  };
+  return row("first_name","First name")+row("last_name","Last name")+row("full_name","Full name")+row("dob","Date of birth")+row("address","Address")+row("expiration","Expires");
+}
+function escHtml(s){ return String(s||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
+
+function viewKyc(){
+  const k = state.kyc;
+  if(k.verdict) return viewKycDone();
+  return `
+  <span class="chip">ID</span>
+  <h1>Photo ID at the dock</h1>
+  <p>For this test, staff still checks the plastic ID at the dock. Tap continue to the rental papers. Names are already filled from the booking.</p>
+  <p id="kycStatus" class="mut"></p>`;
+}
+function viewKycDone(){
+  const k = state.kyc;
+  const box = k.verdict==="verified"?"ok":k.verdict==="failed"?"hot":"";
+  const title = k.verdict==="verified"?"You’re verified":k.verdict==="failed"?"Didit did not approve":"Needs a look";
+  return `
+  <span class="chip">Didit · ${escHtml(k.docType||"ID")}</span>
+  <h1>${title}</h1>
+  <div class="warnbox ${box}">
+    <div class="caps">${escHtml(k.verdict||"")} · ${escHtml(k.status||"")}</div>
+    <p>${escHtml(k.reason||"Name and date of birth came from Didit. Fix a field only if it is wrong.")}</p>
+  </div>
+  ${kycFieldRows()}
+  <p class="note">These values fill the rental and the release.</p>`;
+}
+
+async function pullDidit(sid){
+  const r = await fetch(kycApi()+"/api/didit/result?session_id="+encodeURIComponent(sid));
+  const data = await r.json();
+  if(!data.ok) throw new Error(data.error || "Didit result missing");
+  state.kyc.session = sid;
+  state.kyc.sessionId = sid;
+  state.kyc.verdict = data.verdict;
+  state.kyc.status = data.status || "";
+  state.kyc.score = data.face_score;
+  state.kyc.livenessOk = !!data.liveness_ok;
+  state.kyc.fields = data.fields || {};
+  state.kyc.docType = data.document_type || "";
+  state.kyc.reason = data.verdict==="verified" ? "Didit approved the ID and the live selfie." : (data.error || "");
+  applyKycFields(state.kyc.fields);
+  save();
+}
+
+function viewStart(){
+  return `
+  <span class="chip">Sign your rental papers</span>
+  <h1>You are the guest.</h1>
+  <p>This is the Jet Ski Miami signing page on jet-ski-miami.com. Walk it on your phone the way a customer would.</p>
+  <div class="warnbox">
+    <div class="caps">Booking ${BOOKING.id}</div>
+    <p style="margin:8px 0 0">${BOOKING.date} · 1 jet ski · 1 hour<br>${GUEST.name} · driver and renter · age 34</p>
+  </div>
+  <h2>Electronic signatures and electronic copies</h2>
+  <p>Florida law (chapter 668, including s. 668.50) and federal law (the ESIGN Act, 15 U.S.C. §§ 7001–7006) let us do this rental in writing on your phone instead of on paper.</p>
+  <p><b>To continue you must agree to receive these documents electronically</b> — the rental agreement, each adult’s release, any guardian form, the dock safety card and the FWC card. We will keep a copy of whatever you sign, and you can download it from this link. <b>A paper copy is free</b> — ask at the dock or email privacy@jet-ski-miami.com.</p>
+  <p>This consent is <b>for this booking only</b>. You may withdraw it <b>before you sign</b> by closing this page; we will then complete the papers on paper at the dock, which can delay or prevent departure. After you sign, we still keep the signed copy because Florida livery law requires us to.</p>
+  <p><b>You will need:</b> a current mobile browser (Safari 16 or later, or Chrome 120 or later), JavaScript enabled, and the ability to view a PDF.</p>
+  <p><b>You must sign your own document.</b> Staff will not sign for you. No adult may sign for another adult.</p>
+  <p class="note">Who is on the booking is already filled. There is <b>no</b> “I have no child” box. If a child is on the booking, the guardian form opens by itself. Shorts: wear them, or sign a <b>separate</b> refusal and still ride.</p>
+  <div class="roster">
+    <div class="note">On this booking</div>
+    ${roster().map(p=>`<div class="who">${escHtml(p.name)} · ${escHtml(p.dob)} · ${ageYears(p.dob)<18?`<span class="kid">CHILD ${ageYears(p.dob)}</span>`:ageYears(p.dob)+" yrs"}</div>`).join("")}
+  </div>
+  <h3>Staff test · pick a booking</h3>
+  <p class="note">Same flow the guest gets after the SmartRez order. You sign your own papers. No staff PIN.</p>
+  <div class="nav">
+    <button type="button" class="ghost" onclick="setScenario('solo')">Solo adult</button>
+    <button type="button" class="ghost" onclick="setScenario('child')">Adult + child</button>
+    <button type="button" class="ghost" onclick="setScenario('group')">4 skis · 8 guests</button>
+  </div>
+  <label class="check"><input type="checkbox" ${state.esign?"checked":""} onchange="state.esign=this.checked; if(this.checked){state.consentAt=utcIso();}else{state.consentAt=null;} save();renderSticky()"> I agree to sign electronically and to receive these documents electronically. My mark is my signature, with the same legal effect as ink. I can ask for a free paper copy.</label>
+  `;
+}
+function viewSms(){
+  return `
+  <span class="chip">Confirmation SMS</span>
+  <h1>This is the text.</h1>
+  <div class="sms">
+    <div class="from">Jet Ski Miami · now</div>
+    Jet Ski Miami | ${BOOKING.date} ${BOOKING.start}
+Confirm your ride. Names already filled:
+${location.origin}/h/${BOOKING.id}
+Forward to every adult. Kids don't sign. Arrive ${BOOKING.arrive}.
+    Bring the card you paid with + the same photo ID. Born 1988 or after? Boating card or 30-min test — text a screenshot to 786-863-1721.
+  </div>
+  <p class="mut">You are on the couch. Next: Didit reads the ID and checks the face. After that, the rental papers — already filled.</p>`;
+}
+function viewA(){
+  return `
+  <span class="chip">HOME-A · rental · not a release</span>
+  <h1>Your rental</h1>
+  <p class="mut">This is the commercial contract Florida requires. It does <b>not</b> waive injury claims. That is the next document.</p>
+  ${state.kyc.verdict?`<div class="warnbox ${state.kyc.verdict==="verified"?"ok":""}"><div class="caps">Didit ${state.kyc.verdict}</div><p>Name and date of birth came from Didit. Fix them only if a field is wrong.</p></div>`:""}
+  ${field("Booking", BOOKING.id)}
+  <div class="row">
+    ${field("You", GUEST.name)}
+    ${field("Date of birth", GUEST.dob)}
+  </div>
+  ${field("Address", GUEST.addr+", "+GUEST.city+", "+GUEST.state+" "+GUEST.zip)}
+  <div class="row">${field("Mobile", GUEST.phone)}${field("Email", GUEST.email)}</div>
+  <h3>Emergency contact — not on the water</h3>
+  ${field("Name", GUEST.emName)}
+  ${field("Address", GUEST.emAddr)}
+  <div class="row">${field("Phone", GUEST.emPhone)}${field("Relationship", GUEST.emRel)}</div>
+  <h3>When you leave and when you must be back</h3>
+  <div class="row">${field("Date", BOOKING.date)}${field("Arrive by", BOOKING.arrive)}</div>
+  <div class="row">${field("Start", BOOKING.start)}${field("SCHEDULED RETURN", BOOKING.back)}</div>
+  ${field("Return location", BOOKING.dock)}
+  <h3>Money</h3>
+  <div class="row">${field("Price", BOOKING.price)}${field("Paid now (20%)", BOOKING.paid)}</div>
+  <div class="row">${field("Due at dock", BOOKING.due)}${field("Card hold (not a charge)", BOOKING.hold)}</div>
+  <div class="row">${field("Overtime", BOOKING.overtime)}${field("Max damage / unit", BOOKING.damageCap)}</div>
+  <div class="row">${field("Fuel if we pump", BOOKING.fuel)}${field("Recovery / hour", BOOKING.recovery)}</div>
+  <p class="note">Two different 20%s. The 20% you already paid is the deposit — part of the price. The 20% hold at the dock is a freeze, not a second payment.</p>
+  <h3>The vessel and who is aboard</h3>
+  ${field("Vessel", BOOKING.vessel+" · "+BOOKING.fl+" · "+BOOKING.hin+" · cap "+BOOKING.cap)}
+  <div class="roster">
+    <div class="note">Aboard — from the booking. You cannot add or hide a child here.</div>
+    ${roster().map(p=>`<div class="who">${escHtml(p.name)} · ${escHtml(p.dob)} · ${ageYears(p.dob)<18?`<span class="kid">under 18 · guardian form next</span>`:(p.role==="renter"?"RENTER / DRIVER":"ADULT")}</div>`).join("")}
+  </div>
+  ${initialBox("A1","Everyone aboard is listed. I will not put anyone else on the ski or exceed capacity.")}
+
+  <h2>Who may rent and drive</h2>
+  <div class="warnbox hot">
+    <div class="caps">You will not ride if you do not bring (1) the physical credit card used for this booking and (2) a valid photo ID in the same name. No exceptions.</div>
+    <p>Renter must be 21+, hold a driver’s licence, and present a credit card. A photo of a card on a phone is not the card.</p>
+  </div>
+  ${field("Card you will present (last 4)", "•••• "+GUEST.card)}
+  <p>Anyone born on or after 1 January 1988 who will drive needs a Florida boating safety card or a 90-day temporary certificate. A driver’s licence is not enough. Text a screenshot to 786-863-1721 before you arrive.</p>
+
+  <h2>Hours</h2>
+  <p>Arrive 30 minutes early. Daylight only. Back <b>30 minutes before sunset</b>. No departure before 07:00 or after 19:00. Late arrival is not added to the end.</p>
+
+  <h2>Where you may ride</h2>
+  <p>Only inside the permitted riding area (map ${BOOKING.map}). <b>Haulover / Sunny Isles PWC zone — prohibited. Crandon Park — prohibited. Ocean inlets — no.</b> No-wake within 50 feet of docks, people in the water, or other boats. Idle 100 yards at the 79th Street bridge.</p>
+  <p>No alcohol or drugs. No wake jumping. No racing. Lanyard on. Life jacket on. Engine off while anyone re-boards.</p>
+
+  <div class="warnbox">
+    <div class="caps">The vessel is tracked.</div>
+    <p>GPS records position and speed. It does not record sound or video. It does not drive the ski for you. Do not touch the device.</p>
+  </div>
+
+  <h2>Our insurance does not cover you</h2>
+  <div class="warnbox hot">
+    <div class="caps">Our liability policy insures Gonchar Group, LLC. It does not insure you. You are not an insured or a beneficiary. It does not cover damage to the ski, your medical bills, or a claim someone brings against you.</div>
+    <p>If someone is hurt because of how you ride, the claim is against you.</p>
+  </div>
+
+  ${initialBox("A2","I agree you may freeze 20% of the booking on my credit card as a hold. It is not an extra charge if I bring the ski back with no new damage.")}
+  <p class="note">Ordinary wear is free. New damage is photographed on return. No check-out photos = we do not charge you.</p>
+  ${initialBox("A3","Cancel at least 48 hours ahead: full refund. Cancel later, or miss the slot — including no ID, no credit card, or showing up unfit — no refund.")}
+  <p>If <b>we</b> cancel for weather or safety, unused time is refunded or rescheduled free.</p>
+  ${initialBox("A4","If someone else sues Jet Ski Miami because of how I rode, I cover that claim. This does not cover a claim I bring, or harm you cause by gross negligence or on purpose.")}
+  <div class="warnbox">
+    <p class="note">Read the box. If we go to court about this rental paper, a <b>judge</b> decides. Not a jury.</p>
+    <div class="caps">JURY TRIAL WAIVER — any claim relating to this rental agreement is decided by a judge in Miami-Dade County, Florida, not a jury.</div>
+  </div>
+  ${initialBox("A5","I read the jury box. I agree a judge in Miami-Dade decides disputes about this rental.")}
+
+  <h3>Optional texts — off unless you tick</h3>
+  <label class="check"><input type="checkbox" ${state.sms?"checked":""} onchange="state.sms=this.checked;save()"> Send me later offers by SMS. Not required to rent.</label>
+
+  <h2>Your own liability cover — Florida requires this question</h2>
+  <div class="warnbox">
+    <p>Florida makes us offer you your own liability cover at $500,000 per person / $1,000,000 per event and record your answer. <b>Our policy does not cover you.</b> We do not have a price we can sell you today, so the price line prints <b>[PRICE FROM BROKER]</b> — we will not invent a number. You may buy this yourself from any marine broker. We get nothing if you do. Tick <b>one</b> box.</p>
+    <label class="check"><input type="radio" name="ins" ${state.ins==="accept"?"checked":""} onchange="state.ins='accept';save();renderSticky()"> I ACCEPT — refer me to a marine broker. You still have no policy to sell me today. I may cancel for a full refund.</label>
+    <label class="check"><input type="radio" name="ins" ${state.ins==="decline"?"checked":""} onchange="state.ins='decline';save();renderSticky()"> I DECLINE</label>
+    ${state.ins==="decline"?`<p class="note">Florida’s own wording. We cannot change it.</p>
+    <p class="caps">I UNDERSTAND THAT I AM REFUSING TO PURCHASE A VESSEL RENTAL INSURANCE POLICY FOR COVERAGE OF AT LEAST $500,000 PER PERSON AND $1 MILLION PER EVENT FOR ANY DAMAGE OR INJURIES CAUSED DIRECTLY OR INDIRECTLY BY MY OPERATION OF THE VESSEL. THE VESSEL RENTAL INSURANCE POLICY COVERAGE IS BEING OFFERED TO ME AT THE FOLLOWING PRICE: [PRICE FROM BROKER]. I UNDERSTAND THAT I MAY NOT HAVE OTHER INSURANCE TO COVER ANY DAMAGE OR INJURIES CAUSED DIRECTLY OR INDIRECTLY BY MY OPERATION OF THE VESSEL AND THAT I MAY BE PERSONALLY LIABLE FOR ANY SUCH DAMAGE OR INJURIES DURING THE RENTAL PERIOD.</p>`:""}
+  </div>
+  <h3>Florida boating card</h3>
+  <label class="check"><input type="radio" name="card" ${state.card==="hold"?"checked":""} onchange="state.card='hold';save();renderSticky()"> I hold a Florida boating safety card / temporary certificate</label>
+  <label class="check"><input type="radio" name="card" ${state.card==="no"?"checked":""} onchange="state.card='no';save();renderSticky()"> I do not hold one (I will not drive if born 1988 or after)</label>
+  <p class="caps">I AM SIGNING ONCE. MY SINGLE SIGNATURE BELOW IS MY SIGNATURE TO EACH OF THE FOLLOWING, SEPARATELY AND INDEPENDENTLY: (1) this PERSONAL WATERCRAFT RENTAL AGREEMENT; and (2) the signed written acknowledgment required by section 327.54(7)(b)2., Florida Statutes, including the prescribed statement printed above.</p>
+  <p>I am 21+. Everyone aboard is listed. I understand your insurance does not cover me. This document does not release any injury claim — that is HOME-B, which I sign separately. Draw your initial once; the other initial boxes reuse it. Draw your signature once.</p>
+  ${sigBox("Asig","Sign here · rental + insurance answer")}
+  <p class="note">${ESIGN_PAD}</p>
+  `;
+}
+function viewB(){
+  return `
+  <span class="chip">HOME-B · Participant Release · not the rental</span>
+  <h1>Your release</h1>
+  <p class="mut">A new document. New audit trail. No prices, no return time, no promises about our equipment. Draw your initial and signature once — later boxes reuse them.</p>
+  ${field("Participant", GUEST.name+" · booking "+BOOKING.id)}
+  <div class="warnbox">
+    <h2 style="margin-top:0">PARTICIPANT AGREEMENT, RELEASE AND ASSUMPTION OF RISK</h2>
+    <p>In consideration of the services of GONCHAR GROUP, LLC their agents, owners, officers, volunteers, employees, and all other persons or entities acting in any capacity on their behalf (hereinafter collectively referred to as "GG"), I hereby agree to release, indemnify, and discharge GG, on behalf of myself, my spouse, my children, my parents, my heirs, assigns, personal representative and estate as follows:</p>
+    <p><b>1.</b> I acknowledge that my participation in Jet Ski and Personal Watercraft activities entails known and unanticipated risks that could result in physical or emotional injury, paralysis, death, or damage to myself, to property, or to third parties. I understand that such risks simply cannot be eliminated without jeopardizing the essential qualities of the activity.</p>
+    <p>The risks include, among other things: slips and falls; passengers can be jolted, jarred, bounced, thrown about and otherwise shaken during rides; collision with fixed or movable objects, vehicles, or other watercraft; boat capsize and entrapment; accidental drowning; water craft are slippery when wet and accidents can occur getting in or out; the forces of nature including extremes of weather, lightning and rapid weather changes, exposure to sun, strong wind, cold, large waves, eddies and whirlpools, tidal conditions, surf and currents; exposure to temperature and weather extremes which could cause cold water shock, hypothermia, hyperthermia (heat related illnesses), heat exhaustion, sunburn, dehydration; exposure to potentially dangerous wild animals, insect bites, and hazardous plant life; aggressive and/or poisonous marine life; major injuries are a risk as are sprains, strains, scratches, bruises, abrasions, cuts, lacerations, broken bones, fractures, musculoskeletal injuries including head, neck, and back injuries; injuries to internal organs; loss of fingers or other appendages; equipment failure and/or operator error; the negligence of other visitors, participants, or other persons who may be present; improper lifting or carrying; my own physical condition, and the physical exertion associated with this activity; being lost or separated from their guides or companions; transmissible pathogen or disease; traveling to and from activity locations raises the possibility of any manner of transportation accidents; accidents or illness can occur in remote places without medical facilities and emergency treatment or other services rendered.</p>
+    <p><b>2.</b> I expressly agree and promise to accept and assume all of the risks existing in this activity. My participation in this activity is purely voluntary, and I elect to participate in spite of the risks. Additionally, I agree to wear a U.S. Coast Guard approved personal flotation device (life jacket) and wetsuit bottom (or clothing that provides equivalent protection) while participating in this activity.</p>
+    <p><b>3.</b> I hereby voluntarily release, forever discharge, and agree to indemnify and hold harmless GG from any and all claims, demands, or causes of action, which are in any way connected with my participation in this activity or my use GG’s equipment or facilities, including any such claims which allege negligent acts or omissions of GG.</p>
+    <p><b>4.</b> Should GG or anyone acting on their behalf, be required to incur lawyer's fees and costs to enforce this agreement, I agree to indemnify and hold them harmless for all such fees and costs.</p>
+    <p><b>5.</b> I certify that I have adequate insurance to cover any injury or damage I may cause or suffer while participating, or else I agree to bear the costs of such injury or damage myself. I further certify that I am willing to assume the risk of any medical or physical condition I may have.</p>
+    <p><b>6.</b> In the event that I file a lawsuit against GG, I agree to do so solely in the state of Florida and I further agree that the substantive law of that state shall apply in that action without regard to the conflict of law rules of that that state. I agree that if any portion of this agreement is found to be void or unenforceable, the remaining document shall remain in full force and effect.</p>
+    <p><b>By signing this document, I acknowledge that if anyone is hurt or property is damaged during my participation in this activity, I may be found by a court of law to have waived my right to maintain a lawsuit against GG on the basis of any claim from which I have released them herein. I also agree that this document is valid for subsequent visits and participation at GG. I have had sufficient opportunity to read this entire document. I have read and understood it, and I agree to be bound by its terms.</b></p>
+  </div>
+  <div class="row">${field("Print name", GUEST.name)}${field("DOB", GUEST.dob)}</div>
+  ${field("Phone", GUEST.phone)}
+  ${field("Address", GUEST.addr+", "+GUEST.city+", "+GUEST.state+" "+GUEST.zip)}
+  ${field("Email", GUEST.email)}
+  <h2>Supplemental Rider — Gonchar Group, LLC</h2>
+  <p><b>R0.</b> The document above is the form required by the Owner's insurance carrier and is complete in itself. This Supplemental Rider is a separate and additional agreement. It adds to, and does not amend, limit, qualify or replace, any part of the form above.</p>
+  <p><b>R1.</b> "OWNER" means GONCHAR GROUP, LLC, including JET SKI MIAMI, jet-ski-miami.com, JETSKI MIAMI 7, and every GTT booking. "RELEASED PARTIES" means the Owner and its members, managers, officers, employees, staff, instructors, contractors, volunteers, insurers, affiliated entities, and the owner/operator of any vessel, dock or marina used. "ACTIVITY" means rental, operation, riding, boarding, presence on or around any personal watercraft and all instruction, briefing, launching, fueling, towing and retrieval.</p>
+  <p><b>R2.</b> I KNOWINGLY AND VOLUNTARILY ASSUME ALL INHERENT RISKS, including collision, ejection, drowning, forceful water entry into body cavities, paralysis, and equipment failure. THIS PARAGRAPH SURVIVES even if the release below is held void.</p>
+  <div class="warnbox hot">
+    <p class="caps">R3. I RELEASE, WAIVE, ACQUIT AND FOREVER DISCHARGE THE RELEASED PARTIES FROM ALL CLAIMS FOR PERSONAL INJURY, BODILY INJURY, DEATH AND PROPERTY DAMAGE ARISING OUT OF THE ACTIVITY, INCLUDING ANY SUCH CLAIM CAUSED IN WHOLE OR IN PART BY THE NEGLIGENCE OF ANY RELEASED PARTY, WHETHER ACTIVE OR PASSIVE, INCLUDING NEGLIGENT INSTRUCTION, SUPERVISION, MAINTENANCE, INSPECTION, ENTRUSTMENT AND HIRING. I GIVE THIS RELEASE ON MY OWN BEHALF AND ON BEHALF OF MY SPOUSE, CHILDREN, PARENTS, HEIRS AND ESTATE. I AM GIVING UP THE RIGHT TO SUE FOR INJURIES, INCLUDING FATAL INJURIES, CAUSED BY THE NEGLIGENCE OF THE RELEASED PARTIES.</p>
+    ${initialBox("B1","I have read paragraph R3.")}
+  </div>
+  <p><b>R4.</b> This Rider does not release gross negligence, recklessness, willful or intentional misconduct, or any liability that may not lawfully be released under Florida or federal law, including chapter 327, Florida Statutes.</p>
+  <p><b>R5.</b> I am not under the influence of alcohol, cannabis or impairing drugs (none in the last 8 hours). I can swim or keep myself afloat in a life jacket. I have disclosed any condition that makes this unsafe. If that stops being true, I will say so.</p>
+  <div class="warnbox hot">
+    <div class="caps">R6. THE OWNER'S LIABILITY INSURANCE POLICY INSURES GONCHAR GROUP, LLC. IT DOES NOT INSURE ME. I AM NOT AN INSURED OR A BENEFICIARY. IT PROVIDES ME WITH NO LIABILITY, DEFENSE, ACCIDENT OR MEDICAL COVERAGE, AND IT DOES NOT COVER DAMAGE TO THE RENTED VESSEL.</div>
+  </div>
+  <p><b>R7.</b> The Released Parties have made no promise about the condition of any vessel, inspection, maintenance, supervision, instruction or insurance, and I have not relied on any such promise.</p>
+  <p><b>R8.</b> If any provision is invalid it shall be reformed to the maximum extent the law allows; the rest remains. R2 and R3 are each independent and severable.</p>
+  <p><b>R9.</b> This instrument governs release of claims only. Commercial terms are exclusively in HOME-A. Order of precedence: (1) HOME-C as to a minor; (2) this HOME-B as to release; (3) HOME-A as to commercial terms. NO OTHER INSTRUMENT LIMITS THE CARRIER FORM OR THIS RIDER.</p>
+  <p><b>R10.</b> Every adult signs this personally. No one signs for another adult. A person under 18 does not sign this; a natural guardian signs HOME-C.</p>
+  <p><b>R11.</b> I agree this may be signed electronically (Florida chapter 668, including s. 668.50, and federal ESIGN). Staff may not sign for me.</p>
+  <p><b>R12.</b> Substantive law of Florida. Action solely in Florida, as paragraph 6 of the carrier form provides.</p>
+  <p class="note">If you will not wear the wetsuit bottom, that is a separate form at the dock. You still ride after you sign it.</p>
+  <label class="check"><input type="checkbox" ${state.media?"checked":""} onchange="state.media=this.checked;save()"> Optional: you may use photos/video of me in Jet Ski Miami advertising. Not required to ride. Left empty = no.</label>
+  <label class="check"><input type="checkbox" ${state.checks.age?"checked":""} onchange="state.checks.age=this.checked;save();renderSticky()"> I am 18 or older.</label>
+  <label class="check"><input type="checkbox" ${state.checks.self?"checked":""} onchange="state.checks.self=this.checked;save();renderSticky()"> I am signing only for myself.</label>
+  ${sigBox("Bsig","Sign here · this is your release")}
+  <p class="note">${ESIGN_PAD}</p>
+  `;
+}
+function viewC(){
+  const kids = minors();
+  return `
+  <span class="chip">HOME-C · your child · not the rental</span>
+  <h1>Your child</h1>
+  <p class="mut">This opened because someone on the booking is under 18. There was no “I have a child / I don’t” box. The child does not sign. Only a parent or natural guardian signs.</p>
+  <div class="roster">${kids.map(p=>`<div class="who kid">${escHtml(p.name)} · ${escHtml(p.dob)} · ${ageYears(p.dob)}</div>`).join("")}</div>
+  <h2>Perpetual Waiver and Release</h2>
+  <p>We want you to have a great experience with us. If you are unable or unwilling to sign this Waiver and Release, you are welcome to enjoy yourself by watching others, but we cannot allow your child to participate.</p>
+  <div class="warnbox hot">
+    <p class="notice">NOTICE TO THE MINOR CHILD’S NATURAL GUARDIAN</p>
+    <p class="notice">READ THIS FORM COMPLETELY AND CAREFULLY. YOU ARE AGREEING TO LET YOUR MINOR CHILD ENGAGE IN A POTENTIALLY DANGEROUS ACTIVITY. YOU ARE AGREEING THAT, EVEN IF GONCHAR GROUP LLC USES REASONABLE CARE IN PROVIDING THIS ACTIVITY, THERE IS A CHANCE YOUR CHILD MAY BE SERIOUSLY INJURED OR KILLED BY PARTICIPATING IN THIS ACTIVITY BECAUSE THERE ARE CERTAIN DANGERS INHERENT IN THE ACTIVITY WHICH CANNOT BE AVOIDED OR ELIMINATED. BY SIGNING THIS FORM, YOU ARE GIVING UP YOUR CHILD’S RIGHT AND YOUR RIGHT TO RECOVER FROM GONCHAR GROUP LLC IN A LAWSUIT FOR ANY PERSONAL INJURY, INCLUDING DEATH, TO YOUR CHILD OR ANY PROPERTY DAMAGE THAT RESULTS FROM THE RISKS THAT ARE A NATURAL PART OF THE ACTIVITY. YOU HAVE THE RIGHT TO REFUSE TO SIGN THIS FORM, AND GONCHAR GROUP LLC HAS THE RIGHT TO REFUSE TO LET YOUR CHILD PARTICIPATE IF YOU DO NOT SIGN THIS FORM.</p>
+  </div>
+  ${initialBox("C1","I have read the notice above.")}
+  <p>1. I assume all risk for, and financial cost of, any injury to my child.</p>
+  <p>2. On behalf of my minor child I waive and release GONCHAR GROUP LLC including claims involving their own negligence.</p>
+  <p>3. I indemnify GONCHAR GROUP LLC for claims relating to my child’s participation, including claims alleging their own negligence.</p>
+  <p>4. This agreement extends to each future visit.</p>
+  ${sigBox("CsigA","Guardian signature · carrier form")}
+  <h2>Florida notice — second signature</h2>
+  <div class="warnbox hot">
+    <p class="notice">NOTICE TO THE MINOR CHILD’S NATURAL GUARDIAN</p>
+    <p class="notice">READ THIS FORM COMPLETELY AND CAREFULLY. YOU ARE AGREEING TO LET YOUR MINOR CHILD ENGAGE IN A POTENTIALLY DANGEROUS ACTIVITY. EVEN IF GONCHAR GROUP LLC USES REASONABLE CARE, YOUR CHILD MAY BE SERIOUSLY INJURED OR KILLED. YOU ARE GIVING UP YOUR CHILD’S RIGHT AND YOUR RIGHT TO RECOVER FOR INJURY OR DEATH FROM THE RISKS THAT ARE A NATURAL PART OF THE ACTIVITY.</p>
+  </div>
+  ${initialBox("C2","I have read this second notice.")}
+  ${sigBox("CsigB","Guardian signature · Florida addendum")}
+  <p class="note">${ESIGN_PAD}</p>
+  `;
+}
+function viewArrive(){
+  const kids = minors();
+  return `
+  <span class="chip">Dock · you sign your own papers</span>
+  <h1>You arrived.</h1>
+  <p>Staff hands you a life jacket and offers free wetsuit shorts. You sign on your own phone. Nobody types a PIN for you.</p>
+  <div class="roster">
+    ${roster().map(p=>`<div class="who">${escHtml(p.name)} · ${ageYears(p.dob)<18?`<span class="kid">CHILD</span>`:"adult"}</div>`).join("")}
+    ${kids.length?`<p class="note">Children are already on this booking. The guardian form should already be signed at home.</p>`:""}
+  </div>
+  <div class="warnbox">
+    <div class="caps">Wetsuit shorts — your choice</div>
+    <p>Swimwear does not protect you. Water from the jet can cause severe internal injury. We offer shorts free. If you refuse, you sign a <b>separate</b> form and you still ride. You are responsible for that risk.</p>
+    <label class="check"><input type="radio" name="wet" ${state.wet==="wear"?"checked":""} onchange="state.wet='wear';save();render()"> I will wear the wetsuit bottom.</label>
+    <label class="check"><input type="radio" name="wet" ${state.wet==="refuse"?"checked":""} onchange="state.wet='refuse';save();render()"> I refuse the shorts. I understand the risk. I still want to ride.</label>
+  </div>`;
+}
+function viewDR(){
+  return `
+  <span class="chip">DOCK-D-R · separate form · you still ride</span>
+  <h1>Protective wetsuit refusal</h1>
+  <p>This is not your release and not the rental. It only records that you refuse the shorts. After you sign, you still ride. You take that risk yourself.</p>
+  <div class="warnbox hot">
+    <p>I, for myself, and/or on behalf of my child or legal ward, have been fully warned and advised by GONCHAR GROUP LLC that we should wear properly fitted wetsuit bottoms, or clothing that provides equivalent protection, while riding or being around Wave Runners and Jet Skis in order to protect against injuries caused by water forced into body cavities as a result of falling into the water or being near the jet thrust nozzle. Injuries include water forced into the rectum or vagina causing severe internal injuries or death. I understand that by not wearing wetsuit bottoms or equivalent clothing, I will be going against manufacturers’ requirements and putting myself at risk for injuries. I realize that I may be subject to injury from this activity and that no form of preplanning can remove all danger. Against the advice of GONCHAR GROUP LLC we are declining this critical safety precaution.</p>
+    <p>I/we the undersigned have read the foregoing statement carefully before signing and do understand its warnings and assumption of risks.</p>
+  </div>
+  ${sigBox("Wsig","Sign: I refuse the shorts and I still ride")}
+  <p class="note">${ESIGN_PAD}</p>
+  <p class="note">I/we the undersigned have read the foregoing statement carefully before signing and do understand its warnings and assumption of risks.</p>`;
+}
+function viewD(){
+  const cards = D_BLOCKS.map((b,i)=>`
+    <div class="init ${state.initials["D"+(i+1)]?"on":""}">
+      <b>${b[0]}</b>
+      <p class="note">${b[1]}</p>
+      <canvas id="cv-D${i+1}" height="88"></canvas>
+      <div class="tools"><button type="button" onclick="clearPad('D${i+1}')">Clear</button></div>
+    </div>`).join("");
+  const extra = D_EXTRA.map((b,i)=>{
+    const id=["DP","DN","DB","DL"][i];
+    return `<div class="init ${state.initials[id]?"on":""}">
+      <b>${b[0]}</b><p class="note">${b[1]}</p>
+      <canvas id="cv-${id}" height="88"></canvas>
+      <div class="tools"><button type="button" onclick="clearPad('${id}')">Clear</button></div>
+    </div>`;
+  }).join("");
+  return `
+  <span class="chip">DOCK-D · during the briefing</span>
+  <h1>Safety card</h1>
+  <p class="mut">Instructor is talking. You initial each block as they hit it. One signature at the bottom — theirs too.</p>
+  ${cards}
+  <h2>Four extras for this dock</h2>
+  ${extra}
+  ${field("Wetsuit size issued (staff)", "L — you do not sign this")}
+  ${sigBox("Dsig","Your signature on the briefing card")}
+  <p class="note">${ESIGN_PAD}</p>
+  <p class="note">In production the instructor signs on their phone. On this test you also play the instructor after the check ride, on the FWC card.</p>`;
+}
+function viewRide(){
+  return `
+  <span class="chip">On the water · 6–8 minutes · cannot be shortened</span>
+  <h1>Check ride.</h1>
+  <p>You already initialed the safety card. Now the instructor watches you start, stop, turn, and come back. Paper cannot replace this. Florida requires it on every rental.</p>
+  <p class="mut">When you come off the water you tick each topic on Florida’s card and sign once. Box 24 is “I did the check ride.”</p>`;
+}
+function viewE(){
+  const rows = E_TOPICS.map((t,i)=>{
+    const n=i+1;
+    const on = !!state.checks["E"+n];
+    const na = n===23;
+    return `<label class="topic">
+      <input type="checkbox" ${on?"checked":""}
+        onchange="state.checks['E'+${n}]=this.checked;save();renderSticky()">
+      <span><b>${n}.</b> ${t}${na?" <i>(N/A — same-day return to this dock)</i>":""}</span>
+    </label>`;
+  }).join("");
+  return `
+  <span class="chip">Florida’s card · after the check ride</span>
+  <h1>Sign to go.</h1>
+  <p>This is Florida’s own card. We cannot change its words. Tick each topic we just covered. Sign only after the check ride. <b>This is not a release and it is not insurance.</b></p>
+  ${field("Operator", GUEST.name+" · "+GUEST.dob)}
+  ${field("Vessel", BOOKING.vessel+" · "+BOOKING.fl)}
+  ${rows}
+  <p class="caps">I have received the required pre-rental and pre-ride instruction, including the on-water check ride.</p>
+  ${sigBox("Esig","Your signature")}
+  <p class="note">${ESIGN_PAD}</p>
+  <p class="caps">Instructor: I have provided the required instruction and conducted the check ride.</p>
+  ${sigBox("Einstr","Instructor signs on their phone · on this test, that’s you too")}
+  `;
+}
+function viewDone(){
+  const shots = ["Asig","Bsig","Dsig","Esig","Einstr"].map(id=>{
+    if(!state.sigs[id]) return "";
+    return `<div class="done-card"><div class="note">${id}${state.markTimes[id]?" · "+state.markTimes[id]:""}</div><img alt="${id}" src="${state.sigs[id]}"></div>`;
+  }).join("");
+  const recs = ["CONSENT","HOME-A","HOME-B","DOCK-DR","DOCK-D","DOCK-E"].map(code=>{
+    const r = state.records[code];
+    if(!r) return `<div class="done-card"><div class="note">${code} — not saved</div></div>`;
+    return `<div class="done-card"><div class="note">${code} · ${escHtml(r.record_id||"")}</div>
+      <p class="note">sha256 ${escHtml((r.pdf_sha256||"").slice(0,16))}…</p>
+      ${r.pdf_url?`<p><a href="${escHtml(r.pdf_url)}">Download ${code}.pdf</a></p>`:""}</div>`;
+  }).join("");
+  return `
+  <span class="chip">Signed pack</span>
+  <h1>That’s what a guest does.</h1>
+  <div class="warnbox ok">
+    <div class="caps">Permanent pack link</div>
+    <p><a href="/sign/pack.html?b=${BOOKING.id}">${location.origin}/sign/pack.html?b=${BOOKING.id}</a></p>
+    <p class="note">This page is the signed documents for this booking. Each PDF is also linked below.</p>
+  </div>
+  <div class="warnbox ok">
+    <div class="caps">Your time on this path: ${state.finishedAt||elapsed()}</div>
+    <p>Home: ID + selfie, rental, release${hasMinors()?", guardian form":""}.<br>Dock: ${state.wet==="refuse"?"wetsuit refusal (you still ride), ":""}briefing taps, one signature after the check ride.</p>
+  </div>
+  <h2>What you just signed</h2>
+  <ol>
+    <li><b>Rental</b> — who, when you must be back, hold, “our insurance does not cover you,” insurance decline.</li>
+    <li><b>Release</b> — separate paper, injury / death / negligence.</li>
+    <li><b>Safety card</b> — while someone talked.</li>
+    <li><b>FWC card</b> — after you actually rode.</li>
+  </ol>
+  <p>You did <b>not</b> sign a condition report or anything at return.${state.wet==="refuse"?" You signed the separate wetsuit refusal and you still rode.":" You did not sign a wetsuit refusal."}</p>
+  <h2>Saved electronic records</h2>
+  <p class="note">Each instrument is its own PDF + JSON. Files are write-once under <code>demo/records/${BOOKING.id}/</code>. Still not SmartRez / WaiverForever.</p>
+  ${recs}
+  <h2>Your marks</h2>
+  ${shots}
+  <p class="mut">Tell me what felt long, confusing, or “like a car loan.” That feedback is the point of this test.</p>`;
+}
+
+window.persistThen = persistThen;
+window.afterB = afterB;
+window.finish = finish;
+const VIEWS = {start:viewStart,sms:viewSms,kyc:viewKyc,homeA:viewA,homeB:viewB,homeC:viewC,arrive:viewArrive,dockDR:viewDR,dockD:viewD,ride:viewRide,dockE:viewE,done:viewDone};
+
+function render(){
+  $("barTitle").textContent = TITLES[state.step]||"Jet Ski Miami";
+  $("barStep").textContent = (STEPS.indexOf(state.step)+1)+" / "+STEPS.length;
+  $("barFill").style.width = ((STEPS.indexOf(state.step))/(STEPS.length-1)*100)+"%";
+  $("app").innerHTML = VIEWS[state.step]();
+  renderSticky();
+  requestAnimationFrame(()=>{
+    stampFromMaster();
+    if(state.step==="homeA"){
+      ["A1","A2","A3","A4","A5"].forEach(id=>bindPad(id,state.initials));
+      bindPad("Asig",state.sigs);
+    }
+    if(state.step==="homeB"){
+      bindPad("B1",state.initials); bindPad("Bsig",state.sigs);
+    }
+    if(state.step==="homeC"){
+      bindPad("C1",state.initials); bindPad("C2",state.initials);
+      bindPad("CsigA",state.sigs); bindPad("CsigB",state.sigs);
+    }
+    if(state.step==="dockDR"){
+      bindPad("Wsig",state.sigs);
+    }
+    if(state.step==="dockD"){
+      for(let i=1;i<=15;i++) bindPad("D"+i,state.initials);
+      ["DP","DN","DB","DL"].forEach(id=>bindPad(id,state.initials));
+      bindPad("Dsig",state.sigs);
+    }
+    if(state.step==="dockE"){
+      bindPad("Esig",state.sigs); bindPad("Einstr",state.sigs);
+    }
+    if(state.step==="kyc"){
+      /* Didit is a redirect — nothing to bind here */
+    }
+  });
+}
+
+applyBookingFromUrl();
+load();
+if(location.hash){
+  const h=location.hash.slice(1);
+  if(STEPS.includes(h)) state.step=h;
+}
+(function takeDiditReturn(){
+  const q = new URLSearchParams(location.search);
+  const sid = q.get("didit");
+  if(!sid) return;
+  state.step = "kyc";
+  pullDidit(sid).then(()=>{
+    history.replaceState({}, "", location.pathname+"#kyc");
+    render();
+  }).catch((e)=>{
+    state.kyc.verdict = "failed";
+    state.kyc.reason = e.message || "Didit did not return a result";
+    render();
+  });
+})();
+render();
+setInterval(()=>{ const t=$("timer"); if(t) t.textContent=elapsed(); },500);
+</script>
+</body>
+</html>

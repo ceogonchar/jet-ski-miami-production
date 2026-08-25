@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Signed papers · Jet Ski Miami</title>
+<style>
+body{margin:0;background:#f3f1ec;font:16px/1.5 -apple-system,sans-serif;color:#12151a}
+.shell{max-width:520px;margin:0 auto;background:#fff;min-height:100dvh;padding:22px 16px 48px}
+.chip{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0b6b74}
+a.card{display:block;border:1px solid #d8d3c8;border-radius:14px;padding:14px;margin:10px 0;text-decoration:none;color:#12151a;background:#fafafa}
+.sitebar{background:#050b14;color:#fff;display:flex;justify-content:space-between;padding:10px 14px;font-size:13px}
+.sitebar a{color:#8bd9ff;text-decoration:none}
+</style></head>
+<body>
+<div class="sitebar"><a href="/">Jet Ski Miami 7</a><a href="/sign/">Sign papers</a></div>
+<div class="shell">
+  <div class="chip">Signed pack</div>
+  <h1 id="ttl">Your signed papers</h1>
+  <p id="msg">Loading…</p>
+  <div id="list"></div>
+  <p><a href="/sign/">Sign again</a></p>
+</div>
+<script>
+const b = new URLSearchParams(location.search).get("b") || "GTT-TEST-016";
+document.getElementById("ttl").textContent = b;
+const pack = JSON.parse(localStorage.getItem("jsm_pack_" + b) || "[]");
+const labels = {"CONSENT":"E-sign consent","HOME-A":"Rental agreement","HOME-B":"Participant release","HOME-C":"Guardian waiver","DOCK-DR":"Wetsuit refusal","DOCK-D":"Safety briefing","DOCK-E":"FWC 313A card"};
+if (!pack.length) {
+  document.getElementById("msg").textContent = "No signed papers in this browser yet. Open Sign papers and complete a booking on this phone.";
+} else {
+  document.getElementById("msg").textContent = pack.length + " instrument(s) saved on this phone for this booking. This is the pack link.";
+  document.getElementById("list").innerHTML = pack.map(r => {
+    const marks = ((r.payload||{}).marks||[]).filter(m => m.png).map(m => '<img alt="'+m.field_id+'" src="'+m.png+'" style="width:100%;max-width:360px;border:1px solid #ddd;border-radius:8px;margin:8px 0;background:#fff">').join("");
+    return '<div class="card"><b>'+(labels[r.instrument_code]||r.instrument_code)+'</b><div style="font-size:12px;color:#5e6772">'+ (r.signed_at_utc||"") +' · '+ (r.record_id||"") +'</div>'+marks+'</div>';
+  }).join("");
+}
+</script>
+</body></html>
