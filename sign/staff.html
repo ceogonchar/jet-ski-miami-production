@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Dock gate · Jet Ski Miami</title>
+<style>
+body{margin:0;font:16px/1.45 -apple-system,sans-serif;background:#f3f1ec;color:#12151a}
+.shell{max-width:560px;margin:0 auto;background:#fff;min-height:100dvh;padding:20px 16px 48px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td,th{border-bottom:1px solid #ddd;padding:8px;text-align:left}
+.ok{color:#0d6b39;font-weight:800}
+.no{color:#b3400c;font-weight:800}
+input{font:inherit;padding:8px;border-radius:8px;border:1px solid #ccc;width:100%}
+button{margin-top:10px;width:100%;padding:12px;border:0;border-radius:10px;background:#0b6b74;color:#fff;font-weight:700}
+</style></head>
+<body>
+<div class="shell">
+  <p>Dock gate · staff</p>
+  <h1>Launch count</h1>
+  <input id="gtt" placeholder="GTT000242" value="GTT000242">
+  <button type="button" onclick="load()">Load booking</button>
+  <p id="msg"></p>
+  <table id="tbl"></table>
+  <p><a href="/sign/?gtt=GTT000242&who=instructor&dock=1">Instructor 313A</a></p>
+</div>
+<script>window.JSM_RECORD_API="https://margin-villas-retrieved-couples.trycloudflare.com";</script>
+<script>
+const need = ["CONSENT","HOME-A","HOME-B","HOME-C","DOCK-D","DOCK-E","DOCK-DR"];
+async function load(){
+  const b = document.getElementById("gtt").value.trim();
+  const msg = document.getElementById("msg");
+  const api = (window.JSM_RECORD_API||"").replace(/\/$/,"")+"/api/records?booking="+encodeURIComponent(b);
+  let items=[];
+  try{
+    const r = await fetch(api);
+    const data = await r.json();
+    items = (data && data.items) || [];
+  }catch(e){ msg.textContent = "No company records yet. "+e.message; }
+  const have = {};
+  items.forEach(x => have[x.instrument_code]=x);
+  document.getElementById("tbl").innerHTML = "<tr><th>Instrument</th><th>On file</th></tr>"+need.map(c=>{
+    const ok = !!have[c];
+    return "<tr><td>"+c+"</td><td class='"+(ok?"ok":"no")+"'>"+(ok?"YES":"NO")+"</td></tr>";
+  }).join("");
+  const A = !!have["HOME-A"], B = !!have["HOME-B"], E = !!have["DOCK-E"];
+  const refuse = !!have["DOCK-DR"];
+  msg.textContent = refuse ? "D-R on file — that person does not ride." : (A && B && E ? "Count looks launchable if IDs and shorts check out." : "Do not launch.");
+}
+</script>
+</body></html>

@@ -7,32 +7,59 @@
 body{margin:0;background:#f3f1ec;font:16px/1.5 -apple-system,sans-serif;color:#12151a}
 .shell{max-width:520px;margin:0 auto;background:#fff;min-height:100dvh;padding:22px 16px 48px}
 .chip{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0b6b74}
-a.card{display:block;border:1px solid #d8d3c8;border-radius:14px;padding:14px;margin:10px 0;text-decoration:none;color:#12151a;background:#fafafa}
+a.card,div.card{display:block;border:1px solid #d8d3c8;border-radius:14px;padding:14px;margin:10px 0;text-decoration:none;color:#12151a;background:#fafafa}
 .sitebar{background:#050b14;color:#fff;display:flex;justify-content:space-between;padding:10px 14px;font-size:13px}
 .sitebar a{color:#8bd9ff;text-decoration:none}
+.mut{color:#5e6772;font-size:13px}
 </style></head>
 <body>
-<div class="sitebar"><a href="/">Jet Ski Miami 7</a><a href="/sign/">Sign papers</a></div>
+<div class="sitebar"><a href="/">Jet Ski Miami</a><a href="/sign/">Sign papers</a></div>
 <div class="shell">
   <div class="chip">Signed pack</div>
   <h1 id="ttl">Your signed papers</h1>
   <p id="msg">Loading…</p>
   <div id="list"></div>
-  <p><a href="/sign/">Sign again</a></p>
+  <p class="mut">Gonchar Group, LLC d/b/a Jet Ski Miami · privacy@jet-ski-miami.com</p>
 </div>
+<script>window.JSM_RECORD_API="https://margin-villas-retrieved-couples.trycloudflare.com";</script>
 <script>
-const b = new URLSearchParams(location.search).get("b") || "GTT-TEST-016";
-document.getElementById("ttl").textContent = b;
-const pack = JSON.parse(localStorage.getItem("jsm_pack_" + b) || "[]");
+const b = new URLSearchParams(location.search).get("b") || "";
+document.getElementById("ttl").textContent = b || "No booking";
 const labels = {"CONSENT":"E-sign consent","HOME-A":"Rental agreement","HOME-B":"Participant release","HOME-C":"Guardian waiver","DOCK-DR":"Wetsuit refusal","DOCK-D":"Safety briefing","DOCK-E":"FWC 313A card"};
-if (!pack.length) {
-  document.getElementById("msg").textContent = "No signed papers in this browser yet. Open Sign papers and complete a booking on this phone.";
-} else {
-  document.getElementById("msg").textContent = pack.length + " instrument(s) saved on this phone for this booking. This is the pack link.";
+function renderLocal(pack){
+  if(!pack.length){
+    document.getElementById("msg").textContent = "No signed papers found yet for this booking on this phone.";
+    return;
+  }
+  document.getElementById("msg").textContent = pack.length + " instrument(s) for this booking.";
   document.getElementById("list").innerHTML = pack.map(r => {
-    const marks = ((r.payload||{}).marks||[]).filter(m => m.png).map(m => '<img alt="'+m.field_id+'" src="'+m.png+'" style="width:100%;max-width:360px;border:1px solid #ddd;border-radius:8px;margin:8px 0;background:#fff">').join("");
-    return '<div class="card"><b>'+(labels[r.instrument_code]||r.instrument_code)+'</b><div style="font-size:12px;color:#5e6772">'+ (r.signed_at_utc||"") +' · '+ (r.record_id||"") +'</div>'+marks+'</div>';
+    const code = r.instrument_code || "";
+    const title = labels[code] || code;
+    const pdf = r.pdf_url ? '<p><a href="'+r.pdf_url+'">Download PDF</a></p>' : "";
+    return '<div class="card"><b>'+title+'</b><div class="mut">'+(r.signed_at_utc||"")+' · '+(r.record_id||"")+'</div>'+pdf+'</div>';
   }).join("");
 }
+(async function(){
+  const api = (window.JSM_RECORD_API || "").replace(/\/$/,"") + (window.JSM_RECORD_API ? "/api/records?booking=" + encodeURIComponent(b) : "");
+  if(window.JSM_RECORD_API){
+    try{
+      const r = await fetch(api);
+      if(r.ok){
+        const data = await r.json();
+        if(data.ok && data.items && data.items.length){
+          document.getElementById("msg").textContent = data.items.length + " company record(s).";
+          document.getElementById("list").innerHTML = data.items.map(row => {
+            const title = labels[row.instrument_code] || row.instrument_code;
+            const url = row.pdf_relpath && window.JSM_RECORD_API ? (window.JSM_RECORD_API.replace(/\/$/,"")+"/records/"+row.pdf_relpath) : (row.pdf_url||"");
+            return '<a class="card" href="'+url+'"><b>'+title+'</b><span class="mut">'+ (row.signed_at_utc||"") +'</span></a>';
+          }).join("");
+          return;
+        }
+      }
+    }catch(e){}
+  }
+  const pack = JSON.parse(localStorage.getItem("jsm_pack_" + b) || localStorage.getItem("jsm_pack_" + b + "_renter") || localStorage.getItem("jsm_pack_" + b + "_husband") || "[]");
+  renderLocal(pack);
+})();
 </script>
 </body></html>
