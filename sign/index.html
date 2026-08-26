@@ -389,7 +389,7 @@ function go(step){
 }
 function mark(k){state.checks[k]=true; save(); render();}
 function storageKey(){ return "jsm_sign_"+(BOOKING.id||"x")+"_"+(state.who||"renter"); }
-function save(){ try{ localStorage.setItem(storageKey(), JSON.stringify({...state, t0:state.t0})); }catch(e){} } }
+function save(){ try{ localStorage.setItem(storageKey(), JSON.stringify({...state, t0:state.t0})); }catch(e){} }
 function load(){
   try{
     const raw = localStorage.getItem(storageKey());
@@ -731,7 +731,7 @@ function kycSticky(){
     return `<button class="btn sec" onclick="kycContinue()">Staff will check at the dock · continue</button>`;
   if(k.verdict==="failed")
     return `<button class="btn sec" onclick="kycStartDidit()">Try Didit again</button><button class="ghost" style="width:100%;margin-top:8px" onclick="kycSkipRehearsal()">Skip ID for this rehearsal</button>`;
-  return `<button class="btn" onclick="kycSkipRehearsal()">Continue — ID checked at the dock</button><button class="ghost" style="width:100%;margin-top:8px" onclick="kycStartDidit()">Verify ID now (Didit)</button>`;
+  return `<button class="btn" onclick="kycSkipRehearsal()">Continue — ID checked at the dock</button>`;
 }
 window.kycSkipRehearsal = function(){
   state.kyc.verdict = "skipped_test";
