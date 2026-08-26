@@ -25,7 +25,7 @@ a.card,div.card{display:block;border:1px solid #d8d3c8;border-radius:14px;paddin
 <script>
 const b = new URLSearchParams(location.search).get("b") || "";
 document.getElementById("ttl").textContent = b || "No booking";
-const labels = {"CONSENT":"E-sign consent","HOME-A":"Rental agreement","HOME-B":"Participant release","HOME-C":"Guardian waiver","DOCK-DR":"Wetsuit refusal","DOCK-D":"Safety briefing","DOCK-E":"FWC 313A card"};
+const labels = {"CONSENT":"E-sign consent","HOME-A":"Rental agreement","HOME-B":"Participant release","HOME-OP":"Driver acknowledgment","HOME-C":"Guardian waiver","DOCK-DR":"Wetsuit refusal","DOCK-D":"Safety briefing","DOCK-E":"FWC 313A card"};
 function renderLocal(pack){
   if(!pack.length){
     document.getElementById("msg").textContent = "No signed papers found yet for this booking on this phone.";

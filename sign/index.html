@@ -384,15 +384,17 @@ function isDemo(){ return new URLSearchParams(location.search).get("demo")==="1"
 function homeSteps(){
   if(state.who==="instructor") return ["staff","dockE"];
   if(isDock()) return ["arrive","dockDR","dockD","ride","dockE","done"];
-  if(state.who==="husband") return ["start","identity","homeB","done"];
-  return ["start","identity","homeA","homeB","homeC","done"];
+  if(state.who==="husband") return ["start","kyc","identity","homeB","homeOp","done"];
+  return ["start","kyc","identity","homeA","homeB","homeC","done"];
 }
-const STEPS = ["start","identity","homeA","homeB","homeC","done","arrive","dockDR","dockD","ride","dockE","staff","noride"];
+const STEPS = ["start","kyc","identity","homeA","homeB","homeOp","homeC","done","arrive","dockDR","dockD","ride","dockE","staff","noride"];
 const TITLES = {
   start: "Review and sign",
+  kyc: "Photo ID",
   identity: "Your details",
   homeA: "Your rental",
   homeB: "Your release",
+  homeOp: "You will drive",
   homeC: "Your child",
   arrive: "You arrived at the dock",
   dockDR: "Wetsuit refusal · you do not ride",
@@ -431,9 +433,14 @@ function go(step){
   render();
   window.scrollTo(0,0);
 }
+function husbandIndex(){
+  const i = roster().findIndex(p=>p.role==="adult" || /husband/i.test(p.relation||""));
+  return i;
+}
 function signer(){
   if(state.who==="husband"){
-    const row = roster().find(p=>p.role==="adult" || /husband/i.test(p.relation||"")) || {name:"",dob:""};
+    const i = husbandIndex();
+    const row = (i>=0 && BOOKING.roster[i]) ? BOOKING.roster[i] : {name:"",dob:""};
     return {
       name: row.name||"",
       dob: row.dob||"",
@@ -444,9 +451,24 @@ function signer(){
       state: row.state||"",
       zip: row.zip||"",
       row,
+      index: i,
     };
   }
   return GUEST;
+}
+function setSigner(k, v){
+  v = (v||"").trim();
+  if(state.who==="husband"){
+    const i = husbandIndex();
+    if(i<0) return;
+    BOOKING.roster[i][k] = v;
+    save();
+    return;
+  }
+  GUEST[k] = v;
+  if(k==="name" && roster()[0] && roster()[0].role==="renter") roster()[0].name = v;
+  if(k==="dob" && roster()[0] && roster()[0].role==="renter") roster()[0].dob = v;
+  save();
 }
 function parseMoney(s){
   const n = parseFloat(String(s||"").replace(/[^0-9.]/g,""));
@@ -471,7 +493,7 @@ function missingA(){
   return miss;
 }
 function mark(k){state.checks[k]=true; save(); render();}
-function storageKey(){ return "jsm_sign_"+(BOOKING.id||"x")+"_"+(state.who||"renter"); }
+function storageKey(){ return "jsm_sign_v2_"+(BOOKING.id||"x")+"_"+(state.who||"renter"); }
 function save(){ try{ localStorage.setItem(storageKey(), JSON.stringify({...state, t0:state.t0})); }catch(e){} }
 function load(){
   try{
@@ -507,6 +529,7 @@ function collectMarks(ids, store, type){
 function instrumentMarks(code){
   if(code==="HOME-A") return collectMarks(["A1","A2","A3","A4","A5"], state.initials, "initial").concat(collectMarks(["Asig"], state.sigs, "signature"));
   if(code==="HOME-B") return collectMarks(["B1"], state.initials, "initial").concat(collectMarks(["Bsig"], state.sigs, "signature"));
+  if(code==="HOME-OP") return collectMarks(["O1","O2","O3"], state.initials, "initial").concat(collectMarks(["Osig"], state.sigs, "signature"));
   if(code==="HOME-C") return collectMarks(["C1","C2"], state.initials, "initial").concat(collectMarks(["CsigA","CsigB"], state.sigs, "signature"));
   if(code==="DOCK-DR") return collectMarks(["Wsig"], state.sigs, "signature");
   if(code==="DOCK-D"){
@@ -519,7 +542,8 @@ function instrumentMarks(code){
 }
 function instrumentFields(code){
   if(code==="HOME-A") return {ins:state.ins, card:state.card, sms:!!state.sms};
-  if(code==="HOME-B") return {media:!!state.media, age18:!!state.checks.age, self:!!state.checks.self, minors:minors().map(p=>p.name)};
+  if(code==="HOME-B") return {media:!!state.media, age18:!!state.checks.age, self:!!state.checks.self, signer:signer().name, signer_dob:signer().dob, minors:minors().map(p=>p.name)};
+  if(code==="HOME-OP") return {driver:true, name:signer().name, dob:signer().dob, age:ageYears(signer().dob)};
   if(code==="HOME-C") return {children:minors(), guardian:GUEST.name};
   if(code==="DOCK-DR") return {wet:"refuse", boards:false, noRide:true};
   if(code==="DOCK-E"){
@@ -611,6 +635,10 @@ function field(lab, val, editKey){
 window.saveEdit = function(el){
   const k = el.dataset.edit;
   const v = (el.value||"").trim();
+  if(k.startsWith("me.")){
+    setSigner(k.slice(3), v);
+    return;
+  }
   if(k.startsWith("roster.")){
     const parts = k.split(".");
     const i = +parts[1];
@@ -620,9 +648,7 @@ window.saveEdit = function(el){
     if(BOOKING.roster[i] && BOOKING.roster[i].role==="renter" && field==="dob") GUEST.dob = v;
     save(); return;
   }
-  GUEST[k] = v;
-  if(k==="name" && roster()[0] && roster()[0].role==="renter") roster()[0].name = v;
-  save();
+  setSigner(k, v);
 };
 function masterFor(id, store){
   if(store===state.initials){
@@ -651,9 +677,13 @@ function initialBox(id, text){
     <b>Initial · ${text}</b>
     <canvas id="cv-${id}" height="88"></canvas>
     ${canTap?`<div class="padhint">Tap this box to place the initial you already drew. Or draw a new one.</div>`:""}
-    <div class="tools"><button type="button" onclick="clearPad('${id}')">Clear</button>
-    ${canTap?`<button type="button" onclick="applyMaster('${id}', 'initial')">Place initial</button>`:""}
-    ${on?`<span class="mut">Saved</span>`:""}</div>
+    <div class="tools">
+      <input id="type-${id}" placeholder="Or type initials" maxlength="8" style="width:42%">
+      <button type="button" onclick="placeTyped('${id}','initial')">Place typed</button>
+      <button type="button" onclick="clearPad('${id}')">Clear</button>
+      ${canTap?`<button type="button" onclick="applyMaster('${id}', 'initial')">Place drawn</button>`:""}
+      ${on?`<span class="mut">Saved</span>`:""}
+    </div>
   </div>`;
 }
 function sigBox(id, label){
@@ -663,11 +693,38 @@ function sigBox(id, label){
     <b>${label}</b>
     <canvas id="cv-${id}" height="120"></canvas>
     ${canTap?`<div class="padhint">Tap this box to place the signature you already drew. Or draw a new one.</div>`:""}
-    <div class="tools"><button type="button" onclick="clearPad('${id}')">Clear</button>
-    ${canTap?`<button type="button" onclick="applyMaster('${id}', 'sig')">Place signature</button>`:""}
-    ${on?`<span class="mut">Saved</span>`:""}</div>
+    <div class="tools">
+      <input id="type-${id}" placeholder="Or type your full name" maxlength="40" style="width:52%">
+      <button type="button" onclick="placeTyped('${id}','sig')">Place typed</button>
+      <button type="button" onclick="clearPad('${id}')">Clear</button>
+      ${canTap?`<button type="button" onclick="applyMaster('${id}', 'sig')">Place drawn</button>`:""}
+      ${on?`<span class="mut">Saved</span>`:""}
+    </div>
   </div>`;
 }
+window.placeTyped = function(id, kind){
+  const inp = $("type-"+id);
+  const txt = ((inp && inp.value) || "").trim();
+  if(!txt){ alert("Type your initials or name first."); return; }
+  const cv = $("cv-"+id);
+  if(!cv) return;
+  const ctx = cv.getContext("2d");
+  const w = cv.clientWidth, h = cv.clientHeight;
+  ctx.setTransform(1,0,0,1,0,0);
+  ctx.clearRect(0,0,cv.width,cv.height);
+  const dpr = window.devicePixelRatio||1;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.fillStyle = "#111";
+  ctx.font = (kind==="sig"?"28px":"26px")+" 'Segoe Script', 'Snell Roundhand', cursive";
+  ctx.fillText(txt, 16, kind==="sig"?70:52);
+  const store = kind==="sig"?state.sigs:state.initials;
+  store[id] = cv.toDataURL("image/png");
+  state.markTimes[id] = utcIso();
+  if(kind!=="sig" && id!=="C2") state.masterInitial = store[id];
+  if(kind==="sig" && id!=="Einstr" && id!=="CsigB") state.masterSig = store[id];
+  save();
+  render();
+};
 
 function bindPad(id, store){
   const cv = $("cv-"+id);
@@ -729,6 +786,7 @@ function padsOnStep(){
   const s=state.step;
   if(s==="homeA") return {init:["A1","A2","A3","A4","A5"], sig:["Asig"]};
   if(s==="homeB") return {init:["B1"], sig:["Bsig"]};
+  if(s==="homeOp") return {init:["O1","O2","O3"], sig:["Osig"]};
   if(s==="homeC") return {init:["C1","C2"], sig:["CsigA","CsigB"]};
   if(s==="dockDR") return {init:[], sig:["Wsig"]};
   if(s==="dockD"){
@@ -748,7 +806,15 @@ function needA(){
   return missingA().length===0;
 }
 function needB(){
+  const s = signer();
+  if(!s.name || /guest$/i.test(s.name)) return false;
+  if(ageYears(s.dob)==null || ageYears(s.dob)<18) return false;
   return !!(state.initials.B1 && state.sigs.Bsig && state.checks.age && state.checks.self);
+}
+function needOp(){
+  const s = signer();
+  if(!s.name || ageYears(s.dob)==null || ageYears(s.dob)<21) return false;
+  return !!(state.initials.O1 && state.initials.O2 && state.initials.O3 && state.sigs.Osig);
 }
 function needC(){
   if(!minors().every(p=>p.name && ageYears(p.dob)!=null && ageYears(p.dob)<18)) return false;
@@ -758,7 +824,8 @@ function needDR(){
   return !!state.sigs.Wsig;
 }
 function afterB(){
-  persistThen("HOME-B", (hasMinors() && (state.who||"renter")!=="husband") ? "homeC" : "done");
+  if((state.who||"renter")==="husband") persistThen("HOME-B","homeOp");
+  else persistThen("HOME-B", hasMinors() ? "homeC" : "done");
 }
 function needD(){
   for(let i=1;i<=15;i++) if(!state.initials["D"+i]) return false;
@@ -775,11 +842,13 @@ function renderSticky(){
   const s=state.step;
   let html="";
   if(s==="start") html=`<button class="btn" ${state.esign?"":"disabled"} onclick="startWithConsent()">${state.esign?"I agree — continue":"Tick the box to sign on this phone"}</button>`;
-  if(s==="identity") html=`<button class="btn" onclick="go(state.who==='husband'?'homeB':'homeA')">Details look right · continue</button>`;
+  if(s==="kyc") html=kycSticky();
+  if(s==="identity") html=`<button class="btn" onclick="go(state.who==='husband'?'homeB':'homeA')">That's me · continue</button>`;
   if(s==="homeA") html= needA()
     ? `<button class="btn" onclick="persistThen('HOME-A','homeB')">Sign rental · continue to release</button>`
     : `<div><ul class="missing-list">${missingA().map(x=>"<li>"+escHtml(x)+"</li>").join("")}</ul><button class="btn" disabled>Finish the items above</button></div>`;
-  if(s==="homeB") html=`<button class="btn" ${needB()?"":"disabled"} onclick="afterB()">${needB()?(hasMinors()&&state.who!=="husband"?"Sign release · child form next":"Sign release · done at home"):"Initial once, tick both boxes, sign"}</button>`;
+  if(s==="homeB") html=`<button class="btn" ${needB()?"":"disabled"} onclick="afterB()">${needB()?((state.who==="husband")?"Sign MY release · driver page next":(hasMinors()?"Sign release · child form next":"Sign release · done at home")):"Print YOUR name, initial R3, tick boxes, sign"}</button>`;
+  if(s==="homeOp") html=`<button class="btn" ${needOp()?"":"disabled"} onclick="persistThen('HOME-OP','done')">${needOp()?"Save driver paper · done at home":"Three initials and your signature"}</button>`;
   if(s==="homeC") html=`<button class="btn" ${needC()?"":"disabled"} onclick="persistThen('HOME-C','done')">${needC()?"Sign for your child · done at home":"Read both notices, two initials, two signatures"}</button>`;
   if(s==="arrive") html = state.wet==="wear"
     ? `<button class="btn" onclick="go('dockD')">Wearing shorts · start briefing</button>`
@@ -822,7 +891,7 @@ window.startWithConsent = async function(){
   if(el) el.innerHTML = `<button class="btn" disabled>Saving consent…</button>`;
   try{
     await persistInstrument("CONSENT");
-    go("identity");
+    go("kyc");
   }catch(err){
     alert("Could not save consent: "+err.message);
     renderSticky();
@@ -836,63 +905,52 @@ window.resetAll=function(){
 
 function applyKycFields(fields){
   if(!fields) return;
-  if(fields.first_name || fields.last_name)
-    GUEST.name = [fields.first_name, fields.last_name].filter(Boolean).join(" ");
-  if(fields.full_name) GUEST.name = fields.full_name;
-  if(fields.dob) GUEST.dob = fields.dob;
-  if(fields.street) GUEST.addr = fields.street;
-  if(fields.city) GUEST.city = fields.city;
-  if(fields.state) GUEST.state = fields.state;
-  if(fields.zip) GUEST.zip = fields.zip;
+  const full = fields.full_name || [fields.first_name, fields.last_name].filter(Boolean).join(" ");
+  if(full) setSigner("name", full);
+  if(fields.dob) setSigner("dob", fields.dob);
+  if(fields.street) setSigner("addr", fields.street);
+  if(fields.city) setSigner("city", fields.city);
+  if(fields.state) setSigner("state", fields.state);
+  if(fields.zip) setSigner("zip", fields.zip);
   if(fields.address && !fields.street){
     const parts = String(fields.address).split(",");
-    if(parts[0]) GUEST.addr = parts[0].trim();
+    if(parts[0]) setSigner("addr", parts[0].trim());
   }
   state.kyc.fields = fields;
   save();
 }
 
 function kycApi(){
+  if(window.JSM_RECORD_API) return String(window.JSM_RECORD_API).replace(/\/$/,"");
   return location.origin;
 }
 function kycSticky(){
   const k = state.kyc;
   if(k.verdict==="verified")
-    return `<button class="btn" onclick="kycContinue()">Name looks right · continue</button>`;
+    return `<button class="btn" onclick="kycContinue()">That's my ID · continue</button>`;
   if(k.verdict==="review")
-    return `<button class="btn sec" onclick="kycContinue()">Staff will check at the dock · continue</button>`;
+    return `<button class="btn sec" onclick="kycContinue()">Staff will re-check at the dock · continue</button>`;
   if(k.verdict==="failed")
-    return `<button class="btn sec" onclick="kycStartDidit()">Try Didit again</button><button class="ghost" style="width:100%;margin-top:8px" onclick="kycSkipRehearsal()">Skip ID for this rehearsal</button>`;
-  return `<button class="btn" onclick="kycSkipRehearsal()">Continue — ID checked at the dock</button>`;
+    return `<button class="btn" onclick="kycStartDidit()">Try photo ID again</button>`;
+  return `<button class="btn" onclick="kycStartDidit()">Open camera · verify photo ID</button>`;
 }
-window.kycSkipRehearsal = function(){
-  state.kyc.verdict = "skipped_test";
-  state.kyc.reason = "Didit key not used. Name stays as the prefilled test guest. Staff must check plastic at the dock.";
-  state.kyc.sessionId = "rehearsal-skip";
-  save();
-  go("homeA");
-};
 window.kycContinue = function(){
   document.querySelectorAll("input[data-kyc]").forEach((el)=>{
     if(el.value.trim()) state.kyc.fields[el.dataset.kyc] = el.value.trim();
   });
   applyKycFields(state.kyc.fields);
-  go("homeA");
+  go("identity");
 };
 window.kycStartDidit = async function(){
   const status = $("kycStatus");
-  if(status) status.textContent = "Opening Didit…";
+  if(status) status.textContent = "Opening ID check…";
   try{
     const r = await fetch(kycApi()+"/api/didit/start", {
       method:"POST", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({vendor: BOOKING.id})
+      body: JSON.stringify({vendor: BOOKING.id, who: state.who||"renter", return_origin: location.origin})
     });
     const data = await r.json();
-    if(data.need_key){
-      location.href = kycApi()+"/";
-      return;
-    }
-    if(!data.ok || !data.url) throw new Error(data.error || "Didit did not start");
+    if(!data.ok || !data.url) throw new Error(data.error || "ID check did not start");
     location.href = data.url;
   }catch(err){
     if(status) status.textContent = err.message;
@@ -915,9 +973,10 @@ function viewKyc(){
   const k = state.kyc;
   if(k.verdict) return viewKycDone();
   return `
-  <span class="chip">ID</span>
-  <h1>Photo ID at the dock</h1>
-  <p>For this test, staff still checks the plastic ID at the dock. Tap continue to the rental papers.</p>
+  <span class="chip">Photo ID</span>
+  <h1>Your licence, your face.</h1>
+  <p>We photograph your ID and match a live selfie. That is how we know <b>you</b> are the person signing — not the renter, not someone else on the booking.</p>
+  <p>Staff still checks the plastic card at the dock. This step does not replace that.</p>
   <p id="kycStatus" class="mut"></p>`;
 }
 function viewKycDone(){
@@ -993,20 +1052,24 @@ function viewIdentity(){
   const husband = state.who==="husband";
   return `
   <span class="chip">Your details</span>
-  <h1>${husband?"Your name on the release":"Your name, as on your photo ID"}</h1>
-  <p>Staff will check the plastic ID at the dock. Type the truth now. Empty dates of birth are not allowed.</p>
-  ${field("Full legal name", husband?s.name:GUEST.name, husband?"roster."+Math.max(0,roster().findIndex(p=>p.role==="adult"))+".name":"name")}
-  ${field("Date of birth (MM/DD/YYYY)", husband?s.dob:GUEST.dob, husband?"roster."+Math.max(0,roster().findIndex(p=>p.role==="adult"))+".dob":"dob")}
-  ${husband?"":field("Street address", GUEST.addr, "addr")+field("City", GUEST.city, "city")+`<div class="row">${field("State", GUEST.state, "state")}${field("ZIP", GUEST.zip, "zip")}</div>`+field("Email", GUEST.email, "email")+field("Mobile", GUEST.phone, "phone")+
+  <h1>${husband?"You — not the renter":"Your name, as on your photo ID"}</h1>
+  <p>${husband?"Victoria is the renter. This page is <b>your</b> name, birthday, phone and address. If you see her details here, fix them.":"Staff will check the plastic ID at the dock. Type the truth now."}</p>
+  ${field("Full legal name", s.name, "me.name")}
+  ${field("Date of birth (MM/DD/YYYY)", s.dob, "me.dob")}
+  ${field("Mobile", s.phone, "me.phone")}
+  ${field("Email", s.email, "me.email")}
+  ${field("Street address", s.addr, "me.addr")}
+  <div class="row">${field("City", s.city, "me.city")}${field("State", s.state, "me.state")}</div>
+  ${field("ZIP", s.zip, "me.zip")}
+  ${husband?"":(field("Last 4 of the credit card you will bring", GUEST.card, "card")+
     `<h3>Emergency contact — not on the water</h3>`+
-    field("Name", GUEST.emName, "emName")+field("Address", GUEST.emAddr, "emAddr")+`<div class="row">${field("Phone", GUEST.emPhone, "emPhone")}${field("Relationship", GUEST.emRel, "emRel")}</div>`+
-    field("Last 4 of the credit card you will bring", GUEST.card, "card")}
+    field("Name", GUEST.emName, "emName")+field("Address", GUEST.emAddr, "emAddr")+`<div class="row">${field("Phone", GUEST.emPhone, "emPhone")}${field("Relationship", GUEST.emRel, "emRel")}</div>`)}
   ${husband?"":`<h3>Everyone aboard</h3>
     <div class="roster">${roster().map((p,i)=>`<div class="who">${escHtml(p.relation||p.role)} · ${ageLabel(p)}
       <input data-roster="${i}" data-k="name" placeholder="Full name" value="${escHtml(p.name||"")}" onchange="saveRosterRow(this)">
       <input data-roster="${i}" data-k="dob" placeholder="MM/DD/YYYY" value="${escHtml(p.dob||"")}" onchange="saveRosterRow(this)">
     </div>`).join("")}</div>`}
-  <p class="note">Photo ID is checked at the dock. A photo of a card on a phone is not the card.</p>`;
+  <p class="note">A photo of a card on a phone is not the card. Plastic ID at the dock still required.</p>`;
 }
 function viewSms(){
   return `
@@ -1144,11 +1207,14 @@ function viewA(){
   `;
 }
 function viewB(){
+  const s = signer();
   return `
   <span class="chip">HOME-B · Participant Release · not the rental</span>
-  <h1>Your release</h1>
-  <p class="mut">A new document. New audit trail. No prices, no return time, no promises about our equipment. Draw once, then tap each box to place the mark. We do not auto-fill.</p>
-  ${field("Participant", GUEST.name+" · booking "+BOOKING.id)}
+  <h1>Your release — ${escHtml(s.name||"type your name")}</h1>
+  <p class="mut">${state.who==="husband"?"This is <b>your</b> injury / death release. It is not Victoria’s rental contract and not her name. If the printed name below is wrong, change it.":"A new document. New audit trail. No prices, no return time. Draw once, then tap each later box — or type your initials."}</p>
+  <div class="warnbox"><div class="caps">Signing as ${escHtml(s.name||"(name missing)")}</div>
+    <p>Booking ${escHtml(BOOKING.id)}. Role: ${escHtml(state.who)}. This paper does not charge a card and does not set the return time.</p></div>
+  ${field("Participant", (s.name||"")+" · booking "+BOOKING.id)}
   <div class="warnbox">
     <h2 style="margin-top:0">PARTICIPANT AGREEMENT, RELEASE AND ASSUMPTION OF RISK</h2>
     <p>In consideration of the services of GONCHAR GROUP, LLC their agents, owners, officers, volunteers, employees, and all other persons or entities acting in any capacity on their behalf (hereinafter collectively referred to as "GG"), I hereby agree to release, indemnify, and discharge GG, on behalf of myself, my spouse, my children, my parents, my heirs, assigns, personal representative and estate as follows:</p>
@@ -1161,10 +1227,12 @@ function viewB(){
     <p><b>6.</b> In the event that I file a lawsuit against GG, I agree to do so solely in the state of Florida and I further agree that the substantive law of that state shall apply in that action without regard to the conflict of law rules of that that state. I agree that if any portion of this agreement is found to be void or unenforceable, the remaining document shall remain in full force and effect.</p>
     <p><b>By signing this document, I acknowledge that if anyone is hurt or property is damaged during my participation in this activity, I may be found by a court of law to have waived my right to maintain a lawsuit against GG on the basis of any claim from which I have released them herein. I also agree that this document is valid for subsequent visits and participation at GG. I have had sufficient opportunity to read this entire document. I have read and understood it, and I agree to be bound by its terms.</b></p>
   </div>
-  <div class="row">${field("Print name", GUEST.name)}${field("DOB", GUEST.dob)}</div>
-  ${field("Phone", GUEST.phone)}
-  ${field("Address", GUEST.addr+", "+GUEST.city+", "+GUEST.state+" "+GUEST.zip)}
-  ${field("Email", GUEST.email)}
+  <div class="row">${field("Print name", s.name, "me.name")}${field("DOB", s.dob, "me.dob")}</div>
+  ${field("Phone", s.phone, "me.phone")}
+  ${field("Street", s.addr, "me.addr")}
+  <div class="row">${field("City", s.city, "me.city")}${field("State", s.state, "me.state")}</div>
+  ${field("ZIP", s.zip, "me.zip")}
+  ${field("Email", s.email, "me.email")}
   <h2>Supplemental Rider — Gonchar Group, LLC</h2>
   <p><b>R0.</b> The document above is the form required by the Owner's insurance carrier and is complete in itself. This Supplemental Rider is a separate and additional agreement. It adds to, and does not amend, limit, qualify or replace, any part of the form above.</p>
   <p><b>R1.</b> "OWNER" means GONCHAR GROUP, LLC, including JET SKI MIAMI, jet-ski-miami.com, JETSKI MIAMI 7, and every GTT booking. "RELEASED PARTIES" means the Owner and its members, managers, officers, employees, staff, instructors, contractors, volunteers, insurers, affiliated entities, and the owner/operator of any vessel, dock or marina used. "ACTIVITY" means rental, operation, riding, boarding, presence on or around any personal watercraft and all instruction, briefing, launching, fueling, towing and retrieval.</p>
@@ -1188,9 +1256,36 @@ function viewB(){
   <label class="check"><input type="checkbox" ${state.media?"checked":""} onchange="state.media=this.checked;save()"> Optional: you may use photos/video of me in Jet Ski Miami advertising. Not required to ride. Left empty = no.</label>
   <label class="check"><input type="checkbox" ${state.checks.age?"checked":""} onchange="state.checks.age=this.checked;save();renderSticky()"> I am 18 or older.</label>
   <label class="check"><input type="checkbox" ${state.checks.self?"checked":""} onchange="state.checks.self=this.checked;save();renderSticky()"> I am signing only for myself.</label>
-  ${sigBox("Bsig","Sign here · this is your release")}
+  ${sigBox("Bsig","Sign here · this is YOUR release")}
   <p class="note">${ESIGN_PAD}</p>
   `;
+}
+function viewOp(){
+  const s = signer();
+  const a = ageYears(s.dob);
+  return `
+  <span class="chip">Second driver · not the rental</span>
+  <h1>You will drive a jet ski.</h1>
+  <p>Victoria is the renter. She signed the money contract (price, hold, return time). <b>You</b> still need your own papers because you will be on the water, and on this booking there are two skis.</p>
+  <p>This page is not the release (you just signed that) and not Florida’s 313A card (that is after a real check ride at the dock).</p>
+  <div class="warnbox">
+    <div class="caps">${escHtml(s.name||"Your name")} · ${escHtml(s.dob||"DOB missing")} · ${a==null?"age unknown":a+" yrs"}</div>
+    <p>If you are under 21 you may not operate. If this name is Victoria, go back and fix it.</p>
+  </div>
+  <h2>What you are agreeing</h2>
+  <ul>
+    <li>I am 21 or older.</li>
+    <li>I will operate or ride a personal watercraft on booking ${escHtml(BOOKING.id)}.</li>
+    <li>I will stay inside the riding area. Haulover / Sunny Isles PWC zone — no. Crandon — no. Idle 100 yards at the 79th Street bridge.</li>
+    <li>The owner’s insurance does not cover me.</li>
+    <li>I will wear the wetsuit bottom, or I will not ride.</li>
+    <li>At the dock I will do the briefing and, after a real check ride, Florida’s 313A card. I cannot sign that card from the couch.</li>
+  </ul>
+  ${initialBox("O1","I am 21+ and I will operate or ride on this booking.")}
+  ${initialBox("O2","I will follow the riding area. I will wear the wetsuit bottom or I will not ride.")}
+  ${initialBox("O3","I will complete dock briefing and FWC 313A after a real check ride.")}
+  ${sigBox("Osig","Sign here · driver acknowledgment")}
+  <p class="note">${ESIGN_PAD}</p>`;
 }
 function viewC(){
   const kids = minors();
@@ -1325,22 +1420,32 @@ function viewNoRide(){
     <p>You refused the wetsuit bottom. That is recorded. You do not board or operate. Ask staff about a refund if nobody else on the booking can ride.</p>`;
 }
 function viewDone(){
-  const recs = ["CONSENT","HOME-A","HOME-B","HOME-C","DOCK-DR","DOCK-D","DOCK-E"].map(code=>{
+  const recs = ["CONSENT","HOME-A","HOME-B","HOME-OP","HOME-C","DOCK-DR","DOCK-D","DOCK-E"].map(code=>{
     const r = state.records[code];
     if(!r) return "";
-    return `<div class="done-card"><div class="note">${escHtml(code)}</div>
+    const labels = {CONSENT:"E-sign consent", "HOME-A":"Rental contract (money / return time)", "HOME-B":"Your injury/death release", "HOME-OP":"Driver acknowledgment", "HOME-C":"Guardian form for the child", "DOCK-DR":"Wetsuit refusal", "DOCK-D":"Dock briefing", "DOCK-E":"Florida 313A card"};
+    return `<div class="done-card"><b>${escHtml(labels[code]||code)}</b>
       ${r.pdf_url?`<p><a href="${escHtml(r.pdf_url)}">Download PDF</a></p>`:""}</div>`;
   }).join("");
   const husb = location.origin+"/sign/?gtt="+encodeURIComponent(BOOKING.id)+"&who=husband";
+  const you = signer();
   return `
   <span class="chip">You're signed</span>
   <h1>See you at the dock.</h1>
   <div class="warnbox ok">
+    <p><b>${escHtml(you.name||"")} · ${escHtml(state.who)}</b></p>
     <p><b>${escHtml(BOOKING.date)} · arrive ${escHtml(BOOKING.arrive)}</b><br>${escHtml(BOOKING.dock)}</p>
-    <p>Bring photo ID and a credit card in your name. Wear the free wetsuit shorts or you do not ride.</p>
+    <p>Bring photo ID. Wear the free wetsuit shorts or you do not ride.</p>
   </div>
+  ${state.who==="husband"?`<h2>What you just signed</h2>
+  <ol>
+    <li><b>Photo ID</b> — your licence and face, so we know it is you.</li>
+    <li><b>Participant release</b> — you give up injury/death claims against the company (except things Florida does not let us take). Printed in <b>your</b> name, not Victoria’s.</li>
+    <li><b>Driver paper</b> — you will drive or ride a ski, you are 21+, you follow the map, you do briefing + check ride + Florida card at the dock.</li>
+  </ol>
+  <p>You did <b>not</b> sign the rental money contract. That is Victoria’s. You still sign the safety card and Florida 313A at the dock after the instructor watches you ride.</p>`:
+  `<p>Bring the credit card in the renter’s name. ${roster().some(p=>p.role==="adult")?`Husband signs his own papers: <a href="${husb}">${husb}</a>`:""}</p>`}
   <p><a href="/sign/pack.html?b=${encodeURIComponent(BOOKING.id)}">Your signed papers</a></p>
-  ${state.who!=="husband" && roster().some(p=>p.role==="adult")?`<p>Your husband signs his own release: <a href="${husb}">${husb}</a></p>`:""}
   ${recs}
   <p class="note">Gonchar Group, LLC d/b/a Jet Ski Miami · privacy@jet-ski-miami.com</p>`;
 }
@@ -1348,7 +1453,7 @@ function viewDone(){
 window.persistThen = persistThen;
 window.afterB = afterB;
 window.finish = finish;
-const VIEWS = {start:viewStart,identity:viewIdentity,homeA:viewA,homeB:viewB,homeC:viewC,arrive:viewArrive,dockDR:viewDR,dockD:viewD,ride:viewRide,dockE:viewE,done:viewDone,staff:viewStaff,noride:viewNoRide};
+const VIEWS = {start:viewStart,kyc:viewKyc,identity:viewIdentity,homeA:viewA,homeB:viewB,homeOp:viewOp,homeC:viewC,arrive:viewArrive,dockDR:viewDR,dockD:viewD,ride:viewRide,dockE:viewE,done:viewDone,staff:viewStaff,noride:viewNoRide};
 
 function render(){
   const steps = currentSteps();
@@ -1365,6 +1470,10 @@ function render(){
     }
     if(state.step==="homeB"){
       bindPad("B1",state.initials); bindPad("Bsig",state.sigs);
+    }
+    if(state.step==="homeOp"){
+      ["O1","O2","O3"].forEach(id=>bindPad(id,state.initials));
+      bindPad("Osig",state.sigs);
     }
     if(state.step==="homeC"){
       bindPad("C1",state.initials); bindPad("C2",state.initials);
@@ -1387,11 +1496,25 @@ function render(){
 
 applyBookingFromUrl();
 load();
-if(state.who==="husband" && (state.step==="homeA"||state.step==="homeC"||state.step==="kyc"||state.step==="sms")) state.step="identity";
-if(!isDock() && ["arrive","dockDR","dockD","ride","dockE"].includes(state.step)) state.step = (state.who==="husband"?"identity":"start");
+if(state.who==="husband" && (state.step==="homeA"||state.step==="homeC"||state.step==="sms")) state.step="start";
+if(!isDock() && ["arrive","dockDR","dockD","ride","dockE"].includes(state.step)) state.step = "start";
+(function takeDiditReturn(){
+  const q = new URLSearchParams(location.search);
+  const sid = q.get("didit");
+  if(!sid) return;
+  state.step = "kyc";
+  pullDidit(sid).then(()=>{
+    history.replaceState({}, "", "/sign/?gtt="+encodeURIComponent(BOOKING.id)+"&who="+encodeURIComponent(state.who||"renter")+"#kyc");
+    render();
+  }).catch((e)=>{
+    state.kyc.verdict = "failed";
+    state.kyc.reason = e.message || "ID check did not return a result";
+    render();
+  });
+})();
 if(location.hash){
   const h=location.hash.slice(1);
-  if(currentSteps().includes(h)) state.step=h;
+  if(currentSteps().includes(h) && !new URLSearchParams(location.search).get("didit")) state.step=h;
 }
 render();
 setInterval(()=>{ const t=$("timer"); if(t) t.textContent=elapsed(); },500);
