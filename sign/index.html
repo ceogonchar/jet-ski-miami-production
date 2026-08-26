@@ -85,6 +85,7 @@ hr{border:0;border-top:1px solid var(--line);margin:18px 0}
 .roster{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:10px 0;background:#fafafa}
 .roster .who{font-weight:700}
 .kid{color:var(--hot);font-weight:800}
+.padhint{font-size:12px;color:var(--sea);font-weight:700;margin:6px 0 0}
 .sitebar{max-width:430px;margin:0 auto;background:#050b14;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;font-size:13px}
 .sitebar a{color:#8bd9ff;text-decoration:none;font-weight:650}
 .sitebar .brand{color:#fff;font-weight:800;letter-spacing:-.02em}
@@ -104,7 +105,7 @@ hr{border:0;border-top:1px solid var(--line);margin:18px 0}
 </div>
 <div class="shell">
   <div class="bar">
-    <div class="who">jet-ski-miami.com/sign · staff test</div>
+    <div class="who">jet-ski-miami.com/sign</div>
     <div class="ttl" id="barTitle">Jet Ski Miami</div>
     <div class="meta"><span id="barStep">Start</span><span id="timer">0:00</span></div>
     <div class="prog"><i id="barFill"></i></div>
@@ -227,6 +228,15 @@ const state = {
   staffPin: "",
   masterInitial: null,
   masterSig: null,
+  who: "renter",
+};
+window.saveRosterRow = function(el){
+  const i = +el.dataset.roster;
+  const k = el.dataset.k;
+  if(!BOOKING.roster || !BOOKING.roster[i]) return;
+  BOOKING.roster[i][k] = (el.value||"").trim();
+  if(BOOKING.roster[i].role==="renter" && k==="name") GUEST.name = BOOKING.roster[i].name;
+  save();
 };
 function ageYears(dob){
   const p = String(dob||"").split("/");
@@ -242,17 +252,62 @@ function roster(){
   if(BOOKING.roster && BOOKING.roster.length) return BOOKING.roster;
   return [{name:GUEST.name, dob:GUEST.dob, role:"renter"}];
 }
-function minors(){ return roster().filter(p=>ageYears(p.dob)<18); }
+function isMinor(p){ return p.role==="minor" || ageYears(p.dob)<18; }
+function minors(){ return roster().filter(isMinor); }
 function hasMinors(){ return minors().length>0; }
+const LIVE_BOOKINGS = {
+  GTT000242: {
+    id: "GTT000242",
+    date: "Sat, Aug 29, 2026",
+    start: "11:00 AM",
+    arrive: "10:30 AM",
+    back: "12:00 PM",
+    dock: "1819 79th Street Causeway, North Bay Village, FL 33141",
+    price: "$369.00",
+    paid: "$0.00",
+    due: "$369.00",
+    hold: "$73.80",
+    vessel: "Assigned at the dock · 2 × 1 hour",
+    fl: "—",
+    hin: "—",
+    cap: "2 per ski",
+    map: "GG-MAP-2026-08-A",
+    overtime: "$28 / 15 min",
+    fuel: "$25 + pump",
+    recovery: "$180 / hour",
+    damageCap: "$5,000",
+    skis: 2,
+    renter: {name:"Victoria Guest", phone:"509-989-8888", email:"dmytro+victoria-test@gonchar.group"},
+    roster: [
+      {name:"Victoria Guest", dob:"", role:"renter", phone:"5099898888"},
+      {name:"", dob:"", role:"adult", relation:"Husband"},
+      {name:"", dob:"", role:"minor", relation:"Child"},
+    ],
+  }
+};
+function applyLiveBooking(id){
+  const b = LIVE_BOOKINGS[id];
+  if(!b) return false;
+  Object.assign(BOOKING, b);
+  BOOKING.roster = (b.roster||[]).map(p=>({...p}));
+  GUEST.name = (b.renter&&b.renter.name) || "Guest";
+  GUEST.phone = (b.renter&&b.renter.phone) || "";
+  GUEST.email = (b.renter&&b.renter.email) || "";
+  GUEST.dob = (b.renter&&b.renter.dob) || "";
+  GUEST.card = "";
+  return true;
+}
 function applyBookingFromUrl(){
   const m = location.pathname.match(/\/h\/([^/]+)/);
   const q = new URLSearchParams(location.search);
   const id = (m && m[1]) || q.get("gtt") || BOOKING.id;
   BOOKING.id = decodeURIComponent(id);
+  state.who = (q.get("who") || "renter").toLowerCase();
+  if(applyLiveBooking(BOOKING.id)) return;
   const demo = (q.get("demo") || "").toLowerCase();
   if(/child/i.test(BOOKING.id) || demo==="child") setScenario("child", true);
   else if(/pair|two/i.test(BOOKING.id) || demo==="pair") setScenario("pair", true);
-  else if(/GROUP|GTT0/i.test(BOOKING.id) || demo==="group") setScenario("group", true);
+  else if(/GROUP/i.test(BOOKING.id) || demo==="group") setScenario("group", true);
   else setScenario("solo", true);
 }
 function setScenario(kind, silent){
@@ -292,7 +347,12 @@ function setScenario(kind, silent){
   } else {
     BOOKING.roster = [{name:GUEST.name, dob:GUEST.dob, role:"renter"}];
   }
-  try{ history.replaceState({}, "", "/h/"+encodeURIComponent(BOOKING.id)+location.hash); }catch(e){}
+  try{
+    const onSign = /\/sign/.test(location.pathname);
+    const path = onSign ? "/sign/" : "/h/"+encodeURIComponent(BOOKING.id);
+    const q = "?gtt="+encodeURIComponent(BOOKING.id);
+    history.replaceState({}, "", path+q+location.hash);
+  }catch(e){}
   if(!silent){ save(); render(); }
 }
 window.setScenario = setScenario;
@@ -319,16 +379,20 @@ function elapsed(){
 }
 function go(step){
   if(state.step==="kyc" && step!=="kyc" && window.JSMKyc) JSMKyc.stopCamera();
+  if((state.who||"renter")==="husband" && (step==="homeA"||step==="homeC")){
+    step = (step==="homeC") ? "arrive" : "homeB";
+  }
   state.step = step;
   location.hash = step;
   render();
   window.scrollTo(0,0);
 }
 function mark(k){state.checks[k]=true; save(); render();}
-function save(){ try{ localStorage.setItem("gtt_test_016", JSON.stringify({...state, t0:state.t0})); }catch(e){} }
+function storageKey(){ return "jsm_sign_"+(BOOKING.id||"x")+"_"+(state.who||"renter"); }
+function save(){ try{ localStorage.setItem(storageKey(), JSON.stringify({...state, t0:state.t0})); }catch(e){} } }
 function load(){
   try{
-    const raw = localStorage.getItem("gtt_test_016");
+    const raw = localStorage.getItem(storageKey());
     if(!raw) return;
     const o = JSON.parse(raw);
     Object.assign(state, o);
@@ -408,22 +472,19 @@ async function persistInstrument(code){
       method:"POST", headers:{"Content-Type":"application/json"},
       body: JSON.stringify(payload)
     });
-    if (r.ok) data = await r.json();
+    if(r.ok) data = await r.json();
   } catch (e) {}
-  if (!data || !data.ok) {
-    const rec_id = utcIso().replace(/[-:]/g,"") + "-" + Math.random().toString(16).slice(2,8);
+  if(!data || !data.ok){
+    const rec_id = utcIso().replace(/[-:]/g,"")+"-"+Math.random().toString(16).slice(2,8);
     data = {
-      ok: true,
-      record_id: rec_id,
-      instrument_code: code,
-      booking_id: BOOKING.id,
+      ok:true, record_id:rec_id, instrument_code:code, booking_id:BOOKING.id,
       signed_at_utc: utcIso(),
-      pdf_url: "/sign/pack.html?b=" + encodeURIComponent(BOOKING.id),
-      pack_url: "/sign/pack.html?b=" + encodeURIComponent(BOOKING.id)
+      pdf_url: "/sign/pack.html?b="+encodeURIComponent(BOOKING.id),
+      pack_url: "/sign/pack.html?b="+encodeURIComponent(BOOKING.id)
     };
-    const key = "jsm_pack_" + BOOKING.id;
-    const pack = JSON.parse(localStorage.getItem(key) || "[]");
-    pack.push(Object.assign({}, data, {payload: payload}));
+    const key = "jsm_pack_"+BOOKING.id+"_"+(state.who||"renter");
+    const pack = JSON.parse(localStorage.getItem(key)||"[]");
+    pack.push(Object.assign({}, data, {payload}));
     localStorage.setItem(key, JSON.stringify(pack));
   }
   state.records[code] = data;
@@ -447,21 +508,44 @@ async function persistThen(code, next){
 function field(lab, val){
   return `<div class="field"><label>${lab}</label><div class="val ro">${val}</div></div>`;
 }
+function masterFor(id, store){
+  if(store===state.initials) return state.masterInitial;
+  if(store===state.sigs && id!=="Einstr") return state.masterSig;
+  return null;
+}
+function applyMaster(id, store){
+  const m = masterFor(id, store);
+  if(!m) return false;
+  store[id]=m;
+  state.markTimes[id]=utcIso();
+  save();
+  render();
+  return true;
+}
+window.applyMaster = function(id, kind){
+  applyMaster(id, kind==="sig"?state.sigs:state.initials);
+};
 function initialBox(id, text){
   const on = !!state.initials[id];
+  const canTap = !on && !!state.masterInitial;
   return `<div class="init ${on?"on":""}">
     <b>Initial · ${text}</b>
     <canvas id="cv-${id}" height="88"></canvas>
+    ${canTap?`<div class="padhint">Tap this box to place the initial you already drew. Or draw a new one.</div>`:""}
     <div class="tools"><button type="button" onclick="clearPad('${id}')">Clear</button>
+    ${canTap?`<button type="button" onclick="applyMaster('${id}', 'initial')">Place initial</button>`:""}
     ${on?`<span class="mut">Saved</span>`:""}</div>
   </div>`;
 }
 function sigBox(id, label){
   const on = !!state.sigs[id];
+  const canTap = !on && !!state.masterSig && id!=="Einstr";
   return `<div class="sig">
     <b>${label}</b>
     <canvas id="cv-${id}" height="120"></canvas>
+    ${canTap?`<div class="padhint">Tap this box to place the signature you already drew. Or draw a new one.</div>`:""}
     <div class="tools"><button type="button" onclick="clearPad('${id}')">Clear</button>
+    ${canTap?`<button type="button" onclick="applyMaster('${id}', 'sig')">Place signature</button>`:""}
     ${on?`<span class="mut">Saved</span>`:""}</div>
   </div>`;
 }
@@ -484,27 +568,29 @@ function bindPad(id, store){
     }
   };
   fit();
-  let draw=false, last=null;
+  let draw=false, last=null, dist=0;
   const pos=e=>{
     const r=cv.getBoundingClientRect();
     const t=e.touches?e.touches[0]:e;
     return {x:t.clientX-r.left,y:t.clientY-r.top};
   };
-  const start=e=>{draw=true; last=pos(e); e.preventDefault();};
+  const start=e=>{draw=true; last=pos(e); dist=0; e.preventDefault();};
   const move=e=>{
     if(!draw) return;
     const p=pos(e);
+    dist += Math.hypot(p.x-last.x, p.y-last.y);
     ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke();
     last=p; e.preventDefault();
   };
   const end=()=>{
     if(!draw) return;
     draw=false;
+    if(dist < 10 && !store[id] && applyMaster(id, store)) return;
+    if(dist < 10 && store[id]) return;
     store[id]=cv.toDataURL("image/png");
     state.markTimes[id]=utcIso();
     if(store===state.initials) state.masterInitial = store[id];
     if(store===state.sigs && id!=="Einstr") state.masterSig = store[id];
-    stampFromMaster();
     save();
     render();
   };
@@ -535,18 +621,8 @@ function padsOnStep(){
   return {init:[], sig:[]};
 }
 function stampFromMaster(){
-  const p=padsOnStep();
-  if(state.masterInitial){
-    p.init.forEach(id=>{
-      if(!state.initials[id]){ state.initials[id]=state.masterInitial; state.markTimes[id]=utcIso(); }
-    });
-  }
-  if(state.masterSig){
-    p.sig.forEach(id=>{
-      if(id==="Einstr") return;
-      if(!state.sigs[id]){ state.sigs[id]=state.masterSig; state.markTimes[id]=utcIso(); }
-    });
-  }
+  /* Intentionally empty. Florida e-sign: one drawn mark may be reused,
+     but only when the signer taps that field. Never auto-stamp blanks. */
 }
 
 function needA(){
@@ -562,7 +638,7 @@ function needDR(){
   return !!state.sigs.Wsig;
 }
 function afterB(){
-  persistThen("HOME-B", hasMinors() ? "homeC" : "arrive");
+  persistThen("HOME-B", (hasMinors() && (state.who||"renter")!=="husband") ? "homeC" : "arrive");
 }
 function needD(){
   for(let i=1;i<=15;i++) if(!state.initials["D"+i]) return false;
@@ -621,7 +697,7 @@ window.startWithConsent = async function(){
   }
 };
 window.resetAll=function(){
-  localStorage.removeItem("gtt_test_016");
+  localStorage.removeItem(storageKey());
   location.hash="";
   location.reload();
 };
@@ -709,7 +785,7 @@ function viewKyc(){
   return `
   <span class="chip">ID</span>
   <h1>Photo ID at the dock</h1>
-  <p>For this test, staff still checks the plastic ID at the dock. Tap continue to the rental papers. Names are already filled from the booking.</p>
+  <p>For this test, staff still checks the plastic ID at the dock. Tap continue to the rental papers.</p>
   <p id="kycStatus" class="mut"></p>`;
 }
 function viewKycDone(){
@@ -748,7 +824,7 @@ function viewStart(){
   return `
   <span class="chip">Sign your rental papers</span>
   <h1>You are the guest.</h1>
-  <p>This is the Jet Ski Miami signing page on jet-ski-miami.com. Walk it on your phone the way a customer would.</p>
+  <p>This is the Jet Ski Miami signing page. If we already have your booking, names and the slot are filled. Missing people (husband, child) you type once. Draw a mark once, then tap each box to place it.</p>
   <div class="warnbox">
     <div class="caps">Booking ${BOOKING.id}</div>
     <p style="margin:8px 0 0">${BOOKING.date} · 1 jet ski · 1 hour<br>${GUEST.name} · driver and renter · age 34</p>
@@ -782,7 +858,7 @@ function viewSms(){
     <div class="from">Jet Ski Miami · now</div>
     Jet Ski Miami | ${BOOKING.date} ${BOOKING.start}
 Confirm your ride. Names already filled:
-${location.origin}/h/${BOOKING.id}
+${location.origin}${/\/sign/.test(location.pathname)?"/sign/?gtt="+BOOKING.id:"/h/"+BOOKING.id}
 Forward to every adult. Kids don't sign. Arrive ${BOOKING.arrive}.
     Bring the card you paid with + the same photo ID. Born 1988 or after? Boating card or 30-min test — text a screenshot to 786-863-1721.
   </div>
@@ -819,7 +895,15 @@ function viewA(){
   ${field("Vessel", BOOKING.vessel+" · "+BOOKING.fl+" · "+BOOKING.hin+" · cap "+BOOKING.cap)}
   <div class="roster">
     <div class="note">Aboard — from the booking. You cannot add or hide a child here.</div>
-    ${roster().map(p=>`<div class="who">${escHtml(p.name)} · ${escHtml(p.dob)} · ${ageYears(p.dob)<18?`<span class="kid">under 18 · guardian form next</span>`:(p.role==="renter"?"RENTER / DRIVER":"ADULT")}</div>`).join("")}
+    ${roster().map((p,i)=>{
+      const kid = isMinor(p);
+      const need = !p.name || (kid && !p.dob);
+      if(!need) return `<div class="who">${escHtml(p.name)} · ${escHtml(p.dob)} · ${kid?`<span class="kid">under 18 · guardian form next</span>`:(p.role==="renter"?"RENTER / DRIVER":"ADULT")}</div>`;
+      return `<div class="who">${escHtml(p.relation||p.role)} — type name${kid?" and date of birth":""}
+        <input data-roster="${i}" data-k="name" placeholder="Full name" value="${escHtml(p.name||"")}" onchange="saveRosterRow(this)">
+        ${kid?`<input data-roster="${i}" data-k="dob" placeholder="MM/DD/YYYY" value="${escHtml(p.dob||"")}" onchange="saveRosterRow(this)">`:""}
+      </div>`;
+    }).join("")}
   </div>
   ${initialBox("A1","Everyone aboard is listed. I will not put anyone else on the ski or exceed capacity.")}
 
@@ -875,7 +959,7 @@ function viewA(){
   <label class="check"><input type="radio" name="card" ${state.card==="hold"?"checked":""} onchange="state.card='hold';save();renderSticky()"> I hold a Florida boating safety card / temporary certificate</label>
   <label class="check"><input type="radio" name="card" ${state.card==="no"?"checked":""} onchange="state.card='no';save();renderSticky()"> I do not hold one (I will not drive if born 1988 or after)</label>
   <p class="caps">I AM SIGNING ONCE. MY SINGLE SIGNATURE BELOW IS MY SIGNATURE TO EACH OF THE FOLLOWING, SEPARATELY AND INDEPENDENTLY: (1) this PERSONAL WATERCRAFT RENTAL AGREEMENT; and (2) the signed written acknowledgment required by section 327.54(7)(b)2., Florida Statutes, including the prescribed statement printed above.</p>
-  <p>I am 21+. Everyone aboard is listed. I understand your insurance does not cover me. This document does not release any injury claim — that is HOME-B, which I sign separately. Draw your initial once; the other initial boxes reuse it. Draw your signature once.</p>
+  <p>I am 21+. Everyone aboard is listed. I understand your insurance does not cover me. This document does not release any injury claim — that is HOME-B, which I sign separately. Draw your initial and signature once. Then tap each later box to place them. We do not fill boxes for you.</p>
   ${sigBox("Asig","Sign here · rental + insurance answer")}
   <p class="note">${ESIGN_PAD}</p>
   `;
@@ -884,7 +968,7 @@ function viewB(){
   return `
   <span class="chip">HOME-B · Participant Release · not the rental</span>
   <h1>Your release</h1>
-  <p class="mut">A new document. New audit trail. No prices, no return time, no promises about our equipment. Draw your initial and signature once — later boxes reuse them.</p>
+  <p class="mut">A new document. New audit trail. No prices, no return time, no promises about our equipment. Draw once, then tap each box to place the mark. We do not auto-fill.</p>
   ${field("Participant", GUEST.name+" · booking "+BOOKING.id)}
   <div class="warnbox">
     <h2 style="margin-top:0">PARTICIPANT AGREEMENT, RELEASE AND ASSUMPTION OF RISK</h2>
@@ -1100,7 +1184,6 @@ function render(){
   $("app").innerHTML = VIEWS[state.step]();
   renderSticky();
   requestAnimationFrame(()=>{
-    stampFromMaster();
     if(state.step==="homeA"){
       ["A1","A2","A3","A4","A5"].forEach(id=>bindPad(id,state.initials));
       bindPad("Asig",state.sigs);
