@@ -294,6 +294,8 @@ function applyLiveBooking(id){
   GUEST.phone = (b.renter&&b.renter.phone) || "";
   GUEST.email = (b.renter&&b.renter.email) || "";
   GUEST.dob = (b.renter&&b.renter.dob) || "";
+  GUEST.addr = ""; GUEST.city = ""; GUEST.state = ""; GUEST.zip = "";
+  GUEST.emName = ""; GUEST.emAddr = ""; GUEST.emPhone = ""; GUEST.emRel = "";
   GUEST.card = "";
   return true;
 }
@@ -827,7 +829,7 @@ function viewStart(){
   <p>This is the Jet Ski Miami signing page. If we already have your booking, names and the slot are filled. Missing people (husband, child) you type once. Draw a mark once, then tap each box to place it.</p>
   <div class="warnbox">
     <div class="caps">Booking ${BOOKING.id}</div>
-    <p style="margin:8px 0 0">${BOOKING.date} · 1 jet ski · 1 hour<br>${GUEST.name} · driver and renter · age 34</p>
+    <p style="margin:8px 0 0">${BOOKING.date} · ${BOOKING.start} · ${BOOKING.skis||1} jet ski${(BOOKING.skis||1)>1?"s":""}<br>${GUEST.name} · renter · ${GUEST.phone||""}</p>
   </div>
   <h2>Electronic signatures and electronic copies</h2>
   <p>Florida law (chapter 668, including s. 668.50) and federal law (the ESIGN Act, 15 U.S.C. §§ 7001–7006) let us do this rental in writing on your phone instead of on paper.</p>
