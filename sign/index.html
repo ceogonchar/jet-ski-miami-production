@@ -299,6 +299,32 @@ const LIVE_BOOKINGS = {
       {name:"", dob:"", role:"adult", relation:"Husband"},
       {name:"", dob:"", role:"minor", relation:"Child"},
     ],
+  },
+  GTT000243: {
+    id: "GTT000243",
+    date: "Sat, Aug 29, 2026",
+    start: "11:00 AM",
+    arrive: "10:30 AM",
+    back: "12:00 PM",
+    dock: "1819 79th Street Causeway, North Bay Village, FL 33141",
+    price: "$189.00",
+    paid: "$37.80",
+    due: "$151.20",
+    hold: "$37.80",
+    vessel: "Assigned at the dock · 1 × 1 hour",
+    fl: "—",
+    hin: "—",
+    cap: "2 per ski",
+    map: "GG-MAP-2026-08-A",
+    overtime: "$28 / 15 min",
+    fuel: "$25 + pump",
+    recovery: "$180 / hour",
+    damageCap: "$5,000",
+    skis: 1,
+    renter: {name:"Dmytro Honchar", phone:"786-863-1721", email:"dmytro@gonchar.group", dob:"03/17/1992"},
+    roster: [
+      {name:"Dmytro Honchar", dob:"03/17/1992", role:"renter", phone:"7868631721"},
+    ],
   }
 };
 function applyLiveBooking(id){
@@ -310,6 +336,7 @@ function applyLiveBooking(id){
   GUEST.phone = (b.renter&&b.renter.phone) || "";
   GUEST.email = (b.renter&&b.renter.email) || "";
   GUEST.dob = (b.renter&&b.renter.dob) || "";
+  if(b.renter&&b.renter.addr) GUEST.addr = b.renter.addr;
   GUEST.addr = ""; GUEST.city = ""; GUEST.state = ""; GUEST.zip = "";
   GUEST.emName = ""; GUEST.emAddr = ""; GUEST.emPhone = ""; GUEST.emRel = "";
   GUEST.card = "";
