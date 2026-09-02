@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Issue signing links · Jet Ski Miami</title>
+<style>
+:root{--bg:#e8efe9;--ink:#122018;--mut:#5c6b63;--line:#c9d4cc;--card:#fff;--sea:#0b6b74;--navy:#10231c;--hot:#b3400c;--ok:#0d6b39}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:720px;margin:0 auto;min-height:100dvh;background:var(--card);box-shadow:0 0 0 1px var(--line)}
+.top{background:var(--navy);color:#e8f4ef;padding:14px 16px}
+.top a{color:#8bd9ff;text-decoration:none;font-weight:650}
+.top h1{margin:6px 0 0;font-size:20px;letter-spacing:-.02em}
+.pad{padding:16px 16px 48px}
+.chip{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:#e7f3f1;color:var(--sea);padding:4px 8px;border-radius:99px}
+label{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin:10px 0 4px}
+input,textarea,select{width:100%;font:inherit;padding:10px;border:1px solid var(--line);border-radius:10px}
+textarea{min-height:110px;font-family:ui-monospace,monospace;font-size:13px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+button,.btn{border:0;background:var(--sea);color:#fff;border-radius:12px;padding:12px 14px;font-weight:750;font-size:15px;cursor:pointer}
+button.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.card{border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0;background:#f7faf8}
+.card a{color:var(--sea);word-break:break-all;font-size:13px}
+.mut{color:var(--mut);font-size:13px}
+.warn{border:1px solid #e3c8a8;background:#fff8ef;border-radius:12px;padding:10px 12px;font-size:13.5px;margin:12px 0}
+.ok{color:var(--ok);font-weight:800}
+.who{font-weight:800;margin-bottom:4px}
+.frozen{font-size:12px;color:var(--mut);border-left:3px solid #c9d4cc;padding-left:10px;margin:14px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="chip">Staff · issuance</div>
+    <h1>Issue a unique signing link</h1>
+    <p class="mut" style="color:#b7cfc6;margin:6px 0 0">SmartRez GTT → one URL per adult. WaiverForever and SmartRez stay live until Prime cutover.</p>
+    <p style="margin:10px 0 0;font-size:13px">
+      <a href="/sign/">Guest /sign</a> ·
+      <a href="/sign/staff.html">Dock gate</a> ·
+      <a href="/sign/pack.html">Pack</a>
+    </p>
+  </div>
+  <div class="pad">
+    <p class="frozen">Legal instrument wording on /sign is TEXT FROZEN pending Prime 2026 originals. This page only builds links and prefills identity. Do not paste Tanner / RM waiver text here.</p>
+    <label>SmartRez booking (GTT)</label>
+    <input id="gtt" placeholder="GTT000243" value="GTT000243" autocomplete="off">
+    <div class="btns">
+      <button type="button" onclick="loadKnown()">Load fixture / known booking</button>
+      <button type="button" class="ghost" onclick="document.getElementById('gtt').value='GTT000242';loadKnown()">Victoria 2-ski fixture</button>
+    </div>
+    <p id="meta" class="mut"></p>
+    <label>Roster (one adult or child per line). Role | Name | DOB | Phone | Email</label>
+    <textarea id="roster" placeholder="renter | Dmytro Honchar | 03/17/1992 | 786-863-1721 | dmytro@gonchar.group"></textarea>
+    <p class="mut">Minors do not get a link. HOME-C opens on the renter’s home flow when anyone on the roster is under 18. No “I have a child” checkbox.</p>
+    <label class="check" style="display:flex;gap:10px;align-items:flex-start;margin:12px 0">
+      <input id="walk" type="checkbox" checked>
+      <span>Staff walk — add <code>demo=1</code> so the guest can finish if the record API is down. Uncheck for a live SMS link. Neither option turns off WaiverForever.</span>
+    </label>
+    <div class="btns">
+      <button type="button" onclick="issue()">Mint per-person links</button>
+      <button type="button" class="ghost" onclick="copySms()">Copy renter SMS</button>
+    </div>
+    <div class="warn">Cutover is a later ops hour after Prime replies. Do not turn off WaiverForever or SmartRez v20 from this screen.</div>
+    <div id="list"></div>
+  </div>
+</div>
+<script src="issuance.js"></script>
+<script>
+function parseRoster(text){
+  return String(text||"").split(/\n/).map(line=>{
+    const p = line.split("|").map(s=>s.trim());
+    if(!p[0]) return null;
+    return {role:(p[0]||"").toLowerCase(), name:p[1]||"", dob:p[2]||"", phone:p[3]||"", email:p[4]||"", relation:p[5]||""};
+  }).filter(Boolean);
+}
+function rosterText(b){
+  return (b.roster||[]).map(p => [p.role||"", p.name||"", p.dob||"", p.phone||"", p.email||"", p.relation||""].join(" | ")).join("\n");
+}
+function currentBooking(){
+  const id = document.getElementById("gtt").value.trim();
+  const known = JSMIssuance.booking(id);
+  const roster = parseRoster(document.getElementById("roster").value);
+  if(known){
+    const b = JSON.parse(JSON.stringify(known));
+    if(roster.length) b.roster = roster;
+    const r = roster.find(p=>p.role==="renter");
+    if(r) b.renter = Object.assign({}, b.renter||{}, r);
+    return b;
+  }
+  const r = roster.find(p=>p.role==="renter") || roster[0] || {name:"Guest", role:"renter"};
+  return {
+    id: id || "GTT-STAFF",
+    date: "",
+    start: "",
+    arrive: "30 min before start",
+    renter: r,
+    roster: roster.length ? roster : [r],
+  };
+}
+function loadKnown(){
+  const id = document.getElementById("gtt").value.trim();
+  const b = JSMIssuance.booking(id);
+  const meta = document.getElementById("meta");
+  if(!b){
+    meta.textContent = "No fixture for "+id+". Paste the SmartRez roster below and mint anyway — the guest URL still carries ?gtt= and prefill query fields.";
+    return;
+  }
+  document.getElementById("roster").value = rosterText(b);
+  meta.textContent = b.id+" · "+(b.date||"")+" "+(b.start||"")+" · "+(b.skis||1)+" ski(s) · "+(b.renter&&b.renter.name||"");
+  issue();
+}
+function issue(){
+  const b = currentBooking();
+  const demo = document.getElementById("walk").checked;
+  const links = JSMIssuance.linksForBooking(b, demo);
+  const list = document.getElementById("list");
+  list.innerHTML = links.map(L => {
+    const abs = JSMIssuance.absolute(L.href);
+    const dock = JSMIssuance.absolute(L.dockHref);
+    return `<div class="card">
+      <div class="who">${esc(L.person)} · ${esc(L.label)}</div>
+      <div class="mut">Home: ${(L.home||[]).join(" → ")||"—"}</div>
+      <div class="mut">Dock: ${(L.dock||[]).join(" → ")||"—"}</div>
+      <p><a href="${abs}">${abs}</a></p>
+      <p class="mut">Dock: <a href="${dock}">${dock}</a></p>
+      <button type="button" class="ghost" onclick="navigator.clipboard.writeText('${abs.replace(/'/g,"%27")}')">Copy home link</button>
+    </div>`;
+  }).join("") + `<p class="mut">Pack for this booking: <a href="/sign/pack.html?b=${encodeURIComponent(b.id)}">/sign/pack.html?b=${esc(b.id)}</a>
+  · Gate: <a href="/sign/staff.html?gtt=${encodeURIComponent(b.id)}">/sign/staff.html?gtt=${esc(b.id)}</a></p>`;
+  window._issued = {b, links};
+}
+function copySms(){
+  const b = (window._issued && window._issued.b) || currentBooking();
+  const walk = document.getElementById("walk");
+  const links = (window._issued && window._issued.links) || JSMIssuance.linksForBooking(b, !!(walk && walk.checked));
+  const renter = links.find(L=>L.who==="renter") || links[0];
+  const body = JSMIssuance.smsBody(b, JSMIssuance.absolute(renter.href));
+  navigator.clipboard.writeText(body).then(()=>{ alert("Renter SMS copied."); }).catch(()=>{ prompt("Copy SMS", body); });
+}
+function esc(s){ return String(s||"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+(function(){
+  const q = new URLSearchParams(location.search).get("gtt");
+  if(q) document.getElementById("gtt").value = q;
+  loadKnown();
+})();
+</script>
+</body>
+</html>
