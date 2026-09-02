@@ -293,7 +293,7 @@ function roster(){
   if(BOOKING.roster && BOOKING.roster.length) return BOOKING.roster;
   return [{name:GUEST.name, dob:GUEST.dob, role:"renter"}];
 }
-function isMinor(p){ return p.role==="minor" || ageYears(p.dob)<18; }
+function isMinor(p){ const a = ageYears(p && p.dob); return !!(p && (p.role==="minor" || (a!=null && a<18))); }
 function minors(){ return roster().filter(isMinor); }
 function hasMinors(){ return minors().length>0; }
 function applyLiveBooking(id){
