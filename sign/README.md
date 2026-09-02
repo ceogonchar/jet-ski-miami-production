@@ -4,7 +4,7 @@
 
 See **[FLOW.md](FLOW.md)** for issuance, renter vs extra-adult vs dock, staff gate, and the record API stub.
 
-Legal copy on HOME-B / HOME-C / DOCK-D-R stays frozen (Tanner 2025-08-20 Word file). WaiverForever stays live. Do not email Prime from this change.
+Legal copy on HOME-B / HOME-C / DOCK-D-R is the 2026-09-02 Prime PDF (`sign/legal/Release_2026.txt`). WaiverForever stays live. Do not email Prime from this change.
 
 ## Staff walk (flow / UI — not a Prime cutover)
 
@@ -29,3 +29,4 @@ A2P SMS is blocked. Copy email / iMessage / WhatsApp from the issue page. GitHub
 | `sign/pack.html` | Signed pack |
 | `sign/record-api.js` | POST /api/record host + JSON shape |
 | `sign/kyc.js` | Optional on-device KYC helper |
+| `sign/legal/Release_2026.txt` | 2026 Prime PDF text (B / D-R / C) |

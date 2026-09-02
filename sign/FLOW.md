@@ -6,7 +6,7 @@ Live guest URL (GitHub Pages on `main`):
 
 `/h/{GTT}` is **not** wired. `sign.jet-ski-miami.com` currently 500 — do not issue there.
 
-Paying guests still use WaiverForever (`waiver.fr/p-X54J2`, `p-SGuJB`) until Prime cutover. Do not email Prime from this change. Legal instrument wording on HOME-B / HOME-C / DOCK-D-R stays frozen.
+Paying guests still use WaiverForever (`waiver.fr/p-X54J2`, `p-SGuJB`) until Prime cutover. Do not email Prime from this change. HOME-B / HOME-C / DOCK-D-R on screen are the 2026-09-02 Prime PDF (`sign/legal/Release_2026.txt`), three separate instruments, not merged into HOME-A.
 
 ## How a staffer issues a link
 
@@ -71,7 +71,7 @@ TODO: replace the trycloudflare hostname with a stable Gonchar host. Same path +
 
 | File | Role |
 | --- | --- |
-| `sign/index.html` | Guest wizard (legal copy frozen) |
+| `sign/index.html` | Guest wizard (2026 Prime PDF on B / C / D-R) |
 | `sign/issuance.js` | GTT → per-adult URL, token, launch count |
 | `sign/issue.html` | Staff mints links + QR + share copy |
 | `sign/staff.html` | Dock roster / launch gate |

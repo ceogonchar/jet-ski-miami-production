@@ -1,5 +1,5 @@
 /* Issuance + URL contract for /sign.
-   HOME-B / D-R / HOME-C body copy lives in index.html and stays frozen.
+   HOME-B / D-R / HOME-C body copy lives in index.html (2026-09-02 Release 2026 .pdf).
    Do not put waiver body copy in this file.
    Live guest URL: https://www.jet-ski-miami.com/sign/?gtt=
    /h/{GTT} and sign.jet-ski-miami.com are not wired. */
