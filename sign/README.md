@@ -1,22 +1,25 @@
 # Guest signing at `/sign`
 
-Jet Ski Miami check-in papers. **Legal instrument wording is TEXT FROZEN pending Prime 2026 originals.** Do not paste, rewrite, or “lock” HOME-B / HOME-C / DOCK-D-R to last year’s Tanner / RM Word file in this repo until that 2026 customer-waiver email is in hand.
+Jet Ski Miami check-in papers. **HOME-B, DOCK-D-R, and HOME-C are locked** to Tanner Hoch `<tannerh@primeis.com>`, 2025-08-20, subject “RE: Risk Management — Gonchar Group LLC”, attachment `Gonchar Group LLC.docx`.
 
-WaiverForever and SmartRez v20 stay live. Cutover is a later ops hour after Prime replies. Do not email Prime from this change.
+The 2026 Prime customer-waiver email has not arrived. Do not wait for it. Do not merge HOME-C into HOME-B. Do not “fix” **JSTMC** in HOME-B sentence 1. Do not put a statute-number heading on the Florida minor-guardian block — the Word file heading is unlabeled **NOTICE TO THE MINOR CHILD’S NATURAL GUARDIAN**. The Word file ends after **MINOR NAME #4**.
 
-## URL to walk (staff / Prime review of the *flow*)
+WaiverForever and SmartRez v20 stay live. Cutover is a later ops hour. Do not email Prime from this change.
+
+## URL to walk (staff / Prime review)
 
 Guest shell (fixture, demo persist so a dead record tunnel does not block the walk):
 
 **https://jet-ski-miami.com/sign/?gtt=GTT000243&demo=1**
 
-- Adult + child path: `https://jet-ski-miami.com/sign/?gtt=GTT000242&demo=1`
+- Adult + child path (HOME-C): `https://jet-ski-miami.com/sign/?gtt=GTT000242&demo=1`
+- HOME-C only (same booking, hash jump): `https://jet-ski-miami.com/sign/?gtt=GTT000242&demo=1#homeC`
 - Dock after home papers: add `&dock=1`
 - Issue unique links from a GTT: **https://jet-ski-miami.com/sign/issue.html?gtt=GTT000243**
 - Launch gate: **https://jet-ski-miami.com/sign/staff.html?gtt=GTT000243**
 - Pack (PDF/JSON list): **https://jet-ski-miami.com/sign/pack.html?b=GTT000243**
 
-Cover letter to Prime waits for this year’s originals. When that file arrives, send the live `/sign` URL plus the frozen-then-updated HOME-B/C/D-R text — not before.
+Send Prime the live `/sign` URL. Do not wait for a 2026 PDF.
 
 ## How a guest gets a link
 
@@ -33,12 +36,12 @@ Home (couch), in order:
 1. E-sign consent (this booking only)
 2. Photo ID (Didit). Staff walk with `demo=1` may confirm details without the camera.
 3. Confirm prefilled identity once
-4. **HOME-A** rental (renter only) then **HOME-B** release (every adult)
-5. **HOME-C** if a minor is on the roster
+4. **HOME-A** rental (renter only) then **HOME-B** release (every adult) — Word-file participant agreement
+5. **HOME-C** if a minor is on the roster — Word-file perpetual waiver; separate instrument; ends after MINOR NAME #4
 
 Dock only (`&dock=1`):
 
-6. Wetsuit offer → **DOCK-D-R** if they refuse (separate instrument)
+6. Wetsuit offer → **DOCK-D-R** if they refuse (Word-file refusal; rider signature, then parent/guardian/spouse, additional minors, date)
 7. **DOCK-D** 15-block briefing
 8. Real check ride (instructor unlock)
 9. **DOCK-E** FWC 313A — do not auto-tick boxes or the instructor pad
@@ -55,7 +58,7 @@ Do not commit ID photos, secrets, or executed signature PDFs to this repo.
 
 | File | Role |
 | --- | --- |
-| `sign/index.html` | Guest shell (legal strings frozen) |
+| `sign/index.html` | Guest shell (HOME-B / D-R / HOME-C locked to the 2025-08-20 Word file) |
 | `sign/issuance.js` | GTT → per-person URL, prefill, launch count |
 | `sign/issue.html` | Staff mints links |
 | `sign/staff.html` | Dock launch gate |

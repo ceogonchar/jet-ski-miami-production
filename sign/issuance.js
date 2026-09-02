@@ -1,5 +1,5 @@
 /* Issuance + URL contract for /sign.
-   Legal instrument strings live in index.html and are TEXT FROZEN pending Prime 2026 originals.
+   HOME-B / D-R / HOME-C body copy lives in index.html, locked to Tanner 2025-08-20 Gonchar Group LLC.docx.
    Do not put waiver body copy in this file. */
 (function (root) {
   const LIVE_BOOKINGS = {

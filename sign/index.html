@@ -1,7 +1,9 @@
 <!doctype html>
-<!-- TEXT FROZEN pending Prime 2026 originals (Tanner / RM Word).
-     Do not paste, rewrite, or lock HOME-B / HOME-C / DOCK-D-R copy in this file.
-     This shell is issuance + check-in flow. Legal strings in viewA/viewB/viewC/viewDR/viewD/viewE stay as the current shell. -->
+<!-- HOME-B, DOCK-D-R, HOME-C LOCKED from Tanner Hoch 2025-08-20
+     <tannerh@primeis.com> “RE: Risk Management — Gonchar Group LLC”
+     attachment Gonchar Group LLC.docx. 2026 customer-waiver email has not arrived.
+     Keep JSTMC in sentence 1. Do not label the guardian notice “744.301”.
+     Do not merge HOME-C into HOME-B. Doc ends after MINOR NAME #4. -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -145,9 +147,8 @@ hr{border:0;border-top:1px solid var(--line);margin:18px 0}
 </div>
 
 <script>
-/* TEXT FROZEN pending Prime 2026 originals.
-   Do not rewrite the body copy inside viewA, viewB, viewC, viewDR, viewD, or viewE.
-   Issuance, prefill, persist, and chrome only. */
+/* HOME-B / DOCK-D-R / HOME-C locked to Tanner 2025-08-20 Gonchar Group LLC.docx.
+   Do not “fix” JSTMC. Do not add a 744.301 label. HOME-C is its own instrument. */
 const BOOKING = {
   id: "GTT-TEST-016",
   date: "Sat, Aug 16, 2026",
@@ -259,6 +260,9 @@ const state = {
   kyc: { phase:"front", session:null, fields:{}, conf:{}, verdict:null, score:null, faceOnId:false, idFace:"", selfieFace:"", reason:"", docType:"", livenessOk:false, sessionId:null },
   staffOk: false,
   staffPin: "",
+  extraMinors: [{name:"",dob:"",relation:""},{name:"",dob:"",relation:""},{name:"",dob:"",relation:""},{name:"",dob:"",relation:""}],
+  drMinors: "",
+  drParent: "",
   masterInitial: null,
   masterSig: null,
   who: "renter",
@@ -274,8 +278,14 @@ window.saveRosterRow = function(el){
 function ageYears(dob){
   const p = String(dob||"").split("/");
   if(p.length!==3) return null;
-  const mo=+p[0], d=+p[1], y=+p[2];
-  if(!mo||!d||!y||y<1900||y>2100) return null;
+  const mo=+p[0], d=+p[1];
+  let y=+p[2];
+  if(!mo||!d||Number.isNaN(y) || y<0) return null;
+  if(y>=0 && y<100){
+    const cap = (new Date().getFullYear() % 100) + 1;
+    y += (y > cap) ? 1900 : 2000;
+  }
+  if(y<1900||y>2100) return null;
   const dt = new Date(y, mo-1, d);
   if(dt.getMonth()!==mo-1 || dt.getDate()!==d) return null;
   const now = new Date();
@@ -284,6 +294,39 @@ function ageYears(dob){
   if(m<0 || (m===0 && now.getDate()<dt.getDate())) a--;
   return a;
 }
+function todayMDY(){
+  const d = new Date();
+  return String(d.getMonth()+1).padStart(2,"0")+"/"+String(d.getDate()).padStart(2,"0")+"/"+String(d.getFullYear()).slice(-2);
+}
+function homeCSlots(){
+  const kids = minors();
+  const extras = state.extraMinors || (state.extraMinors=[{},{},{},{}]);
+  const slots = [];
+  for(let i=0;i<4;i++){
+    if(kids[i]) slots.push({p:kids[i], rosterIndex: roster().indexOf(kids[i]), extraIndex:-1});
+    else {
+      const off = i - kids.length;
+      if(!extras[off]) extras[off] = {name:"",dob:"",relation:""};
+      slots.push({p:extras[off], rosterIndex:-1, extraIndex:off});
+    }
+  }
+  return slots;
+}
+window.saveChildSlot = function(el){
+  const i = +el.dataset.slot;
+  const k = el.dataset.k;
+  const v = (el.value||"").trim();
+  const slot = homeCSlots()[i];
+  if(!slot) return;
+  if(slot.rosterIndex>=0 && BOOKING.roster[slot.rosterIndex]){
+    BOOKING.roster[slot.rosterIndex][k] = v;
+  } else {
+    if(!state.extraMinors) state.extraMinors = [{},{},{},{}];
+    if(!state.extraMinors[slot.extraIndex]) state.extraMinors[slot.extraIndex] = {name:"",dob:"",relation:""};
+    state.extraMinors[slot.extraIndex][k] = v;
+  }
+  save();
+};
 function ageLabel(p){
   if(isMinor(p)) return `<span class="kid">CHILD${ageYears(p.dob)!=null?" "+ageYears(p.dob):""}</span>`;
   const a = ageYears(p.dob);
@@ -549,10 +592,10 @@ function collectMarks(ids, store, type){
 }
 function instrumentMarks(code){
   if(code==="HOME-A") return collectMarks(["A1","A2","A3","A4","A5"], state.initials, "initial").concat(collectMarks(["Asig"], state.sigs, "signature"));
-  if(code==="HOME-B") return collectMarks(["B1"], state.initials, "initial").concat(collectMarks(["Bsig"], state.sigs, "signature"));
+  if(code==="HOME-B") return collectMarks(["Bsig"], state.sigs, "signature");
   if(code==="HOME-OP") return collectMarks(["O1","O2","O3"], state.initials, "initial").concat(collectMarks(["Osig"], state.sigs, "signature"));
-  if(code==="HOME-C") return collectMarks(["C1","C2"], state.initials, "initial").concat(collectMarks(["CsigA","CsigB"], state.sigs, "signature"));
-  if(code==="DOCK-DR") return collectMarks(["Wsig"], state.sigs, "signature");
+  if(code==="HOME-C") return collectMarks(["CsigA"], state.sigs, "signature");
+  if(code==="DOCK-DR") return collectMarks(["Wsig","WsigP"], state.sigs, "signature");
   if(code==="DOCK-D"){
     const ids = [];
     for(let i=1;i<=15;i++) ids.push("D"+i);
@@ -563,10 +606,10 @@ function instrumentMarks(code){
 }
 function instrumentFields(code){
   if(code==="HOME-A") return {ins:state.ins, card:state.card, sms:!!state.sms};
-  if(code==="HOME-B") return {media:!!state.media, age18:!!state.checks.age, self:!!state.checks.self, signer:signer().name, signer_dob:signer().dob, minors:minors().map(p=>p.name)};
+  if(code==="HOME-B") return {print_name:signer().name, dob:signer().dob, phone:signer().phone, address:signer().addr, city:signer().city, state:signer().state, zip:signer().zip, email:signer().email, signed_date: todayMDY()};
   if(code==="HOME-OP") return {driver:true, name:signer().name, dob:signer().dob, age:ageYears(signer().dob)};
-  if(code==="HOME-C") return {children:minors(), guardian:GUEST.name};
-  if(code==="DOCK-DR") return {wet:"refuse", boards:false, noRide:true};
+  if(code==="HOME-C") return {children:minors(), extraMinors:state.extraMinors||[], guardian:GUEST.name, guardian_print:GUEST.name, signed_date: todayMDY()};
+  if(code==="DOCK-DR") return {wet:"refuse", additionalMinors:state.drMinors||"", parentSpouse:state.drParent||""};
   if(code==="DOCK-E"){
     const boxes={};
     for(let i=1;i<=24;i++) boxes["E"+i]=!!state.checks["E"+i];
@@ -815,10 +858,10 @@ window.clearPad=function(id){
 function padsOnStep(){
   const s=state.step;
   if(s==="homeA") return {init:["A1","A2","A3","A4","A5"], sig:["Asig"]};
-  if(s==="homeB") return {init:["B1"], sig:["Bsig"]};
+  if(s==="homeB") return {init:[], sig:["Bsig"]};
   if(s==="homeOp") return {init:["O1","O2","O3"], sig:["Osig"]};
-  if(s==="homeC") return {init:["C1","C2"], sig:["CsigA","CsigB"]};
-  if(s==="dockDR") return {init:[], sig:["Wsig"]};
+  if(s==="homeC") return {init:[], sig:["CsigA"]};
+  if(s==="dockDR") return {init:[], sig:["Wsig","WsigP"]};
   if(s==="dockD"){
     const init=[];
     for(let i=1;i<=15;i++) init.push("D"+i);
@@ -839,7 +882,7 @@ function needB(){
   const s = signer();
   if(!s.name || /guest$/i.test(s.name)) return false;
   if(ageYears(s.dob)==null || ageYears(s.dob)<18) return false;
-  return !!(state.initials.B1 && state.sigs.Bsig && state.checks.age && state.checks.self);
+  return !!state.sigs.Bsig;
 }
 function needOp(){
   const s = signer();
@@ -848,7 +891,8 @@ function needOp(){
 }
 function needC(){
   if(!minors().every(p=>p.name && ageYears(p.dob)!=null && ageYears(p.dob)<18)) return false;
-  return !!(state.initials.C1 && state.initials.C2 && state.sigs.CsigA && state.sigs.CsigB);
+  if(!GUEST.name || /guest$/i.test(GUEST.name.trim())) return false;
+  return !!state.sigs.CsigA;
 }
 function needDR(){
   return !!state.sigs.Wsig;
@@ -877,9 +921,9 @@ function renderSticky(){
   if(s==="homeA") html= needA()
     ? `<button class="btn" onclick="persistThen('HOME-A','homeB')">Sign rental · continue to release</button>`
     : `<div><ul class="missing-list">${missingA().map(x=>"<li>"+escHtml(x)+"</li>").join("")}</ul><button class="btn" disabled>Finish the items above</button></div>`;
-  if(s==="homeB") html=`<button class="btn" ${needB()?"":"disabled"} onclick="afterB()">${needB()?((state.who==="husband")?"Sign MY release · driver page next":(hasMinors()?"Sign release · child form next":"Sign release · done at home")):"Print YOUR name, initial R3, tick boxes, sign"}</button>`;
+  if(s==="homeB") html=`<button class="btn" ${needB()?"":"disabled"} onclick="afterB()">${needB()?((state.who==="husband")?"Sign MY release · driver page next":(hasMinors()?"Sign release · child form next":"Sign release · done at home")):"Print name, date of birth, and sign"}</button>`;
   if(s==="homeOp") html=`<button class="btn" ${needOp()?"":"disabled"} onclick="persistThen('HOME-OP','done')">${needOp()?"Save driver paper · done at home":"Three initials and your signature"}</button>`;
-  if(s==="homeC") html=`<button class="btn" ${needC()?"":"disabled"} onclick="persistThen('HOME-C','done')">${needC()?"Sign for your child · done at home":"Read both notices, two initials, two signatures"}</button>`;
+  if(s==="homeC") html=`<button class="btn" ${needC()?"":"disabled"} onclick="persistThen('HOME-C','done')">${needC()?"Sign for your child · done at home":"Print your name, list each child, sign"}</button>`;
   if(s==="arrive") html = state.wet==="wear"
     ? `<button class="btn" onclick="go('dockD')">Wearing shorts · start briefing</button>`
     : state.wet==="refuse"
@@ -1239,7 +1283,7 @@ function viewA(){
   <p class="note">${ESIGN_PAD}</p>
   `;
 }
-/* TEXT FROZEN pending Prime 2026 originals — do not rewrite legal strings in viewB. */
+/* LOCKED Tanner 2025-08-20 Gonchar Group LLC.docx — keep JSTMC; do not merge HOME-C. */
 function viewB(){
   const s = signer();
   return `
@@ -1247,50 +1291,27 @@ function viewB(){
   <h1>Your release — ${escHtml(s.name||"type your name")}</h1>
   <p class="mut">${state.who==="husband"?"This is <b>your</b> injury / death release. It is not Victoria’s rental contract and not her name. If the printed name below is wrong, change it.":"A new document. New audit trail. No prices, no return time. Draw once, then tap each later box — or type your initials."}</p>
   <div class="warnbox"><div class="caps">Signing as ${escHtml(s.name||"(name missing)")}</div>
-    <p>Booking ${escHtml(BOOKING.id)}. Role: ${escHtml(state.who)}. This paper does not charge a card and does not set the return time.</p></div>
-  ${field("Participant", (s.name||"")+" · booking "+BOOKING.id)}
+    <p>Booking ${escHtml(BOOKING.id)}. Role: ${escHtml(state.who)}. This paper does not charge a card and does not set the return time. HOME-C is a separate instrument if a child is on the roster.</p></div>
   <div class="warnbox">
     <h2 style="margin-top:0">PARTICIPANT AGREEMENT, RELEASE AND ASSUMPTION OF RISK</h2>
-    <p>In consideration of the services of GONCHAR GROUP, LLC their agents, owners, officers, volunteers, employees, and all other persons or entities acting in any capacity on their behalf (hereinafter collectively referred to as "GG"), I hereby agree to release, indemnify, and discharge GG, on behalf of myself, my spouse, my children, my parents, my heirs, assigns, personal representative and estate as follows:</p>
-    <p><b>1.</b> I acknowledge that my participation in Jet Ski and Personal Watercraft activities entails known and unanticipated risks that could result in physical or emotional injury, paralysis, death, or damage to myself, to property, or to third parties. I understand that such risks simply cannot be eliminated without jeopardizing the essential qualities of the activity.</p>
+    <p>In consideration of the services of Gonchar Group LLC their agents, owners, officers, volunteers, employees, and all other persons or entities acting in any capacity on their behalf (hereinafter collectively referred to as "GG"), I hereby agree to release, indemnify, and discharge JSTMC, on behalf of myself, my spouse, my children, my parents, my heirs, assigns, personal representative and estate as follows:</p>
+    <p>I acknowledge that my participation in Jet Ski and Personal Watercraft  activities entails known and unanticipated risks that could result in physical or emotional injury, paralysis, death, or damage to myself, to property, or to third parties.  I understand that such risks simply cannot be eliminated without jeopardizing the essential qualities of the activity.</p>
     <p>The risks include, among other things: slips and falls; passengers can be jolted, jarred, bounced, thrown about and otherwise shaken during rides; collision with fixed or movable objects, vehicles, or other watercraft; boat capsize and entrapment; accidental drowning; water craft are slippery when wet and accidents can occur getting in or out; the forces of nature including extremes of weather, lightning and rapid weather changes, exposure to sun, strong wind, cold, large waves, eddies and whirlpools, tidal conditions, surf and currents; exposure to temperature and weather extremes which could cause cold water shock, hypothermia, hyperthermia (heat related illnesses), heat exhaustion, sunburn, dehydration; exposure to potentially dangerous wild animals, insect bites, and hazardous plant life; aggressive and/or poisonous marine life; major injuries are a risk as are sprains, strains, scratches, bruises, abrasions, cuts, lacerations, broken bones, fractures, musculoskeletal injuries including head, neck, and back injuries; injuries to internal organs; loss of fingers or other appendages; equipment failure and/or operator error; the negligence of other visitors, participants, or other persons who may be present; improper lifting or carrying; my own physical condition, and the physical exertion associated with this activity; being lost or separated from their guides or companions; transmissible pathogen or disease; traveling to and from activity locations raises the possibility of any manner of transportation accidents; accidents or illness can occur in remote places without medical facilities and emergency treatment or other services rendered.</p>
-    <p><b>2.</b> I expressly agree and promise to accept and assume all of the risks existing in this activity. My participation in this activity is purely voluntary, and I elect to participate in spite of the risks. Additionally, I agree to wear a U.S. Coast Guard approved personal flotation device (life jacket) and wetsuit bottom (or clothing that provides equivalent protection) while participating in this activity.</p>
-    <p><b>3.</b> I hereby voluntarily release, forever discharge, and agree to indemnify and hold harmless GG from any and all claims, demands, or causes of action, which are in any way connected with my participation in this activity or my use GG’s equipment or facilities, including any such claims which allege negligent acts or omissions of GG.</p>
-    <p><b>4.</b> Should GG or anyone acting on their behalf, be required to incur lawyer's fees and costs to enforce this agreement, I agree to indemnify and hold them harmless for all such fees and costs.</p>
-    <p><b>5.</b> I certify that I have adequate insurance to cover any injury or damage I may cause or suffer while participating, or else I agree to bear the costs of such injury or damage myself. I further certify that I am willing to assume the risk of any medical or physical condition I may have.</p>
-    <p><b>6.</b> In the event that I file a lawsuit against GG, I agree to do so solely in the state of Florida and I further agree that the substantive law of that state shall apply in that action without regard to the conflict of law rules of that that state. I agree that if any portion of this agreement is found to be void or unenforceable, the remaining document shall remain in full force and effect.</p>
-    <p><b>By signing this document, I acknowledge that if anyone is hurt or property is damaged during my participation in this activity, I may be found by a court of law to have waived my right to maintain a lawsuit against GG on the basis of any claim from which I have released them herein. I also agree that this document is valid for subsequent visits and participation at GG. I have had sufficient opportunity to read this entire document. I have read and understood it, and I agree to be bound by its terms.</b></p>
+    <p>2.I expressly agree and promise to accept and assume all of the risks existing in this activity.  My participation in this activity is purely voluntary, and I elect to participate in spite of the risks.  Additionally, I agree to wear a U.S. Coast Guard approved personal flotation device (life jacket) and wetsuit bottom (or clothing that provides equivalent protection) while participating in this activity.</p>
+    <p>3.I hereby voluntarily release, forever discharge, and agree to indemnify and hold harmless GG from any and all claims, demands, or causes of action, which are in any way connected with my participation in this activity or my use GG’s equipment or facilities, including any such claims which allege negligent acts or omissions of GG.</p>
+    <p>4.Should GG or anyone acting on their behalf, be required to incur lawyer's fees and costs to enforce this agreement, I agree to indemnify and hold them harmless for all such fees and costs.</p>
+    <p>5.I certify that I have adequate insurance to cover any injury or damage I may cause or suffer while participating, or else I agree to bear the costs of such injury or damage myself. I further certify that I am willing to assume the risk of any medical or physical condition I may have.</p>
+    <p>6.In the event that I file a lawsuit against GG, I agree to do so solely in the state of Florida and I further agree that the substantive law of that state shall apply in that action without regard to the conflict of law rules of that that state. I agree that if any portion of this agreement is found to be void or unenforceable, the remaining document shall remain in full force and effect.</p>
+    <p><b>By signing this document, I acknowledge that if anyone is hurt or property is damaged during my participation in this activity, I may be found by a court of law to have waived my right to maintain a lawsuit against GG on the basis of any claim from which I have released them herein. I also agree that this document is valid for subsequent visits and participation at GG. I have had sufficient opportunity to read this entire document.  I have read and understood it, and I agree to be bound by its terms.</b></p>
   </div>
-  <div class="row">${field("Print name", s.name, "me.name")}${field("DOB", s.dob, "me.dob")}</div>
-  ${field("Phone", s.phone, "me.phone")}
-  ${field("Street", s.addr, "me.addr")}
+  <div class="row">${field("Print Name", s.name, "me.name")}${field("DOB", s.dob, "me.dob")}</div>
+  ${field("Phone Number", s.phone, "me.phone")}
+  ${field("Address", s.addr, "me.addr")}
   <div class="row">${field("City", s.city, "me.city")}${field("State", s.state, "me.state")}</div>
-  ${field("ZIP", s.zip, "me.zip")}
+  ${field("Zip", s.zip, "me.zip")}
   ${field("Email", s.email, "me.email")}
-  <h2>Supplemental Rider — Gonchar Group, LLC</h2>
-  <p><b>R0.</b> The document above is the form required by the Owner's insurance carrier and is complete in itself. This Supplemental Rider is a separate and additional agreement. It adds to, and does not amend, limit, qualify or replace, any part of the form above.</p>
-  <p><b>R1.</b> "OWNER" means GONCHAR GROUP, LLC, including JET SKI MIAMI, jet-ski-miami.com, JETSKI MIAMI 7, and every GTT booking. "RELEASED PARTIES" means the Owner and its members, managers, officers, employees, staff, instructors, contractors, volunteers, insurers, affiliated entities, and the owner/operator of any vessel, dock or marina used. "ACTIVITY" means rental, operation, riding, boarding, presence on or around any personal watercraft and all instruction, briefing, launching, fueling, towing and retrieval.</p>
-  <p><b>R2.</b> I KNOWINGLY AND VOLUNTARILY ASSUME ALL INHERENT RISKS, including collision, ejection, drowning, forceful water entry into body cavities, paralysis, and equipment failure. THIS PARAGRAPH SURVIVES even if the release below is held void.</p>
-  <div class="warnbox hot">
-    <p class="caps">R3. I RELEASE, WAIVE, ACQUIT AND FOREVER DISCHARGE THE RELEASED PARTIES FROM ALL CLAIMS FOR PERSONAL INJURY, BODILY INJURY, DEATH AND PROPERTY DAMAGE ARISING OUT OF THE ACTIVITY, INCLUDING ANY SUCH CLAIM CAUSED IN WHOLE OR IN PART BY THE NEGLIGENCE OF ANY RELEASED PARTY, WHETHER ACTIVE OR PASSIVE, INCLUDING NEGLIGENT INSTRUCTION, SUPERVISION, MAINTENANCE, INSPECTION, ENTRUSTMENT AND HIRING. I GIVE THIS RELEASE ON MY OWN BEHALF AND ON BEHALF OF MY SPOUSE, CHILDREN, PARENTS, HEIRS AND ESTATE. I AM GIVING UP THE RIGHT TO SUE FOR INJURIES, INCLUDING FATAL INJURIES, CAUSED BY THE NEGLIGENCE OF THE RELEASED PARTIES.</p>
-    ${initialBox("B1","I have read paragraph R3.")}
-  </div>
-  <p><b>R4.</b> This Rider does not release gross negligence, recklessness, willful or intentional misconduct, or any liability that may not lawfully be released under Florida or federal law, including chapter 327, Florida Statutes.</p>
-  <p><b>R5.</b> I am not under the influence of alcohol, cannabis or impairing drugs (none in the last 8 hours). I can swim or keep myself afloat in a life jacket. I have disclosed any condition that makes this unsafe. If that stops being true, I will say so.</p>
-  <div class="warnbox hot">
-    <div class="caps">R6. THE OWNER'S LIABILITY INSURANCE POLICY INSURES GONCHAR GROUP, LLC. IT DOES NOT INSURE ME. I AM NOT AN INSURED OR A BENEFICIARY. IT PROVIDES ME WITH NO LIABILITY, DEFENSE, ACCIDENT OR MEDICAL COVERAGE, AND IT DOES NOT COVER DAMAGE TO THE RENTED VESSEL.</div>
-  </div>
-  <p><b>R7.</b> The Released Parties have made no promise about the condition of any vessel, inspection, maintenance, supervision, instruction or insurance, and I have not relied on any such promise.</p>
-  <p><b>R8.</b> If any provision is invalid it shall be reformed to the maximum extent the law allows; the rest remains. R2 and R3 are each independent and severable.</p>
-  <p><b>R9.</b> This instrument governs release of claims only. Commercial terms are exclusively in HOME-A. Order of precedence: (1) HOME-C as to a minor; (2) this HOME-B as to release; (3) HOME-A as to commercial terms. NO OTHER INSTRUMENT LIMITS THE CARRIER FORM OR THIS RIDER.</p>
-  <p><b>R10.</b> Every adult signs this personally. No one signs for another adult. A person under 18 does not sign this; a natural guardian signs HOME-C.</p>
-  <p><b>R11.</b> I agree this may be signed electronically (Florida chapter 668, including s. 668.50, and federal ESIGN). Staff may not sign for me.</p>
-  <p><b>R12.</b> Substantive law of Florida. Action solely in Florida, as paragraph 6 of the carrier form provides.</p>
-  <p class="note">If you will not wear the wetsuit bottom, that is a separate form at the dock. If you refuse, you do not ride.</p>
-  <label class="check"><input type="checkbox" ${state.media?"checked":""} onchange="state.media=this.checked;save()"> Optional: you may use photos/video of me in Jet Ski Miami advertising. Not required to ride. Left empty = no.</label>
-  <label class="check"><input type="checkbox" ${state.checks.age?"checked":""} onchange="state.checks.age=this.checked;save();renderSticky()"> I am 18 or older.</label>
-  <label class="check"><input type="checkbox" ${state.checks.self?"checked":""} onchange="state.checks.self=this.checked;save();renderSticky()"> I am signing only for myself.</label>
-  ${sigBox("Bsig","Sign here · this is YOUR release")}
+  ${field("Date", todayMDY())}
+  ${sigBox("Bsig","Signature of Participant")}
   <p class="note">${ESIGN_PAD}</p>
   `;
 }
@@ -1321,34 +1342,47 @@ function viewOp(){
   ${sigBox("Osig","Sign here · driver acknowledgment")}
   <p class="note">${ESIGN_PAD}</p>`;
 }
-/* TEXT FROZEN pending Prime 2026 originals — do not rewrite legal strings in viewC. */
+/* LOCKED Tanner 2025-08-20 Gonchar Group LLC.docx — separate from HOME-B. No “744.301” label. Ends after MINOR NAME #4. */
 function viewC(){
   const kids = minors();
+  const slots = homeCSlots();
+  const printName = GUEST.name || "";
+  const slotRows = slots.map((slot,i)=>{
+    const p = slot.p || {};
+    return `<div class="roster"><div class="who">MINOR NAME #${i+1}</div>
+      <input data-slot="${i}" data-k="name" placeholder="First name, Last name" value="${escHtml(p.name||"")}" onchange="saveChildSlot(this)">
+      <input data-slot="${i}" data-k="dob" placeholder="BIRTHDATE mm/dd/yy" value="${escHtml(p.dob||"")}" onchange="saveChildSlot(this)">
+      <input data-slot="${i}" data-k="relation" placeholder="RELATION" value="${escHtml(p.relation||"")}" onchange="saveChildSlot(this)">
+    </div>`;
+  }).join("");
   return `
-  <span class="chip">HOME-C · your child · not the rental</span>
+  <span class="chip">HOME-C · guardian · not the rental · not HOME-B</span>
   <h1>Your child</h1>
-  <p class="mut">This opened because someone on the booking is under 18. There was no “I have a child / I don’t” box. The child does not sign. Only a parent or natural guardian signs.</p>
-  <div class="roster">${kids.map((p,i)=>`<div class="who kid">${escHtml(p.relation||"Child")} · ${ageLabel(p)}<input data-roster="${roster().indexOf(p)}" data-k="name" placeholder="Child full name" value="${escHtml(p.name||"")}" onchange="saveRosterRow(this)"><input data-roster="${roster().indexOf(p)}" data-k="dob" placeholder="MM/DD/YYYY" value="${escHtml(p.dob||"")}" onchange="saveRosterRow(this)"></div>`).join("")}</div><p class="es">Lea el recuadro en inglés. Es el texto de la ley. No lo podemos cambiar.</p>
-  <h2>Perpetual Waiver and Release</h2>
-  <p>We want you to have a great experience with us. If you are unable or unwilling to sign this Waiver and Release, you are welcome to enjoy yourself by watching others, but we cannot allow your child to participate.</p>
+  <p class="mut">This opened because someone on the booking is under 18. There was no “I have a child / I don’t” box. The child does not sign. Only a parent or natural guardian signs. This is not HOME-B.</p>
+  ${kids.length?`<div class="roster">${kids.map(p=>`<div class="who kid">${escHtml(p.relation||"Child")} · ${ageLabel(p)} · ${escHtml(p.name||"")}</div>`).join("")}</div>`:""}
+  <div class="warnbox">
+    <h2 style="margin-top:0">PERPETUAL WAIVER AND RELEASE</h2>
+    <p>(VALID FOR EACH AND EVERY DATE OF PARTICIPATION)</p>
+    <p>We want you to have a great experience with us. However, for your protection and ours, you must read and agree to the provisions below before you are authorized to use our facilities and/or services. The different activities that are offered entail certain risks that simply cannot be eliminated without jeopardizing the essential qualities of the activity. If you are unable or unwilling to sign this Waiver and Release, you are welcome to enjoy yourself by watching others, but we cannot allow you to personally participate in any of our activities or actively use our facilities and/or services.</p>
+  </div>
   <div class="warnbox hot">
     <p class="notice">NOTICE TO THE MINOR CHILD’S NATURAL GUARDIAN</p>
-    <p class="notice">READ THIS FORM COMPLETELY AND CAREFULLY. YOU ARE AGREEING TO LET YOUR MINOR CHILD ENGAGE IN A POTENTIALLY DANGEROUS ACTIVITY. YOU ARE AGREEING THAT, EVEN IF GONCHAR GROUP LLC USES REASONABLE CARE IN PROVIDING THIS ACTIVITY, THERE IS A CHANCE YOUR CHILD MAY BE SERIOUSLY INJURED OR KILLED BY PARTICIPATING IN THIS ACTIVITY BECAUSE THERE ARE CERTAIN DANGERS INHERENT IN THE ACTIVITY WHICH CANNOT BE AVOIDED OR ELIMINATED. BY SIGNING THIS FORM, YOU ARE GIVING UP YOUR CHILD’S RIGHT AND YOUR RIGHT TO RECOVER FROM GONCHAR GROUP LLC IN A LAWSUIT FOR ANY PERSONAL INJURY, INCLUDING DEATH, TO YOUR CHILD OR ANY PROPERTY DAMAGE THAT RESULTS FROM THE RISKS THAT ARE A NATURAL PART OF THE ACTIVITY. YOU HAVE THE RIGHT TO REFUSE TO SIGN THIS FORM, AND GONCHAR GROUP LLC HAS THE RIGHT TO REFUSE TO LET YOUR CHILD PARTICIPATE IF YOU DO NOT SIGN THIS FORM.</p>
+    <p class="notice">READ THIS FORM COMPLETELY AND CAREFULLY. YOU ARE AGREEING TO LET YOUR MINOR CHILD ENGAGE IN A POTENTIALLY DANGEROUS ACTIVITY. YOU ARE AGREEING THAT, EVEN IF GG USES REASONABLE CARE IN PROVIDING THIS ACTIVITY, THERE IS A CHANCE YOUR CHILD MAY BE SERIOUSLY INJURED OR KILLED BY PARTICIPATING IN THIS ACTIVITY BECAUSE THERE ARE CERTAIN DANGERS INHERENT IN THE ACTIVITY WHICH CANNOT BE AVOIDED OR ELIMINATED. BY SIGNING THIS FORM, YOU ARE GIVING UP YOUR CHILD’S RIGHT AND YOUR RIGHT TO RECOVER FROM GG IN A LAWSUIT FOR ANY PERSONAL INJURY, INCLUDING DEATH, TO YOUR CHILD OR ANY PROPERTY DAMAGE THAT RESULTS FROM THE RISKS THAT ARE A NATURAL PART OF THE ACTIVITY.  YOU HAVE THE RIGHT TO REFUSE TO SIGN THIS FORM, AND GG HAS THE RIGHT TO REFUSE TO LET YOUR CHILD PARTICIPATE IF YOU DO NOT SIGN THIS FORM.</p>
   </div>
-  ${initialBox("C1","I have read the notice above.")}
-  <p>1. I assume all risk for, and financial cost of, any injury to my child.</p>
-  <p>2. On behalf of my minor child I waive and release GONCHAR GROUP LLC including claims involving their own negligence.</p>
-  <p>3. I indemnify GONCHAR GROUP LLC for claims relating to my child’s participation, including claims alleging their own negligence.</p>
-  <p>4. This agreement extends to each future visit.</p>
-  ${sigBox("CsigA","Guardian signature · carrier form")}
-  <h2>Florida notice — second signature</h2>
-  <p class="note">Same statutory notice. Different signature. We cannot shorten it.</p>
-  <div class="warnbox hot">
-    <p class="notice">NOTICE TO THE MINOR CHILD’S NATURAL GUARDIAN</p>
-    <p class="notice">READ THIS FORM COMPLETELY AND CAREFULLY. YOU ARE AGREEING TO LET YOUR MINOR CHILD ENGAGE IN A POTENTIALLY DANGEROUS ACTIVITY. YOU ARE AGREEING THAT, EVEN IF GONCHAR GROUP, LLC D/B/A JET SKI MIAMI USES REASONABLE CARE IN PROVIDING THIS ACTIVITY, THERE IS A CHANCE YOUR CHILD MAY BE SERIOUSLY INJURED OR KILLED BY PARTICIPATING IN THIS ACTIVITY BECAUSE THERE ARE CERTAIN DANGERS INHERENT IN THE ACTIVITY WHICH CANNOT BE AVOIDED OR ELIMINATED. BY SIGNING THIS FORM YOU ARE GIVING UP YOUR CHILD’S RIGHT AND YOUR RIGHT TO RECOVER FROM GONCHAR GROUP, LLC D/B/A JET SKI MIAMI IN A LAWSUIT FOR ANY PERSONAL INJURY, INCLUDING DEATH, TO YOUR CHILD OR ANY PROPERTY DAMAGE THAT RESULTS FROM THE RISKS THAT ARE A NATURAL PART OF THE ACTIVITY. YOU HAVE THE RIGHT TO REFUSE TO SIGN THIS FORM, AND GONCHAR GROUP, LLC D/B/A JET SKI MIAMI HAS THE RIGHT TO REFUSE TO LET YOUR CHILD PARTICIPATE IF YOU DO NOT SIGN THIS FORM.</p>
-  </div>
-  ${initialBox("C2","I have read this second notice.")}
-  ${sigBox("CsigB","Guardian signature · Florida addendum")}
+  <p><b>${escHtml(printName||"______________________________")} (PRINT YOUR NAME)</b> has read this Waiver and Release and agrees as follows:</p>
+  <p>I recognize and agree that: all risks can never be eliminated, and participating in the activities at GG involves inherent danger and potential risk of both minor and serious, temporary and permanent, bodily injury of any and all kinds, both caused by me and/or by others.  In signing this release, I assume all risk for, and financial cost of, any and all injuries, and/or any damage, to my child/children.</p>
+  <p>On behalf of my minor child/children I fully, and forever waive, release and discharge GG and its individual members, managers, directors, officers, agents, employees, volunteers, representatives, affiliated entities, and all other persons, firms, corporations, associations or partnerships claiming by or through them, from any and all claims, actions, causes of action, demands, judgments, damages (including compensatory, general, special, consequential, and exemplary), liability or obligations of any nature or kind, whether known at the time or which may arise or become known later, which accrue on account of, or in any way arise out of or in connection with me or my child’s activities with or at GG including claims involving their own negligence.</p>
+  <p>I agree to indemnify and hold harmless GG and its individual managers, directors, officers, agents, employees, volunteers, representatives, affiliated entities, and all other persons, corporations, or partnerships claiming by or through them, from and against any and all losses, liabilities, claims, obligations, costs, damages, and/or judgments directly or indirectly arising out of, or relating to, my child’s/children’s participation in any activities at GG including for claims alleging GG own negligence.</p>
+  <p>I understand that this agreement extends forever into the future and will have full force and legal effect each and every time my child/children visit GG whether at the current location or any other location or facility.</p>
+  <p>I have read the GG Waiver and Release from any Claim of Responsibility or Damage and agree to all conditions.</p>
+  ${field("Parent Name/Legal Guardian (Print)", GUEST.name, "name")}
+  ${field("Address", GUEST.addr, "addr")}
+  <div class="row">${field("City", GUEST.city, "city")}${field("State", GUEST.state, "state")}</div>
+  <div class="row">${field("Zip", GUEST.zip, "zip")}${field("Phone Number", GUEST.phone, "phone")}</div>
+  <div class="row">${field("Date of Birth", GUEST.dob, "dob")}${field("Today’s date (MM/DD/YY)", todayMDY())}</div>
+  <h3>NAMES AND BIRTHDATES OF ALL CHILDREN UNDER 18 to be included with your signature</h3>
+  ${slotRows}
+  ${sigBox("CsigA","Signature")}
   <p class="note">${ESIGN_PAD}</p>
   `;
 }
@@ -1369,19 +1403,22 @@ function viewArrive(){
     <label class="check"><input type="radio" name="wet" ${state.wet==="refuse"?"checked":""} onchange="state.wet='refuse';save();render()"> I refuse the shorts. I understand I will not ride.</label>
   </div>`;
 }
-/* TEXT FROZEN pending Prime 2026 originals — do not rewrite legal strings in viewDR. */
+/* LOCKED Tanner 2025-08-20 Gonchar Group LLC.docx — separate from HOME-B and HOME-C. */
 function viewDR(){
   return `
-  <span class="chip">DOCK-D-R · separate form · you do not ride</span>
+  <span class="chip">DOCK-D-R · separate form · not HOME-B</span>
   <h1>Protective wetsuit refusal</h1>
-  <p>This is not your release and not the rental. It records that you refuse the shorts. After you sign, <b>you do not ride</b>.</p>
+  <p class="mut">This is not your release and not the rental. It is the wetsuit-refusal page from the Prime Word file.</p>
   <div class="warnbox hot">
-    <p>I, for myself, and/or on behalf of my child or legal ward, have been fully warned and advised by GONCHAR GROUP LLC that we should wear properly fitted wetsuit bottoms, or clothing that provides equivalent protection, while riding or being around Wave Runners and Jet Skis in order to protect against injuries caused by water forced into body cavities as a result of falling into the water or being near the jet thrust nozzle. Injuries include water forced into the rectum or vagina causing severe internal injuries or death. I understand that by not wearing wetsuit bottoms or equivalent clothing, I will be going against manufacturers’ requirements and putting myself at risk for injuries. I realize that I may be subject to injury from this activity and that no form of preplanning can remove all danger. Against the advice of GONCHAR GROUP LLC we are declining this critical safety precaution.</p>
+    <p>I, for myself, and/or on behalf of my child or legal ward, have been fully warned and advised by GG that we should wear properly fitted wetsuit bottoms, or clothing that provides equivalent protection, while riding or being around Wave Runners and Jet Skis in order to protect against injuries caused by water forced into body cavities as a result of falling into the water or being near the jet thrust nozzle. Injuries include water forced into the rectum or vagina causing severe internal injuries or death. I understand that by not wearing wetsuit bottoms or equivalent clothing, I will be going against manufacturers’ requirements and putting myself at risk for injuries. I realize that I may be subject to injury from this activity and that no form of preplanning can remove all danger Against the advice of GG, we are declining this critical safety precaution.</p>
     <p>I/we the undersigned have read the foregoing statement carefully before signing and do understand its warnings and assumption of risks.</p>
   </div>
-  ${sigBox("Wsig","Sign: I refuse the shorts and I will not ride")}
+  ${sigBox("Wsig","Signature of Rider (spouse must sign for themselves)")}
+  <div class="field"><label>Name of additional minor(s) rider(s)</label><input value="${escHtml(state.drMinors||"")}" onchange="state.drMinors=(this.value||'').trim();save()"></div>
+  ${sigBox("WsigP","Signature of parent, guardian and or spouse")}
+  ${field("Date", todayMDY())}
   <p class="note">${ESIGN_PAD}</p>
-  <p class="note">I/we the undersigned have read the foregoing statement carefully before signing and do understand its warnings and assumption of risks.</p>`;
+  `;
 }
 /* TEXT FROZEN pending Prime 2026 originals — do not rewrite legal strings in viewD. */
 function viewD(){
@@ -1553,18 +1590,18 @@ function render(){
       bindPad("Asig",state.sigs);
     }
     if(state.step==="homeB"){
-      bindPad("B1",state.initials); bindPad("Bsig",state.sigs);
+      bindPad("Bsig",state.sigs);
     }
     if(state.step==="homeOp"){
       ["O1","O2","O3"].forEach(id=>bindPad(id,state.initials));
       bindPad("Osig",state.sigs);
     }
     if(state.step==="homeC"){
-      bindPad("C1",state.initials); bindPad("C2",state.initials);
-      bindPad("CsigA",state.sigs); bindPad("CsigB",state.sigs);
+      bindPad("CsigA",state.sigs);
     }
     if(state.step==="dockDR"){
       bindPad("Wsig",state.sigs);
+      bindPad("WsigP",state.sigs);
     }
     if(state.step==="dockD"){
       for(let i=1;i<=15;i++) bindPad("D"+i,state.initials);
