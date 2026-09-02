@@ -111,8 +111,8 @@ async function load(){
     call.className = "call stop";
     call.textContent = "Do not launch. Missing: "+((gate.missing||[]).join("; ")||"records");
   }
-  const instr = JSMIssuance.absolute(JSMIssuance.instructorHref(b, false));
-  const dock = JSMIssuance.absolute(JSMIssuance.signUrl({gtt:b, who:"renter", dock:true, token:false}));
+  const instr = JSMIssuance.publicAbsolute(JSMIssuance.instructorHref(b, false));
+  const dock = JSMIssuance.publicAbsolute(JSMIssuance.signUrl({gtt:b, who:"renter", dock:true, token:false}));
   document.getElementById("links").innerHTML =
     'Instructor 313A (staff device): <a href="'+instr+'">'+instr+'</a><br>'+
     'Dock QR (same origin): <a href="'+dock+'">'+dock+'</a><br>'+

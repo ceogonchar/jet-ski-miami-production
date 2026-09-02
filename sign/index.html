@@ -682,6 +682,8 @@ async function persistInstrument(code){
   };
   let data = null;
   let failClosed = null;
+  /* Keep posting to the live trycloudflare host. Fail closed on HTTP 5xx.
+     TODO: stable Gonchar host, same POST /api/record shape (see record-api.js). */
   const endpoints = [];
   if(window.JSM_RECORD_API) endpoints.push(String(window.JSM_RECORD_API).replace(/\/$/,"")+"/api/record");
   endpoints.push("/api/record");

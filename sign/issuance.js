@@ -218,6 +218,7 @@
     if (o.demo) q.set("demo", o.demo === true ? "1" : String(o.demo));
     if (o.t) q.set("t", o.t);
     else if (o.gtt && who && who !== "instructor" && o.token !== false) {
+      /* TODO: bind t= server-side (72h). Client token is not a secret. Keep who= for GTT000242/243. */
       q.set("t", makeToken(o.gtt, who));
     }
     const pre = o.prefill || {};

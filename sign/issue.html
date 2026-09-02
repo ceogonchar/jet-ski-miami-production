@@ -127,10 +127,9 @@ function issue(){
   }
   const demo = document.getElementById("walk").checked;
   const links = JSMIssuance.linksForBooking(b, demo);
-  const origin = location.origin.indexOf("jet-ski-miami.com")>=0 ? location.origin : JSMIssuance.LIVE_ORIGIN;
   const cards = links.map(L => {
-    const abs = JSMIssuance.absolute(L.href, origin);
-    const dock = JSMIssuance.absolute(L.dockHref, origin);
+    const abs = JSMIssuance.publicAbsolute(L.href);
+    const dock = JSMIssuance.publicAbsolute(L.dockHref);
     const kind = L.who==="renter" ? "renter" : "adult";
     const copy = JSMIssuance.shareCopy(b, abs, kind);
     const jsAbs = abs.replace(/\\/g,"\\\\").replace(/'/g,"\\'");
@@ -152,7 +151,7 @@ function issue(){
     </div>`;
   }).join("");
   const renter = links.find(L=>L.who==="renter") || links[0];
-  const renterAbs = renter ? JSMIssuance.absolute(renter.href, origin) : "";
+  const renterAbs = renter ? JSMIssuance.publicAbsolute(renter.href) : "";
   document.getElementById("confirm").innerHTML = `
     <h2 style="font-size:16px">Confirmation / reminder (mock)</h2>
     <div class="copybox">${esc(JSMIssuance.shareCopy(b, renterAbs, "renter"))}</div>
