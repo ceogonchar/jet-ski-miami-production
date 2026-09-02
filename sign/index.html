@@ -50,17 +50,18 @@ p,li{font-size:14.5px}
 .init{border:1.5px dashed #9aa;border-radius:12px;padding:10px;margin:14px 0;background:#fbfaf7}
 .init.on{border-style:solid;border-color:var(--ok);background:#f1faf4}
 .init b{display:block;font-size:13px;margin-bottom:8px}
-.init canvas,.sig canvas{width:100%;height:88px;background:#fff;border:1px solid var(--line);border-radius:8px;touch-action:none}
-.sig canvas{height:120px}
+.init canvas,.sig canvas{width:100%;height:110px;background:#fff;border:1px solid var(--line);border-radius:8px;touch-action:none}
+.sig canvas{height:148px}
 .sig{margin:12px 0}
-.tools{display:flex;gap:8px;margin-top:6px}
-.tools button,.ghost{background:none;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:12px}
+.sig b,.init b{font-size:14px}
+.tools{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.tools button,.ghost{background:none;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;min-height:44px}
 .check{display:flex;gap:10px;align-items:flex-start;margin:8px 0;font-size:14px}
 .check input{margin-top:4px;transform:scale(1.15)}
 .topic{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
 .sticky{position:fixed;left:0;right:0;bottom:0;margin:0 auto;width:100%;max-width:430px;
   background:linear-gradient(transparent, #fff 28%);padding:18px 16px max(18px, env(safe-area-inset-bottom));z-index:30}
-.btn{width:100%;border:0;background:var(--sea);color:#fff;border-radius:12px;padding:14px 16px;font-weight:750;font-size:16px}
+.btn{width:100%;border:0;background:var(--sea);color:#fff;border-radius:12px;padding:16px 16px;font-weight:750;font-size:17px;min-height:48px}
 .btn:disabled{background:#5e6a6c;color:#fff;opacity:.95}
 .btn[aria-disabled="true"]{background:#5e6a6c}
 :focus-visible{outline:3px solid #3ecad4;outline-offset:2px}
@@ -119,8 +120,18 @@ hr{border:0;border-top:1px solid var(--line);margin:18px 0}
 }
 .pad.dock{background:linear-gradient(#f3f7f4,#fff 40px)}
 .idcard{border:1px solid var(--line);border-radius:14px;padding:12px;background:linear-gradient(#fff,#f4f7f6);margin:10px 0}
+.legal{border:1px solid var(--line);border-radius:12px;margin:12px 0;background:var(--paper)}
+.legal>summary{cursor:pointer;padding:14px 12px;font-weight:750;font-size:15px;list-style:none}
+.legal>summary::-webkit-details-marker{display:none}
+.legal>summary:after{content:" · tap to collapse";font-weight:500;color:var(--mut);font-size:12px}
+.legal:not([open])>summary:after{content:" · tap to read"}
+.legal .warnbox{margin:0;border:0;border-radius:0 0 12px 12px}
+.gate{padding:8px 0 24px}
+.gate h1{font-size:24px}
+.field input,.check{min-height:44px}
+.check input{transform:scale(1.25);min-width:22px;min-height:22px}
 </style>
-<script>window.JSM_RECORD_API="https://margin-villas-retrieved-couples.trycloudflare.com";</script>
+<script src="record-api.js"></script>
 <script src="issuance.js"></script>
 </head>
 <body>
@@ -128,8 +139,6 @@ hr{border:0;border-top:1px solid var(--line);margin:18px 0}
   <a class="brand" href="/">Jet Ski Miami</a>
   <nav>
     <a href="/">Home</a>
-    &nbsp;·&nbsp;
-    <a href="/sign/">Sign papers</a>
     &nbsp;·&nbsp;
     <a href="/book">Book</a>
   </nav>
@@ -150,42 +159,42 @@ hr{border:0;border-top:1px solid var(--line);margin:18px 0}
 /* HOME-B / DOCK-D-R / HOME-C locked to Tanner 2025-08-20 Gonchar Group LLC.docx.
    Do not “fix” JSTMC. Do not add a 744.301 label. HOME-C is its own instrument. */
 const BOOKING = {
-  id: "GTT-TEST-016",
-  date: "Sat, Aug 16, 2026",
-  start: "11:00 AM",
-  arrive: "10:30 AM",
-  back: "12:00 PM",
+  id: "",
+  date: "",
+  start: "",
+  arrive: "",
+  back: "",
   dock: "1819 79th Street Causeway, North Bay Village, FL 33141",
-  price: "$189.00",
-  paid: "$37.80",
-  due: "$151.20",
-  hold: "$38.00",
-  vessel: "Unit 3 · Sea-Doo GTI 130",
-  fl: "FL 2846 JK",
-  hin: "YDV54790A323",
-  cap: "2",
-  map: "GG-MAP-2026-08-A",
-  rate: "RS-2026-08-A",
-  overtime: "$28 / 15 min",
-  fuel: "$25 + pump",
-  recovery: "$180 / hour",
-  damageCap: "$5,000",
+  price: "",
+  paid: "",
+  due: "",
+  hold: "",
+  vessel: "",
+  fl: "—",
+  hin: "—",
+  cap: "",
+  map: "",
+  rate: "",
+  overtime: "",
+  fuel: "",
+  recovery: "",
+  damageCap: "",
   roster: [],
 };
 const GUEST = {
-  name: "Dmytro Gonchar",
-  dob: "03/17/1992",
-  addr: "1571 Stillwater Drive",
-  city: "Miami Beach",
-  state: "FL",
-  zip: "33141",
-  phone: "786-863-1721",
-  email: "dmytro@test.jetskimiami.local",
-  emName: "Nataly Gonchar",
-  emAddr: "1571 Stillwater Drive, Miami Beach, FL 33141",
-  emPhone: "786-555-0144",
-  emRel: "Spouse",
-  card: "4242",
+  name: "",
+  dob: "",
+  addr: "",
+  city: "",
+  state: "",
+  zip: "",
+  phone: "",
+  email: "",
+  emName: "",
+  emAddr: "",
+  emPhone: "",
+  emRel: "",
+  card: "",
 };
 
 const D_BLOCKS = [
@@ -243,6 +252,7 @@ const ESIGN_PAD = "I agree this mark is my electronic signature (Florida ch. 668
 
 const state = {
   step: "start",
+  gate: "",
   t0: Date.now(),
   personId: null,
   initials: {},
@@ -337,6 +347,27 @@ function roster(){
   return [{name:GUEST.name, dob:GUEST.dob, role:"renter"}];
 }
 function isMinor(p){ const a = ageYears(p && p.dob); return !!(p && (p.role==="minor" || (a!=null && a<18))); }
+function extraAdults(){ return roster().filter(p=>p && !isMinor(p) && p.role!=="renter"); }
+function isExtraAdult(){
+  if(window.JSMIssuance) return JSMIssuance.isExtraWho(state.who) || state.who==="husband" || state.who==="adult";
+  return state.who==="husband" || state.who==="adult" || /^adult\d+$/i.test(state.who||"");
+}
+function namedFixture(){ return BOOKING.id==="GTT000242"; }
+function idBanner(){
+  const s = signer();
+  return `<div class="idcard"><div class="lh-co">Confirm once — fills every paper</div>
+    <div class="caps">${escHtml(s.name||"Name missing")} · ${escHtml(s.dob||"DOB missing")}</div>
+    <p class="note">${escHtml(s.phone||"")} ${escHtml(s.email||"")} ${escHtml([s.addr,s.city,s.state,s.zip].filter(Boolean).join(", "))}</p>
+  </div>`;
+}
+function legalWell(summary, inner){
+  return `<details class="legal" open><summary>${summary}</summary>${inner}</details>`;
+}
+function staffUnlocked(){
+  if(state.who==="instructor") return true;
+  try{ if(sessionStorage.getItem("jsm_unlock_"+(BOOKING.id||""))==="1") return true; }catch(e){}
+  return !!state.staffOk;
+}
 function minors(){ return roster().filter(isMinor); }
 function hasMinors(){ return minors().length>0; }
 function applyLiveBooking(id){
@@ -356,7 +387,7 @@ function applyLiveBooking(id){
 }
 function applyUrlPrefill(){
   if(!window.JSMIssuance) return;
-  if((state.who||"renter")==="husband" || state.who==="adult"){
+  if(isExtraAdult()){
     const i = husbandIndex();
     if(i>=0 && BOOKING.roster && BOOKING.roster[i]) JSMIssuance.applyQueryPrefill(BOOKING.roster[i]);
   } else {
@@ -370,12 +401,19 @@ function applyUrlPrefill(){
 function applyBookingFromUrl(){
   const m = location.pathname.match(/\/h\/([^/]+)/);
   const q = new URLSearchParams(location.search);
-  state.who = (q.get("who") || "renter").toLowerCase();
+  const rawWho = (q.get("who") || "renter").toLowerCase();
+  state.who = rawWho==="husband" ? "husband" : ((window.JSMIssuance && JSMIssuance.normalizeWho(rawWho)) || rawWho);
   const id = (m && m[1]) || q.get("gtt") || "";
-  if(!id){ state.missingBooking = true; BOOKING.id = ""; return; }
+  state.gate = "";
+  if(!id){ state.missingBooking = true; state.gate = "missing"; BOOKING.id = ""; return; }
   BOOKING.id = decodeURIComponent(id);
   state.missingBooking = false;
-  if(applyLiveBooking(BOOKING.id)){ applyUrlPrefill(); return; }
+  const tok = q.get("t");
+  if(tok && window.JSMIssuance){
+    const st = JSMIssuance.tokenStatus(tok, BOOKING.id, state.who);
+    if(!st.ok && st.reason==="expired"){ state.gate = "expired"; return; }
+  }
+  if(applyLiveBooking(BOOKING.id)){ applyUrlPrefill(); rememberGtt(); return; }
   if(isDemo()){
     const demo = (q.get("demo") || "").toLowerCase();
     if(/child/i.test(BOOKING.id) || demo==="child") setScenario("child", true);
@@ -383,12 +421,13 @@ function applyBookingFromUrl(){
     else if(/GROUP/i.test(BOOKING.id) || demo==="group") setScenario("group", true);
     else setScenario("solo", true);
     applyUrlPrefill();
+    rememberGtt();
     return;
   }
-  if(!BOOKING.roster || !BOOKING.roster.length){
-    BOOKING.roster = [{name:GUEST.name, dob:GUEST.dob, role:"renter"}];
-  }
-  applyUrlPrefill();
+  state.gate = "unknown";
+}
+function rememberGtt(){
+  try{ if(BOOKING.id) localStorage.setItem("jsm_last_gtt", BOOKING.id); }catch(e){}
 }
 function setScenario(kind, silent){
   if(kind==="child"){
@@ -446,9 +485,9 @@ function allowOfflinePersist(){
   return isDemo() || new URLSearchParams(location.search).get("offline")==="1";
 }
 function homeSteps(){
-  if(state.who==="instructor") return ["staff","dockE"];
+  if(state.who==="instructor") return ["dockE"];
   if(isDock()) return ["arrive","dockDR","dockD","ride","dockE","done"];
-  if(state.who==="husband") return ["start","kyc","identity","homeB","homeOp","done"];
+  if(isExtraAdult()) return ["start","kyc","identity","homeB","homeOp","done"];
   return ["start","kyc","identity","homeA","homeB","homeC","done"];
 }
 const STEPS = ["start","kyc","identity","homeA","homeB","homeOp","homeC","done","arrive","dockDR","dockD","ride","dockE","staff","noride"];
@@ -471,7 +510,8 @@ const TITLES = {
 };
 function currentSteps(){
   let s = homeSteps();
-  if(!isDock() && state.who!=="husband" && !hasMinors()) s = s.filter(x=>x!=="homeC");
+  if(!isDock() && !isExtraAdult() && !hasMinors()) s = s.filter(x=>x!=="homeC");
+  if(isDock() && state.wet!=="refuse") s = s.filter(x=>x!=="dockDR");
   return s;
 }
 
@@ -481,7 +521,7 @@ function elapsed(){
   return Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
 }
 function go(step){
-  if((state.who||"renter")==="husband" && (step==="homeA"||step==="homeC")){
+  if(isExtraAdult() && (step==="homeA"||step==="homeC")){
     step = "homeB";
   }
   const allowed = currentSteps();
@@ -498,11 +538,15 @@ function go(step){
   window.scrollTo(0,0);
 }
 function husbandIndex(){
+  const extras = extraAdults();
+  const iQuery = new URLSearchParams(location.search).get("i");
+  const n = window.JSMIssuance ? JSMIssuance.extraIndexFromWho(state.who, iQuery) : 0;
+  if(extras[n]) return roster().indexOf(extras[n]);
   const i = roster().findIndex(p=>p.role==="adult" || /husband/i.test(p.relation||""));
   return i;
 }
 function signer(){
-  if(state.who==="husband"){
+  if(isExtraAdult()){
     const i = husbandIndex();
     const row = (i>=0 && BOOKING.roster[i]) ? BOOKING.roster[i] : {name:"",dob:""};
     return {
@@ -522,7 +566,7 @@ function signer(){
 }
 function setSigner(k, v){
   v = (v||"").trim();
-  if(state.who==="husband"){
+  if(isExtraAdult()){
     const i = husbandIndex();
     if(i<0) return;
     BOOKING.roster[i][k] = v;
@@ -540,7 +584,7 @@ function parseMoney(s){
 }
 function missingA(){
   const miss=[];
-  if(!GUEST.name || /guest$/i.test(GUEST.name.trim())) miss.push("your full legal name");
+  if(!GUEST.name || /^guest$/i.test(GUEST.name.trim())) miss.push("your full legal name");
   if(ageYears(GUEST.dob)==null) miss.push("your date of birth");
   else if(ageYears(GUEST.dob)<21) miss.push("renter must be 21 or older");
   if(!GUEST.addr || !GUEST.city || !GUEST.state || !GUEST.zip) miss.push("your address");
@@ -558,7 +602,7 @@ function missingA(){
 }
 function mark(k){state.checks[k]=true; save(); render();}
 function storageKey(){ return "jsm_sign_v2_"+(BOOKING.id||"x")+"_"+(state.who||"renter"); }
-function save(){ try{ localStorage.setItem(storageKey(), JSON.stringify({...state, t0:state.t0})); }catch(e){} }
+function save(){ try{ localStorage.setItem(storageKey(), JSON.stringify({...state, t0:state.t0})); rememberGtt(); }catch(e){} }
 function load(){
   try{
     const raw = localStorage.getItem(storageKey());
@@ -625,7 +669,7 @@ async function persistInstrument(code){
     booking_id: BOOKING.id,
     displayed_text: displayed,
     displayed_text_sha256: hash,
-    who: { person_id: state.personId, name: (signer().name||GUEST.name||""), role: state.who==="instructor"?"instructor":(state.who||"renter") },
+    who: { person_id: state.personId, name: (signer().name||GUEST.name||""), role: isExtraAdult() ? (state.who==="husband"?"husband":(state.who||"adult2")) : (state.who==="instructor"?"instructor":(state.who||"renter")) },
     tz_offset_minutes: -new Date().getTimezoneOffset(),
     marks: instrumentMarks(code),
     fields: instrumentFields(code),
@@ -638,6 +682,7 @@ async function persistInstrument(code){
     page_url: location.pathname + "#" + (code==="CONSENT"?"start":state.step),
   };
   let data = null;
+  let failClosed = null;
   const endpoints = [];
   if(window.JSM_RECORD_API) endpoints.push(String(window.JSM_RECORD_API).replace(/\/$/,"")+"/api/record");
   endpoints.push("/api/record");
@@ -647,20 +692,9 @@ async function persistInstrument(code){
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify(payload)
       });
+      if(r.status>=500){ failClosed = r.status; continue; }
       if(r.ok){ data = await r.json(); if(data && data.ok) break; }
     } catch (e) {}
-  }
-  if(!data || !data.ok){
-    const api = (window.JSM_RECORD_API||"").replace(/\/$/,"") + "/api/record";
-    if(window.JSM_RECORD_API){
-      try{
-        const r2 = await fetch(api, {
-          method:"POST", headers:{"Content-Type":"application/json"},
-          body: JSON.stringify(payload)
-        });
-        if(r2.ok) data = await r2.json();
-      }catch(e){}
-    }
   }
   const localRow = {
     ok: true,
@@ -678,6 +712,9 @@ async function persistInstrument(code){
     localStorage.setItem("jsm_pack_"+BOOKING.id+"_"+(state.who||"renter"), JSON.stringify(pack));
   }catch(e){}
   if(!data || !data.ok){
+    if(failClosed && !allowOfflinePersist()){
+      throw new Error("Company copy failed (HTTP "+failClosed+"). Stay on this page and try again.");
+    }
     if(allowOfflinePersist()) data = localRow;
     else throw new Error("Could not save "+code+". Stay on this page and try again. The company must keep a copy.");
   }
@@ -880,7 +917,7 @@ function needA(){
 }
 function needB(){
   const s = signer();
-  if(!s.name || /guest$/i.test(s.name)) return false;
+  if(!s.name || /^guest$/i.test(s.name.trim())) return false;
   if(ageYears(s.dob)==null || ageYears(s.dob)<18) return false;
   return !!state.sigs.Bsig;
 }
@@ -891,14 +928,14 @@ function needOp(){
 }
 function needC(){
   if(!minors().every(p=>p.name && ageYears(p.dob)!=null && ageYears(p.dob)<18)) return false;
-  if(!GUEST.name || /guest$/i.test(GUEST.name.trim())) return false;
+  if(!GUEST.name || /^guest$/i.test(GUEST.name.trim())) return false;
   return !!state.sigs.CsigA;
 }
 function needDR(){
   return !!state.sigs.Wsig;
 }
 function afterB(){
-  if((state.who||"renter")==="husband") persistThen("HOME-B","homeOp");
+  if(isExtraAdult()) persistThen("HOME-B","homeOp");
   else persistThen("HOME-B", hasMinors() ? "homeC" : "done");
 }
 function needD(){
@@ -915,13 +952,16 @@ function renderSticky(){
   const el=$("sticky");
   const s=state.step;
   let html="";
-  if(s==="start") html=`<button class="btn" ${state.esign?"":"disabled"} onclick="startWithConsent()">${state.esign?"I agree — continue":"Tick the box to sign on this phone"}</button>`;
+  if(state.gate==="missing") html=`<button class="btn" onclick="lookupGtt()">Open my booking</button>`;
+  else if(state.gate==="unknown"||state.gate==="expired") html=`<a class="btn" href="tel:17868631721" style="display:block;text-align:center;text-decoration:none">Call the dock</a>`;
+  else if(state.gate==="signed") html=`<a class="btn" href="/sign/pack.html?b=${encodeURIComponent(BOOKING.id)}" style="display:block;text-align:center;text-decoration:none">Open signed pack</a>`;
+  else if(s==="start") html=`<button class="btn" ${state.esign?"":"disabled"} onclick="startWithConsent()">${state.esign?"I agree — continue":"Tick the box to sign on this phone"}</button>`;
   if(s==="kyc") html=kycSticky();
-  if(s==="identity") html=`<button class="btn" onclick="go(state.who==='husband'?'homeB':'homeA')">That's me · continue</button>`;
+  if(s==="identity") html=`<button class="btn" onclick="go(isExtraAdult()?'homeB':'homeA')">That's me · continue</button>`;
   if(s==="homeA") html= needA()
     ? `<button class="btn" onclick="persistThen('HOME-A','homeB')">Sign rental · continue to release</button>`
     : `<div><ul class="missing-list">${missingA().map(x=>"<li>"+escHtml(x)+"</li>").join("")}</ul><button class="btn" disabled>Finish the items above</button></div>`;
-  if(s==="homeB") html=`<button class="btn" ${needB()?"":"disabled"} onclick="afterB()">${needB()?((state.who==="husband")?"Sign MY release · driver page next":(hasMinors()?"Sign release · child form next":"Sign release · done at home")):"Print name, date of birth, and sign"}</button>`;
+  if(s==="homeB") html=`<button class="btn" ${needB()?"":"disabled"} onclick="afterB()">${needB()?(isExtraAdult()?"Sign my release · driver page next":(hasMinors()?"Sign release · child form next":"Sign release · done at home")):"Print name, date of birth, and sign"}</button>`;
   if(s==="homeOp") html=`<button class="btn" ${needOp()?"":"disabled"} onclick="persistThen('HOME-OP','done')">${needOp()?"Save driver paper · done at home":"Three initials and your signature"}</button>`;
   if(s==="homeC") html=`<button class="btn" ${needC()?"":"disabled"} onclick="persistThen('HOME-C','done')">${needC()?"Sign for your child · done at home":"Print your name, list each child, sign"}</button>`;
   if(s==="arrive") html = state.wet==="wear"
@@ -931,11 +971,11 @@ function renderSticky(){
       : `<button class="btn" disabled>Choose shorts or refusal</button>`;
   if(s==="dockDR") html=`<button class="btn" ${needDR()?"":"disabled"} onclick="finishRefusal()">${needDR()?"Save refusal · I will not ride":"Sign that you refuse the shorts"}</button>`;
   if(s==="dockD") html=`<button class="btn" ${needD()?"":"disabled"} onclick="persistThen('DOCK-D','ride')">${needD()?"Save briefing card · check ride":"Initial each card, then sign"}</button>`;
-  if(s==="ride") html= state.staffOk
+  if(s==="ride") html= staffUnlocked()
     ? `<button class="btn sec" onclick="go('dockE')">Check ride done · Florida card</button>`
-    : `<button class="btn" disabled>Instructor unlocks this after the check ride</button>`;
+    : `<button class="btn" disabled>Instructor unlocks this from the dock gate</button>`;
   if(s==="dockE") html=`<button class="btn" ${needE()?"":"disabled"} onclick="finish()">${needE()?"Save Florida card":(state.who==="instructor"?"Instructor: sign after the check ride":"Tick each topic and sign")}</button>`;
-  if(s==="staff") html=`<button class="btn" onclick="tryPin()">Unlock instructor pad</button>`;
+  if(s==="staff") html=`<a class="btn" href="/sign/staff.html?gtt=${encodeURIComponent(BOOKING.id)}" style="display:block;text-align:center;text-decoration:none">Open dock gate</a>`;
   if(s==="noride") html=`<button class="btn sec" onclick="go('done')">Done</button>`;
   if(s==="done") html=`<a class="btn" href="/sign/pack.html?b=${encodeURIComponent(BOOKING.id)}" style="display:block;text-align:center;text-decoration:none">Open signed pack</a>`;
   el.innerHTML=html;
@@ -950,12 +990,6 @@ window.finishRefusal = function(){
   state.noRide = true;
   save();
   persistThen("DOCK-DR","noride");
-};
-window.tryPin = function(){
-  const el = document.getElementById("staffPinIn");
-  const v = (el && el.value) || state.staffPin || "";
-  if(v==="1735"){ state.staffOk = true; state.who="instructor"; save(); go("dockE"); }
-  else alert("Wrong instructor code");
 };
 window.startWithConsent = async function(){
   if(!state.esign) return;
@@ -1086,29 +1120,60 @@ async function pullDidit(sid){
   save();
 }
 
-function viewStart(){
-  if(state.missingBooking){
-    return `<span class="chip">Jet Ski Miami</span><h1>Open the link we sent you.</h1>
-    <p>This page needs your booking number. Use the text message from Jet Ski Miami, or ask us at 786-863-1721.</p>
-    <p class="note">Gonchar Group, LLC d/b/a Jet Ski Miami · 1819 79th Street Causeway, North Bay Village, FL 33141</p>
-    ${isDemo()?`<p class="note">Staff: <a href="/sign/issue.html">issue a GTT link</a></p>`:""}`;
+function viewGate(){
+  const g = state.gate;
+  if(g==="missing"){
+    return `<div class="gate"><span class="chip">Your link</span>
+    <h1>Open the unique link we sent you.</h1>
+    <p>Each adult has their own papers. This page needs a booking number from that link. We cannot start a blank form from the website menu.</p>
+    <div class="field"><label>Booking number (GTT)</label><input id="gttLookup" placeholder="GTT000243" inputmode="text"></div>
+    <p class="note">Gonchar Group, LLC d/b/a Jet Ski Miami · 1819 79th Street Causeway · 786-863-1721</p>
+    <p class="note">Paying guests still sign WaiverForever until we cut over. Staff: <a href="/sign/issue.html">issue a link</a>.</p></div>`;
   }
-  const whoLine = state.who==="husband" ? "You are signing the adult release only. You are not the renter." : "You are the renter. Your husband signs his own release on his link.";
+  if(g==="unknown"){
+    return `<div class="gate"><span class="chip">${escHtml(BOOKING.id||"")}</span>
+    <h1>We don’t have papers for this booking yet.</h1>
+    <p>Ask the dock to issue your unique link, or check the email / iMessage we sent. Do not reuse someone else’s URL.</p>
+    <p class="note">Staff fixtures: GTT000242, GTT000243, GTT000258.</p>
+    <p><a href="/sign/issue.html?gtt=${encodeURIComponent(BOOKING.id||"")}">Staff · issue links</a></p></div>`;
+  }
+  if(g==="expired"){
+    return `<div class="gate"><span class="chip">Link expired</span>
+    <h1>This signing link is older than 72 hours.</h1>
+    <p>Ask us to send a new unique link for booking ${escHtml(BOOKING.id||"")}.</p>
+    <p class="note">Staff: mint again from <a href="/sign/issue.html?gtt=${encodeURIComponent(BOOKING.id||"")}">issue links</a>.</p></div>`;
+  }
+  if(g==="signed"){
+    return `<div class="gate"><span class="chip">Already signed</span>
+    <h1>These papers are already on file for you.</h1>
+    <p>Booking ${escHtml(BOOKING.id)}. Open your pack, or continue at the dock with the dock QR.</p>
+    <p><a href="/sign/pack.html?b=${encodeURIComponent(BOOKING.id)}">Your signed papers</a></p>
+    <p class="note"><a href="/sign/?gtt=${encodeURIComponent(BOOKING.id)}&who=${encodeURIComponent(state.who||"renter")}&dock=1">Dock papers</a></p></div>`;
+  }
+  return viewStart();
+}
+function viewStart(){
+  if(state.gate==="missing"||state.gate==="unknown"||state.gate==="expired"||state.gate==="signed") return viewGate();
+  const extra = isExtraAdult();
+  const whoLine = extra
+    ? "This link is yours only. You sign the adult release. You are not the renter, and you do not sign the rental contract."
+    : "You are the renter. You sign the rental, then the release. Every other adult uses their own link.";
   return `
   <span class="chip">Sign your rental papers</span>
   <h1>Review and sign your Jet Ski Miami papers.</h1>
   <p>${whoLine} Draw a mark once, then tap each later box to place it. We do not fill boxes for you.</p>
+  ${idBanner()}
   <div class="warnbox">
     <div class="caps">Booking ${escHtml(BOOKING.id)}</div>
-    <p style="margin:8px 0 0">${escHtml(BOOKING.date)} · ${escHtml(BOOKING.start)} · ${BOOKING.skis||1} jet ski${(BOOKING.skis||1)>1?"s":""}<br>${escHtml(state.who==="husband"?(signer().name||"Husband"):GUEST.name)} · ${escHtml(state.who)} · ${escHtml(GUEST.phone||"")}</p>
+    <p style="margin:8px 0 0">${escHtml(BOOKING.date)} · ${escHtml(BOOKING.start)} · ${BOOKING.skis||1} jet ski${(BOOKING.skis||1)>1?"s":""}<br>${escHtml(signer().name||GUEST.name||"")} · ${escHtml(extra?"adult":"renter")}</p>
   </div>
-  <p class="es">Florida y la ley federal permiten firmar en el teléfono. El texto legal permanece en inglés.</p>
-  <h2>Electronic signatures and electronic copies</h2>
+  ${legalWell("Electronic signatures — tap to read", `<div class="warnbox">
   <p>Florida law (chapter 668, including s. 668.50) and federal law (the ESIGN Act, 15 U.S.C. §§ 7001–7006) let us do this rental in writing on your phone instead of on paper.</p>
   <p><b>To continue you must agree to receive these documents electronically</b> — the rental agreement, each adult’s release, any guardian form, the dock safety card and the FWC card. We will keep a copy of whatever you sign, and you can download it from this link. <b>A paper copy is free</b> — ask at the dock or email privacy@jet-ski-miami.com.</p>
   <p>This consent is <b>for this booking only</b>. You may withdraw it <b>before you sign</b> by closing this page or emailing privacy@jet-ski-miami.com; we will then complete the papers on paper at the dock, which can delay or prevent departure. After you sign, we still keep the signed copy because Florida livery law requires us to. <b>We will email a copy</b> to the address on the form, and you can download it from the pack link at the end.</p>
   <p><b>You will need:</b> a current mobile browser (Safari 16 or later, or Chrome 120 or later), JavaScript enabled, and the ability to view a PDF.</p>
   <p><b>You must sign your own document.</b> Staff will not sign for you. No adult may sign for another adult.</p>
+  </div>`)}
   <p class="note">There is <b>no</b> “I have no child” box. If a child is on the booking, the guardian form opens by itself. At the dock: wear the free wetsuit shorts, or sign a separate refusal and <b>you do not ride</b>.</p>
   <div class="roster">
     <div class="note">On this booking</div>
@@ -1125,11 +1190,12 @@ function viewStart(){
 }
 function viewIdentity(){
   const s = signer();
-  const husband = state.who==="husband";
+  const extra = isExtraAdult();
   return `
   <span class="chip">Your details</span>
-  <h1>${husband?"You — not the renter":"Your name, as on your photo ID"}</h1>
-  <p>${husband?"Victoria is the renter. This page is <b>your</b> name, birthday, phone and address. If you see her details here, fix them.":"Staff will check the plastic ID at the dock. Type the truth now. These fields fill every paper on this booking — you should not retype them."}</p>
+  <h1>${extra?"You — not the renter":"Your name, as on your photo ID"}</h1>
+  <p>${extra?"The renter signed the money contract. This page is <b>your</b> name, birthday, phone and address. If you see the renter’s details here, fix them.":"Staff will check the plastic ID at the dock. Confirm once. These fields fill every paper on this booking — you should not retype them on the rental or the release."}</p>
+  ${idBanner()}
   ${field("Full legal name", s.name, "me.name")}
   ${field("Date of birth (MM/DD/YYYY)", s.dob, "me.dob")}
   ${field("Mobile", s.phone, "me.phone")}
@@ -1137,10 +1203,10 @@ function viewIdentity(){
   ${field("Street address", s.addr, "me.addr")}
   <div class="row">${field("City", s.city, "me.city")}${field("State", s.state, "me.state")}</div>
   ${field("ZIP", s.zip, "me.zip")}
-  ${husband?"":(field("Last 4 of the credit card you will bring", GUEST.card, "card")+
+  ${extra?"":(field("Last 4 of the credit card you will bring", GUEST.card, "card")+
     `<h3>Emergency contact — not on the water</h3>`+
     field("Name", GUEST.emName, "emName")+field("Address", GUEST.emAddr, "emAddr")+`<div class="row">${field("Phone", GUEST.emPhone, "emPhone")}${field("Relationship", GUEST.emRel, "emRel")}</div>`)}
-  ${husband?"":`<h3>Everyone aboard</h3>
+  ${extra?"":`<h3>Everyone aboard</h3>
     <div class="roster">${roster().map((p,i)=>`<div class="who">${escHtml(p.relation||p.role)} · ${ageLabel(p)}
       <input data-roster="${i}" data-k="name" placeholder="Full name" value="${escHtml(p.name||"")}" onchange="saveRosterRow(this)">
       <input data-roster="${i}" data-k="dob" placeholder="MM/DD/YYYY" value="${escHtml(p.dob||"")}" onchange="saveRosterRow(this)">
@@ -1167,6 +1233,7 @@ function viewA(){
   <span class="chip">HOME-A · rental · not a release</span>
   <h1>Your rental</h1>
   <p class="mut">This is the commercial contract Florida requires. It does <b>not</b> waive injury claims. That is the next document.</p>
+  ${idBanner()}
   ${state.kyc.verdict?`<div class="warnbox ${state.kyc.verdict==="verified"?"ok":""}"><div class="caps">Didit ${state.kyc.verdict}</div><p>Name and date of birth came from Didit. Fix them only if a field is wrong.</p></div>`:""}
   ${field("Booking", BOOKING.id)}
   <div class="row">
@@ -1289,10 +1356,11 @@ function viewB(){
   return `
   <span class="chip">HOME-B · Participant Release · not the rental</span>
   <h1>Your release — ${escHtml(s.name||"type your name")}</h1>
-  <p class="mut">${state.who==="husband"?"This is <b>your</b> injury / death release. It is not Victoria’s rental contract and not her name. If the printed name below is wrong, change it.":"A new document. New audit trail. No prices, no return time. Draw once, then tap each later box — or type your initials."}</p>
+  <p class="mut">${isExtraAdult()?"This is <b>your</b> injury / death release. It is not the renter’s money contract. If the printed name below is wrong, change it.":"A new document. New audit trail. No prices, no return time. Draw once, then tap each later box — or type your initials."}</p>
+  ${idBanner()}
   <div class="warnbox"><div class="caps">Signing as ${escHtml(s.name||"(name missing)")}</div>
-    <p>Booking ${escHtml(BOOKING.id)}. Role: ${escHtml(state.who)}. This paper does not charge a card and does not set the return time. HOME-C is a separate instrument if a child is on the roster.</p></div>
-  <div class="warnbox">
+    <p>Booking ${escHtml(BOOKING.id)}. Role: ${escHtml(isExtraAdult()?"adult":"renter")}. This paper does not charge a card and does not set the return time. HOME-C is a separate instrument if a child is on the roster.</p></div>
+  ${legalWell("Participant agreement — tap to collapse", `<div class="warnbox">
     <h2 style="margin-top:0">PARTICIPANT AGREEMENT, RELEASE AND ASSUMPTION OF RISK</h2>
     <p>In consideration of the services of Gonchar Group LLC their agents, owners, officers, volunteers, employees, and all other persons or entities acting in any capacity on their behalf (hereinafter collectively referred to as "GG"), I hereby agree to release, indemnify, and discharge JSTMC, on behalf of myself, my spouse, my children, my parents, my heirs, assigns, personal representative and estate as follows:</p>
     <p>I acknowledge that my participation in Jet Ski and Personal Watercraft  activities entails known and unanticipated risks that could result in physical or emotional injury, paralysis, death, or damage to myself, to property, or to third parties.  I understand that such risks simply cannot be eliminated without jeopardizing the essential qualities of the activity.</p>
@@ -1303,7 +1371,7 @@ function viewB(){
     <p>5.I certify that I have adequate insurance to cover any injury or damage I may cause or suffer while participating, or else I agree to bear the costs of such injury or damage myself. I further certify that I am willing to assume the risk of any medical or physical condition I may have.</p>
     <p>6.In the event that I file a lawsuit against GG, I agree to do so solely in the state of Florida and I further agree that the substantive law of that state shall apply in that action without regard to the conflict of law rules of that that state. I agree that if any portion of this agreement is found to be void or unenforceable, the remaining document shall remain in full force and effect.</p>
     <p><b>By signing this document, I acknowledge that if anyone is hurt or property is damaged during my participation in this activity, I may be found by a court of law to have waived my right to maintain a lawsuit against GG on the basis of any claim from which I have released them herein. I also agree that this document is valid for subsequent visits and participation at GG. I have had sufficient opportunity to read this entire document.  I have read and understood it, and I agree to be bound by its terms.</b></p>
-  </div>
+  </div>`)}
   <div class="row">${field("Print Name", s.name, "me.name")}${field("DOB", s.dob, "me.dob")}</div>
   ${field("Phone Number", s.phone, "me.phone")}
   ${field("Address", s.addr, "me.addr")}
@@ -1318,14 +1386,16 @@ function viewB(){
 function viewOp(){
   const s = signer();
   const a = ageYears(s.dob);
+  const renterName = namedFixture() ? "Victoria" : "the renter";
   return `
   <span class="chip">Second driver · not the rental</span>
   <h1>You will drive a jet ski.</h1>
-  <p>Victoria is the renter. She signed the money contract (price, hold, return time). <b>You</b> still need your own papers because you will be on the water, and on this booking there are two skis.</p>
+  <p>${escHtml(renterName.charAt(0).toUpperCase()+renterName.slice(1))} signed the money contract (price, hold, return time). <b>You</b> still need your own papers because you will be on the water.</p>
   <p>This page is not the release (you just signed that) and not Florida’s 313A card (that is after a real check ride at the dock).</p>
+  ${idBanner()}
   <div class="warnbox">
     <div class="caps">${escHtml(s.name||"Your name")} · ${escHtml(s.dob||"DOB missing")} · ${a==null?"age unknown":a+" yrs"}</div>
-    <p>If you are under 21 you may not operate. If this name is Victoria, go back and fix it.</p>
+    <p>If you are under 21 you may not operate. If this name is the renter, go back and fix it.</p>
   </div>
   <h2>What you are agreeing</h2>
   <ul>
@@ -1359,7 +1429,9 @@ function viewC(){
   <span class="chip">HOME-C · guardian · not the rental · not HOME-B</span>
   <h1>Your child</h1>
   <p class="mut">This opened because someone on the booking is under 18. There was no “I have a child / I don’t” box. The child does not sign. Only a parent or natural guardian signs. This is not HOME-B.</p>
+  ${idBanner()}
   ${kids.length?`<div class="roster">${kids.map(p=>`<div class="who kid">${escHtml(p.relation||"Child")} · ${ageLabel(p)} · ${escHtml(p.name||"")}</div>`).join("")}</div>`:""}
+  ${legalWell("Perpetual waiver — tap to collapse", `
   <div class="warnbox">
     <h2 style="margin-top:0">PERPETUAL WAIVER AND RELEASE</h2>
     <p>(VALID FOR EACH AND EVERY DATE OF PARTICIPATION)</p>
@@ -1375,6 +1447,7 @@ function viewC(){
   <p>I agree to indemnify and hold harmless GG and its individual managers, directors, officers, agents, employees, volunteers, representatives, affiliated entities, and all other persons, corporations, or partnerships claiming by or through them, from and against any and all losses, liabilities, claims, obligations, costs, damages, and/or judgments directly or indirectly arising out of, or relating to, my child’s/children’s participation in any activities at GG including for claims alleging GG own negligence.</p>
   <p>I understand that this agreement extends forever into the future and will have full force and legal effect each and every time my child/children visit GG whether at the current location or any other location or facility.</p>
   <p>I have read the GG Waiver and Release from any Claim of Responsibility or Damage and agree to all conditions.</p>
+  `)}
   ${field("Parent Name/Legal Guardian (Print)", GUEST.name, "name")}
   ${field("Address", GUEST.addr, "addr")}
   <div class="row">${field("City", GUEST.city, "city")}${field("State", GUEST.state, "state")}</div>
@@ -1409,10 +1482,10 @@ function viewDR(){
   <span class="chip">DOCK-D-R · separate form · not HOME-B</span>
   <h1>Protective wetsuit refusal</h1>
   <p class="mut">This is not your release and not the rental. It is the wetsuit-refusal page from the Prime Word file.</p>
-  <div class="warnbox hot">
+  ${legalWell("Wetsuit refusal — tap to collapse", `<div class="warnbox hot">
     <p>I, for myself, and/or on behalf of my child or legal ward, have been fully warned and advised by GG that we should wear properly fitted wetsuit bottoms, or clothing that provides equivalent protection, while riding or being around Wave Runners and Jet Skis in order to protect against injuries caused by water forced into body cavities as a result of falling into the water or being near the jet thrust nozzle. Injuries include water forced into the rectum or vagina causing severe internal injuries or death. I understand that by not wearing wetsuit bottoms or equivalent clothing, I will be going against manufacturers’ requirements and putting myself at risk for injuries. I realize that I may be subject to injury from this activity and that no form of preplanning can remove all danger Against the advice of GG, we are declining this critical safety precaution.</p>
     <p>I/we the undersigned have read the foregoing statement carefully before signing and do understand its warnings and assumption of risks.</p>
-  </div>
+  </div>`)}
   ${sigBox("Wsig","Signature of Rider (spouse must sign for themselves)")}
   <div class="field"><label>Name of additional minor(s) rider(s)</label><input value="${escHtml(state.drMinors||"")}" onchange="state.drMinors=(this.value||'').trim();save()"></div>
   ${sigBox("WsigP","Signature of parent, guardian and or spouse")}
@@ -1454,10 +1527,13 @@ function viewRide(){
   <span class="chip">On the water · 6–8 minutes · cannot be shortened</span>
   <h1>Check ride.</h1>
   <p>The instructor watches you start, stop, turn, and come back. Paper cannot replace this. Florida requires it on every rental.</p>
-  ${state.staffOk?`<p class="note">Instructor unlocked the Florida card.</p>`:
-    `<p class="mut">When you come off the water, the instructor types their code and you sign Florida’s card. You cannot open that card from the couch.</p>
-     <div class="field"><label>Instructor code</label><input id="staffPinIn" type="password" inputmode="numeric" autocomplete="off"></div>
-     <button type="button" class="ghost" onclick="tryPin()">Instructor unlock</button>`}`;
+  ${staffUnlocked()?`<p class="note">The dock gate unlocked the Florida card on this phone.</p>`:
+    `<p class="mut">When you come off the water, staff opens the dock gate on this phone and unlocks Florida’s card. There is no code on this guest page. You cannot open that card from the couch.</p>`}`;
+}
+function viewStaff(){
+  return `<span class="chip">Instructor</span><h1>Staff only.</h1>
+    <p>The instructor pad is not a guest URL. Open the dock gate after a real check ride.</p>
+    <p><a href="/sign/staff.html?gtt=${encodeURIComponent(BOOKING.id)}">Dock gate</a></p>`;
 }
 /* TEXT FROZEN pending Prime 2026 originals — do not rewrite legal strings in viewE. */
 function viewE(){
@@ -1485,11 +1561,6 @@ function viewE(){
     `<p class="note">The instructor signs on their phone. You do not sign for them.</p>`}
   `;
 }
-function viewStaff(){
-  return `<span class="chip">Instructor</span><h1>Staff only.</h1>
-    <p>Enter your code to sign Florida’s card after the check ride.</p>
-    <div class="field"><label>Instructor code</label><input id="staffPinIn" type="password" inputmode="numeric"></div>`;
-}
 function viewNoRide(){
   return `<span class="chip">Dock</span><h1>You will not ride.</h1>
     <p>You refused the wetsuit bottom. That is recorded. You do not board or operate. Ask staff about a refund if nobody else on the booking can ride.</p>`;
@@ -1502,24 +1573,24 @@ function viewDone(){
     return `<div class="done-card"><b>${escHtml(labels[code]||code)}</b>
       ${r.pdf_url?`<p><a href="${escHtml(r.pdf_url)}">Download PDF</a></p>`:""}</div>`;
   }).join("");
-  const husb = location.origin+"/sign/?gtt="+encodeURIComponent(BOOKING.id)+"&who=husband";
   const you = signer();
+  const extra = isExtraAdult();
   return `
   <span class="chip">You're signed</span>
   <h1>See you at the dock.</h1>
   <div class="warnbox ok">
-    <p><b>${escHtml(you.name||"")} · ${escHtml(state.who)}</b></p>
+    <p><b>${escHtml(you.name||"")} · ${escHtml(extra?"adult":(state.who||"renter"))}</b></p>
     <p><b>${escHtml(BOOKING.date)} · arrive ${escHtml(BOOKING.arrive)}</b><br>${escHtml(BOOKING.dock)}</p>
     <p>Bring photo ID. Wear the free wetsuit shorts or you do not ride.</p>
   </div>
-  ${state.who==="husband"?`<h2>What you just signed</h2>
+  ${extra?`<h2>What you just signed</h2>
   <ol>
     <li><b>Photo ID</b> — your licence and face, so we know it is you.</li>
-    <li><b>Participant release</b> — you give up injury/death claims against the company (except things Florida does not let us take). Printed in <b>your</b> name, not Victoria’s.</li>
+    <li><b>Participant release</b> — you give up injury/death claims against the company (except things Florida does not let us take). Printed in <b>your</b> name.</li>
     <li><b>Driver paper</b> — you will drive or ride a ski, you are 21+, you follow the map, you do briefing + check ride + Florida card at the dock.</li>
   </ol>
-  <p>You did <b>not</b> sign the rental money contract. That is Victoria’s. You still sign the safety card and Florida 313A at the dock after the instructor watches you ride.</p>`:
-  `<p>Bring the credit card in the renter’s name. ${roster().some(p=>p.role==="adult")?`Husband signs his own papers: <a href="${husb}">${husb}</a>`:""}</p>`}
+  <p>You did <b>not</b> sign the rental money contract. That is the renter’s. You still sign the safety card and Florida 313A at the dock after the instructor watches you ride.</p>`:
+  `<p>Bring the credit card in the renter’s name. Every other adult uses the unique link we sent them — do not forward this page.</p>`}
   <p><a href="/sign/pack.html?b=${encodeURIComponent(BOOKING.id)}">Your signed papers</a></p>
   <p><button type="button" class="ghost" onclick="downloadPack()">Download JSON pack from this phone</button></p>
   ${recs}
@@ -1563,9 +1634,10 @@ function phaseId(step){
 function renderPhases(){
   const el = $("barPhases");
   if(!el) return;
+  if(state.gate){ el.innerHTML = ""; return; }
   const cur = phaseId(state.step);
   let items = [["id","ID"],["a","Rental"],["b","Release"],["done","Done"]];
-  if(state.who==="husband") items = [["id","ID"],["b","Release"],["done","Done"]];
+  if(isExtraAdult()) items = [["id","ID"],["b","Release"],["done","Done"]];
   else if(isDock()) items = [["dock","Dock"],["done","Done"]];
   else if(hasMinors()) items = [["id","ID"],["a","Rental"],["b","Release"],["c","Child"],["done","Done"]];
   el.innerHTML = items.map(([k,l])=>`<span class="${k===cur?"on":""}">${l}</span>`).join("");
@@ -1573,10 +1645,23 @@ function renderPhases(){
 const VIEWS = {start:viewStart,kyc:viewKyc,identity:viewIdentity,homeA:viewA,homeB:viewB,homeOp:viewOp,homeC:viewC,arrive:viewArrive,dockDR:viewDR,dockD:viewD,ride:viewRide,dockE:viewE,done:viewDone,staff:viewStaff,noride:viewNoRide};
 
 function render(){
+  if(state.gate){
+    $("barTitle").textContent = "Jet Ski Miami";
+    $("barStep").textContent = "Link";
+    $("barFill").style.width = "0%";
+    const book = $("barBook");
+    if(book) book.textContent = BOOKING.id || "no booking";
+    renderPhases();
+    $("app").className = "pad";
+    $("app").innerHTML = viewGate();
+    renderSticky();
+    return;
+  }
   const steps = currentSteps();
   $("barTitle").textContent = TITLES[state.step]||"Jet Ski Miami";
   const idx = Math.max(0, steps.indexOf(state.step));
-  $("barStep").textContent = (idx+1)+" / "+steps.length;
+  const left = Math.max(0, steps.length - idx - 1);
+  $("barStep").textContent = (idx+1)+" / "+steps.length+" · "+left+" left";
   $("barFill").style.width = (steps.length>1?(idx/(steps.length-1)*100):100)+"%";
   const book = $("barBook");
   if(book) book.textContent = (BOOKING.id||"no booking")+" · "+(state.who||"renter");
@@ -1616,9 +1701,24 @@ function render(){
 }
 
 applyBookingFromUrl();
-load();
-if(state.who==="husband" && (state.step==="homeA"||state.step==="homeC"||state.step==="sms")) state.step="start";
+if(!state.gate) load();
+if(isExtraAdult() && (state.step==="homeA"||state.step==="homeC"||state.step==="sms")) state.step="start";
 if(!isDock() && ["arrive","dockDR","dockD","ride","dockE"].includes(state.step)) state.step = "start";
+if(state.who==="instructor") state.step = "dockE";
+(function alreadySigned(){
+  if(state.gate || isDock() || isDemo() || location.hash || state.who==="instructor") return;
+  const pack = window.JSMIssuance ? JSMIssuance.readLocalPack(BOOKING.id, state.who) : [];
+  const codes = Object.assign({}, state.records||{});
+  pack.forEach((r)=>{ const c = r.instrument_code; if(c) codes[c]=r; });
+  const need = (window.JSMIssuance ? JSMIssuance.neededAtHome(state.who, hasMinors()) : []).filter((c)=>c!=="CONSENT");
+  if(need.length && need.every((c)=>!!codes[c])) state.gate = "signed";
+})();
+window.lookupGtt = function(){
+  const el = document.getElementById("gttLookup");
+  const v = ((el && el.value) || "").trim().toUpperCase();
+  if(!v){ alert("Type the booking number from your email or iMessage."); return; }
+  location.assign("/sign/?gtt="+encodeURIComponent(v));
+};
 (function takeDiditReturn(){
   const q = new URLSearchParams(location.search);
   const sid = q.get("didit");

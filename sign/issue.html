@@ -16,57 +16,61 @@ html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-s
 .pad{padding:16px 16px 48px}
 .chip{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:#e7f3f1;color:var(--sea);padding:4px 8px;border-radius:99px}
 label{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin:10px 0 4px}
-input,textarea,select{width:100%;font:inherit;padding:10px;border:1px solid var(--line);border-radius:10px}
+input,textarea,select{width:100%;font:inherit;padding:12px;border:1px solid var(--line);border-radius:10px;min-height:44px}
 textarea{min-height:110px;font-family:ui-monospace,monospace;font-size:13px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-button,.btn{border:0;background:var(--sea);color:#fff;border-radius:12px;padding:12px 14px;font-weight:750;font-size:15px;cursor:pointer}
+button,.btn{border:0;background:var(--sea);color:#fff;border-radius:12px;padding:14px 14px;font-weight:750;font-size:15px;cursor:pointer;min-height:44px}
 button.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
 .btns{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
-.card{border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0;background:#f7faf8}
+.card{border:1px solid var(--line);border-radius:14px;padding:14px;margin:12px 0;background:#f7faf8}
 .card a{color:var(--sea);word-break:break-all;font-size:13px}
 .mut{color:var(--mut);font-size:13px}
 .warn{border:1px solid #e3c8a8;background:#fff8ef;border-radius:12px;padding:10px 12px;font-size:13.5px;margin:12px 0}
 .ok{color:var(--ok);font-weight:800}
 .who{font-weight:800;margin-bottom:4px}
 .frozen{font-size:12px;color:var(--mut);border-left:3px solid #c9d4cc;padding-left:10px;margin:14px 0}
+.qr{width:160px;height:160px;background:#fff;border:1px solid var(--line);border-radius:12px;margin:10px 0}
+.copybox{font:13px/1.4 ui-monospace,monospace;background:#12151a;color:#e8eef4;border-radius:12px;padding:12px;white-space:pre-wrap;margin:8px 0}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="top">
     <div class="chip">Staff · issuance</div>
-    <h1>Issue a unique signing link</h1>
-    <p class="mut" style="color:#b7cfc6;margin:6px 0 0">SmartRez GTT → one URL per adult. WaiverForever and SmartRez stay live until Prime cutover.</p>
+    <h1>One booking. One link per adult.</h1>
+    <p class="mut" style="color:#b7cfc6;margin:6px 0 0">https://www.jet-ski-miami.com/sign/?gtt= · A2P SMS is blocked (Twilio 30034). Send email, iMessage, or WhatsApp. WaiverForever stays live.</p>
     <p style="margin:10px 0 0;font-size:13px">
-      <a href="/sign/">Guest /sign</a> ·
       <a href="/sign/staff.html">Dock gate</a> ·
+      <a href="/sign/FLOW.md">Flow</a> ·
       <a href="/sign/pack.html">Pack</a>
     </p>
   </div>
   <div class="pad">
-    <p class="frozen">HOME-B, D-R, and HOME-C on /sign are locked to the 2025-08-20 Prime Word file (keep JSTMC in HOME-B sentence 1; guardian notice is unlabeled). This page only builds links and prefills identity. WaiverForever stays live. Do not wait for a 2026 Prime email.</p>
+    <p class="frozen">Legal copy on the guest form is frozen. This page only mints links. Paying guests still use WaiverForever until Prime cutover. Do not share the guest URL for the instructor pad.</p>
     <label>SmartRez booking (GTT)</label>
     <input id="gtt" placeholder="GTT000243" value="GTT000243" autocomplete="off">
     <div class="btns">
-      <button type="button" onclick="loadKnown()">Load fixture / known booking</button>
-      <button type="button" class="ghost" onclick="document.getElementById('gtt').value='GTT000242';loadKnown()">Victoria 2-ski fixture</button>
+      <button type="button" onclick="loadKnown()">Load fixture</button>
+      <button type="button" class="ghost" onclick="document.getElementById('gtt').value='GTT000242';loadKnown()">GTT000242</button>
+      <button type="button" class="ghost" onclick="document.getElementById('gtt').value='GTT000258';loadKnown()">GTT000258</button>
     </div>
     <p id="meta" class="mut"></p>
     <label>Roster (one adult or child per line). Role | Name | DOB | Phone | Email</label>
-    <textarea id="roster" placeholder="renter | Dmytro Honchar | 03/17/1992 | 786-863-1721 | dmytro@gonchar.group"></textarea>
-    <p class="mut">Minors do not get a link. HOME-C opens on the renter’s home flow when anyone on the roster is under 18. No “I have a child” checkbox.</p>
+    <textarea id="roster" placeholder="renter | Alex Rivera | 04/11/1990 | 305-555-0148 | alex@example.com"></textarea>
+    <p class="mut">Minors do not get a link. HOME-C opens on the renter’s home flow when anyone on the roster is under 18.</p>
     <label class="check" style="display:flex;gap:10px;align-items:flex-start;margin:12px 0">
       <input id="walk" type="checkbox" checked>
-      <span>Staff walk — add <code>demo=1</code> so the guest can finish if the record API is down. Uncheck for a live SMS link. Neither option turns off WaiverForever.</span>
+      <span>Staff walk — add <code>demo=1</code> so a 5xx on the record host does not block the guest. Uncheck for a live link. Neither option turns off WaiverForever.</span>
     </label>
     <div class="btns">
-      <button type="button" onclick="issue()">Mint per-person links</button>
-      <button type="button" class="ghost" onclick="copySms()">Copy renter SMS</button>
+      <button type="button" onclick="issue()">Mint per-adult links</button>
     </div>
-    <div class="warn">Cutover is a later ops hour after Prime replies. Do not turn off WaiverForever or SmartRez v20 from this screen.</div>
+    <div class="warn">A2P SMS is blocked. Copy the confirmation below into email, iMessage, or WhatsApp. Each adult gets their own URL — do not tell the renter to forward one link.</div>
+    <div id="confirm"></div>
     <div id="list"></div>
   </div>
 </div>
+<script src="record-api.js"></script>
 <script src="issuance.js"></script>
 <script>
 function parseRoster(text){
@@ -92,7 +96,7 @@ function currentBooking(){
   }
   const r = roster.find(p=>p.role==="renter") || roster[0] || {name:"Guest", role:"renter"};
   return {
-    id: id || "GTT-STAFF",
+    id: id || "",
     date: "",
     start: "",
     arrive: "30 min before start",
@@ -100,12 +104,15 @@ function currentBooking(){
     roster: roster.length ? roster : [r],
   };
 }
+function qrSrc(url){
+  return "https://api.qrserver.com/v1/create-qr-code/?size=160x160&data="+encodeURIComponent(url);
+}
 function loadKnown(){
   const id = document.getElementById("gtt").value.trim();
   const b = JSMIssuance.booking(id);
   const meta = document.getElementById("meta");
   if(!b){
-    meta.textContent = "No fixture for "+id+". Paste the SmartRez roster below and mint anyway — the guest URL still carries ?gtt= and prefill query fields.";
+    meta.textContent = "No local fixture for "+id+". Paste the SmartRez roster and mint anyway. Guest URL still carries ?gtt= and prefill. Unknown GTT without a roster shows an error on the guest page. TODO: fetch SmartRez server-side.";
     return;
   }
   document.getElementById("roster").value = rosterText(b);
@@ -114,31 +121,54 @@ function loadKnown(){
 }
 function issue(){
   const b = currentBooking();
+  if(!b.id){
+    document.getElementById("list").innerHTML = "<p class='warn'>Enter a GTT first.</p>";
+    return;
+  }
   const demo = document.getElementById("walk").checked;
   const links = JSMIssuance.linksForBooking(b, demo);
-  const list = document.getElementById("list");
-  list.innerHTML = links.map(L => {
-    const abs = JSMIssuance.absolute(L.href);
-    const dock = JSMIssuance.absolute(L.dockHref);
+  const origin = location.origin.indexOf("jet-ski-miami.com")>=0 ? location.origin : JSMIssuance.LIVE_ORIGIN;
+  const cards = links.map(L => {
+    const abs = JSMIssuance.absolute(L.href, origin);
+    const dock = JSMIssuance.absolute(L.dockHref, origin);
+    const kind = L.who==="renter" ? "renter" : "adult";
+    const copy = JSMIssuance.shareCopy(b, abs, kind);
+    const jsAbs = abs.replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+    const jsCopy = copy.replace(/\\/g,"\\\\").replace(/`/g,"\\`").replace(/\$/g,"");
     return `<div class="card">
-      <div class="who">${esc(L.person)} · ${esc(L.label)}</div>
+      <div class="who">${esc(L.person)} · ${esc(L.who)}</div>
+      <div class="mut">${esc(L.label)}</div>
       <div class="mut">Home: ${(L.home||[]).join(" → ")||"—"}</div>
-      <div class="mut">Dock: ${(L.dock||[]).join(" → ")||"—"}</div>
+      <div class="mut">Dock QR: D then E after a real check ride</div>
       <p><a href="${abs}">${abs}</a></p>
-      <p class="mut">Dock: <a href="${dock}">${dock}</a></p>
-      <button type="button" class="ghost" onclick="navigator.clipboard.writeText('${abs.replace(/'/g,"%27")}')">Copy home link</button>
+      <img class="qr" alt="QR for ${esc(L.who)}" src="${qrSrc(abs)}">
+      <div class="btns">
+        <button type="button" class="ghost" data-copy="${encodeURIComponent(abs)}">Copy link</button>
+        <button type="button" class="ghost" data-copy="${encodeURIComponent(copy)}">Copy email / iMessage / WhatsApp</button>
+      </div>
+      <p class="mut">Walk-up dock: <a href="${dock}">${dock}</a></p>
+      <img class="qr" alt="Dock QR" src="${qrSrc(dock)}">
+      ${L.compatHref && b.id==="GTT000242"?`<p class="mut">Fixture alias still works: <code>?who=husband</code></p>`:""}
     </div>`;
-  }).join("") + `<p class="mut">Pack for this booking: <a href="/sign/pack.html?b=${encodeURIComponent(b.id)}">/sign/pack.html?b=${esc(b.id)}</a>
-  · Gate: <a href="/sign/staff.html?gtt=${encodeURIComponent(b.id)}">/sign/staff.html?gtt=${esc(b.id)}</a></p>`;
-  window._issued = {b, links};
-}
-function copySms(){
-  const b = (window._issued && window._issued.b) || currentBooking();
-  const walk = document.getElementById("walk");
-  const links = (window._issued && window._issued.links) || JSMIssuance.linksForBooking(b, !!(walk && walk.checked));
+  }).join("");
   const renter = links.find(L=>L.who==="renter") || links[0];
-  const body = JSMIssuance.smsBody(b, JSMIssuance.absolute(renter.href));
-  navigator.clipboard.writeText(body).then(()=>{ alert("Renter SMS copied."); }).catch(()=>{ prompt("Copy SMS", body); });
+  const renterAbs = renter ? JSMIssuance.absolute(renter.href, origin) : "";
+  document.getElementById("confirm").innerHTML = `
+    <h2 style="font-size:16px">Confirmation / reminder (mock)</h2>
+    <div class="copybox">${esc(JSMIssuance.shareCopy(b, renterAbs, "renter"))}</div>
+    <div class="btns"><button type="button" class="ghost" data-copy="${encodeURIComponent(JSMIssuance.shareCopy(b, renterAbs, "renter"))}">Copy renter confirmation</button>
+    <button type="button" class="ghost" data-copy="${encodeURIComponent(JSMIssuance.reminderCopy(b))}">Copy reminder</button></div>
+    <p class="mut">Paying guests still get WaiverForever (<code>waiver.fr/p-X54J2</code>, <code>p-SGuJB</code>) until cutover.</p>`;
+  document.getElementById("list").innerHTML = cards + `<p class="mut">Gate: <a href="/sign/staff.html?gtt=${encodeURIComponent(b.id)}">/sign/staff.html?gtt=${esc(b.id)}</a>
+  · Pack: <a href="/sign/pack.html?b=${encodeURIComponent(b.id)}">/sign/pack.html?b=${esc(b.id)}</a>
+  · Instructor pad is on the dock gate — not a guest link.</p>`;
+  window._issued = {b, links};
+  document.querySelectorAll("[data-copy]").forEach(btn=>{
+    btn.onclick = ()=>{
+      const t = decodeURIComponent(btn.getAttribute("data-copy")||"");
+      navigator.clipboard.writeText(t).then(()=>{ btn.textContent = "Copied"; setTimeout(()=>btn.textContent=btn.textContent, 800); }).catch(()=>prompt("Copy", t));
+    };
+  });
 }
 function esc(s){ return String(s||"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
 (function(){

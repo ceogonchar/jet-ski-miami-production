@@ -1,15 +1,14 @@
 (function () {
   if ((location.pathname || "").indexOf("/sign") === 0) return;
+  var last = "";
+  try { last = localStorage.getItem("jsm_last_gtt") || ""; } catch (e) {}
+  if (!last) return;
   function makeLink(from) {
     var a = document.createElement("a");
-    a.href = "/sign/";
+    a.href = "/sign/?gtt=" + encodeURIComponent(last);
     a.setAttribute("data-jsm-sign", "1");
     if (from && from.className) a.className = from.className;
-    a.textContent = "Sign papers";
-    a.addEventListener("click", function (e) {
-      e.preventDefault();
-      window.location.assign("/sign/");
-    });
+    a.textContent = "Your papers";
     return a;
   }
   function add() {
