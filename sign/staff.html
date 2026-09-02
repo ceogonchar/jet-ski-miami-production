@@ -1,50 +1,129 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
 <title>Dock gate · Jet Ski Miami</title>
 <style>
-body{margin:0;font:16px/1.45 -apple-system,sans-serif;background:#f3f1ec;color:#12151a}
-.shell{max-width:560px;margin:0 auto;background:#fff;min-height:100dvh;padding:20px 16px 48px}
-table{width:100%;border-collapse:collapse;font-size:14px}
-td,th{border-bottom:1px solid #ddd;padding:8px;text-align:left}
-.ok{color:#0d6b39;font-weight:800}
-.no{color:#b3400c;font-weight:800}
-input{font:inherit;padding:8px;border-radius:8px;border:1px solid #ccc;width:100%}
-button{margin-top:10px;width:100%;padding:12px;border:0;border-radius:10px;background:#0b6b74;color:#fff;font-weight:700}
-</style></head>
+:root{--bg:#e8efe9;--ink:#122018;--mut:#5c6b63;--line:#c9d4cc;--card:#fff;--sea:#0b6b74;--navy:#10231c;--hot:#b3400c;--ok:#0d6b39}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,sans-serif}
+.wrap{max-width:720px;margin:0 auto;min-height:100dvh;background:var(--card)}
+.top{background:var(--navy);color:#e8f4ef;padding:14px 16px}
+.top a{color:#8bd9ff;text-decoration:none;font-weight:650}
+.top h1{margin:6px 0 0;font-size:22px}
+.pad{padding:16px 16px 48px}
+label{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin:8px 0 4px}
+input{width:100%;font:inherit;padding:12px;border:1px solid var(--line);border-radius:10px;min-height:44px}
+button{margin-top:10px;width:100%;padding:14px;border:0;border-radius:12px;background:var(--sea);color:#fff;font-weight:750;min-height:44px}
+button.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px}
+td,th{border-bottom:1px solid var(--line);padding:8px;text-align:left}
+.ok{color:var(--ok);font-weight:800}
+.no{color:var(--hot);font-weight:800}
+.call{border-radius:14px;padding:12px;margin:12px 0;font-weight:750}
+.call.go{background:#eaf7ef;color:var(--ok)}
+.call.stop{background:#fff1ec;color:var(--hot)}
+.mut{color:var(--mut);font-size:13px}
+.chip{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#9ecfc8}
+.frozen{font-size:12px;color:var(--mut);border-left:3px solid #c9d4cc;padding-left:10px;margin:12px 0}
+.counts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.counts div{border:1px solid var(--line);border-radius:12px;padding:10px;background:#f7faf8}
+.counts b{display:block;font-size:20px}
+</style>
+</head>
 <body>
-<div class="shell">
-  <p>Dock gate · staff</p>
-  <h1>Launch count</h1>
-  <input id="gtt" placeholder="GTT000242" value="GTT000242">
-  <button type="button" onclick="load()">Load booking</button>
-  <p id="msg"></p>
-  <table id="tbl"></table>
-  <p><a href="/sign/?gtt=GTT000242&who=instructor&dock=1">Instructor 313A</a></p>
+<div class="wrap">
+  <div class="top">
+    <div class="chip">Staff · launch gate</div>
+    <h1>Count the papers. Then launch.</h1>
+    <p class="mut" style="color:#b7cfc6;margin:6px 0 0">Do not share the guest signing URL for the instructor pad. Unlock 313A from this page after a real check ride.</p>
+    <p style="margin:10px 0 0;font-size:13px">
+      <a href="/sign/issue.html">Issue links</a> ·
+      <a href="/sign/FLOW.md">Flow</a>
+    </p>
+  </div>
+  <div class="pad">
+    <p class="frozen">Count from the go-live checklist: 1×A per booking; B = adults; C if anyone &lt;18; D per adult participant; E per driver + renter; D-R only if shorts refused. WaiverForever stays live.</p>
+    <label>Booking (GTT)</label>
+    <input id="gtt" placeholder="GTT000243" value="GTT000243" autocomplete="off">
+    <button type="button" onclick="load()">Load launch count</button>
+    <div id="call"></div>
+    <div id="counts" class="counts"></div>
+    <p id="msg" class="mut"></p>
+    <table id="tbl"></table>
+    <p id="links" class="mut"></p>
+    <button type="button" class="ghost" onclick="unlockThisPhone()">Unlock 313A on this phone (after check ride)</button>
+    <p class="mut">Guest phones never see an instructor PIN. This sets a flag on <b>this</b> device only.</p>
+  </div>
 </div>
-<script>window.JSM_RECORD_API="https://margin-villas-retrieved-couples.trycloudflare.com";</script>
+<script src="record-api.js"></script>
+<script src="issuance.js"></script>
 <script>
-const need = ["CONSENT","HOME-A","HOME-B","HOME-C","DOCK-D","DOCK-E","DOCK-DR"];
+async function fetchCompany(b){
+  const host = (window.JSM_RECORD_API||"").replace(/\/$/,"");
+  if(!host) return {items:[], error:"no host"};
+  try{
+    const r = await fetch(host+"/api/records?booking="+encodeURIComponent(b));
+    if(r.status>=500) return {items:[], error:"Record API HTTP "+r.status+" (fail closed)"};
+    if(!r.ok) return {items:[], error:"Record API HTTP "+r.status};
+    const data = await r.json();
+    return {items:(data && data.items)||[], error:null};
+  }catch(e){
+    return {items:[], error:"Record API unreachable"};
+  }
+}
+function unlockThisPhone(){
+  const b = document.getElementById("gtt").value.trim();
+  try{ sessionStorage.setItem("jsm_unlock_"+b, "1"); }catch(e){}
+  alert("313A unlocked on this phone for "+b+". Open the guest dock link on this same phone after the check ride.");
+}
 async function load(){
   const b = document.getElementById("gtt").value.trim();
-  const msg = document.getElementById("msg");
-  const api = (window.JSM_RECORD_API||"").replace(/\/$/,"")+"/api/records?booking="+encodeURIComponent(b);
-  let items=[];
-  try{
-    const r = await fetch(api);
-    const data = await r.json();
-    items = (data && data.items) || [];
-  }catch(e){ msg.textContent = "No company records yet. "+e.message; }
-  const have = {};
-  items.forEach(x => have[x.instrument_code]=x);
-  document.getElementById("tbl").innerHTML = "<tr><th>Instrument</th><th>On file</th></tr>"+need.map(c=>{
-    const ok = !!have[c];
-    return "<tr><td>"+c+"</td><td class='"+(ok?"ok":"no")+"'>"+(ok?"YES":"NO")+"</td></tr>";
+  const known = JSMIssuance.booking(b);
+  const company = await fetchCompany(b);
+  const local = JSMIssuance.readAllLocalPacks(b);
+  const items = (company.items && company.items.length) ? company.items : local;
+  const src = (company.items && company.items.length)
+    ? "Company record API"
+    : (company.error ? company.error+" · this phone (local pack)" : "This phone (local pack)");
+  const gate = known
+    ? JSMIssuance.launchGate(known, items)
+    : {missing:["unknown GTT — paste roster on issue.html"], matrix:[], launch:false, refuse:false, needA:1, needB:"?", needC:"?", needD:"?", needE:"?"};
+  document.getElementById("counts").innerHTML =
+    `<div><b>${gate.needA}</b>A rental</div><div><b>${gate.needB}</b>B releases</div><div><b>${gate.needC}</b>C guardian</div>`+
+    `<div><b>${gate.needD}</b>D briefing</div><div><b>${gate.needE}</b>E 313A</div><div><b>${gate.refuseCount||0}</b>D-R refusal</div>`;
+  const rows = (gate.matrix||[]).map(row=>{
+    const req = row.required ? "required" : "if refused";
+    return "<tr><td>"+esc(row.person)+" · "+esc(row.who)+"</td><td>"+esc(row.code)+"</td><td>"+req+"</td><td class='"+(row.ok?"ok":"no")+"'>"+(row.ok?"YES":"NO")+"</td></tr>";
   }).join("");
-  const A = !!have["HOME-A"], B = !!have["HOME-B"], E = !!have["DOCK-E"];
-  const refuse = !!have["DOCK-DR"];
-  msg.textContent = refuse ? "D-R on file — that person does not ride." : (A && B && E ? "Count looks launchable if IDs and shorts check out." : "Do not launch.");
+  document.getElementById("tbl").innerHTML = "<tr><th>Who</th><th>Paper</th><th></th><th>On file</th></tr>"+(rows||"<tr><td colspan='4'>No roster for this GTT on this phone.</td></tr>");
+  document.getElementById("msg").textContent = src+" · "+items.length+" row(s). 313A is after a real check ride — do not auto-tick FWC boxes.";
+  const call = document.getElementById("call");
+  if(gate.refuse){
+    call.className = "call stop";
+    call.textContent = "DOCK-D-R is on file. Confirm on the dock whether that person rides. Do not silently rewrite the refusal form.";
+  } else if(gate.launch){
+    call.className = "call go";
+    call.textContent = "Count is launchable if photo ID, renter card, and shorts check out in person.";
+  } else {
+    call.className = "call stop";
+    call.textContent = "Do not launch. Missing: "+((gate.missing||[]).join("; ")||"records");
+  }
+  const instr = JSMIssuance.publicAbsolute(JSMIssuance.instructorHref(b, false));
+  const dock = JSMIssuance.publicAbsolute(JSMIssuance.signUrl({gtt:b, who:"renter", dock:true, token:false}));
+  document.getElementById("links").innerHTML =
+    'Instructor 313A (staff device): <a href="'+instr+'">'+instr+'</a><br>'+
+    'Dock QR (same origin): <a href="'+dock+'">'+dock+'</a><br>'+
+    'Issue links: <a href="/sign/issue.html?gtt='+encodeURIComponent(b)+'">/sign/issue.html?gtt='+esc(b)+'</a>';
 }
+function esc(s){ return String(s||"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+(function(){
+  const q = new URLSearchParams(location.search).get("gtt");
+  if(q) document.getElementById("gtt").value = q;
+  load();
+})();
 </script>
-</body></html>
+</body>
+</html>

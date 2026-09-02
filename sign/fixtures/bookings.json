@@ -1,0 +1,4 @@
+{
+  "_comment": "Local SmartRez stand-ins. Do not put live API keys here. TODO: replace with a server fetch of the real GTT.",
+  "bookings": ["GTT000242", "GTT000243", "GTT000258"]
+}
