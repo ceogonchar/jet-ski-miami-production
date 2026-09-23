@@ -1,81 +1,17 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex">
-<title>Signed papers · Jet Ski Miami</title>
-<style>
-:root{--bg:#dfe8e2;--ink:#122018;--mut:#5c6b63;--line:#c9d4cc;--card:#fff;--sea:#0b6b74;--navy:#10231c;--hot:#b3400c}
-body{margin:0;background:var(--bg);font:16px/1.5 -apple-system,sans-serif;color:var(--ink)}
-.shell{max-width:520px;margin:0 auto;background:var(--card);min-height:100dvh;padding:0 0 48px}
-.pad{padding:22px 16px}
-.chip{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--sea)}
-a.card,div.card{display:block;border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0;text-decoration:none;color:var(--ink);background:#f7faf8}
-.sitebar{background:var(--navy);color:#fff;display:flex;justify-content:space-between;padding:10px 14px;font-size:13px}
-.sitebar a{color:#8bd9ff;text-decoration:none}
-.mut{color:var(--mut);font-size:13px}
-.frozen{font-size:12px;color:var(--mut);border-left:3px solid var(--line);padding-left:10px;margin:12px 0}
-.err{color:var(--hot);font-weight:700}
-</style></head>
-<body>
-<div class="sitebar"><a href="/">Jet Ski Miami</a><a href="/sign/issue.html">Issue</a></div>
-<div class="shell"><div class="pad">
-  <div class="chip">Signed pack</div>
-  <h1 id="ttl">Your signed papers</h1>
-  <p class="frozen">Same store as the guest wizard: company POST /api/record first, then this phone’s localStorage pack. TODO: stable host replacing the trycloudflare tunnel.</p>
-  <p id="msg">Loading…</p>
-  <div id="list"></div>
-  <p class="mut">Gonchar Group, LLC d/b/a Jet Ski Miami · privacy@jet-ski-miami.com</p>
-  <p class="mut"><a href="/sign/staff.html">Dock gate</a> · <a href="/sign/issue.html">Issue links</a></p>
-</div></div>
-<script src="record-api.js"></script>
-<script src="issuance.js"></script>
-<script>
-const b = new URLSearchParams(location.search).get("b") || new URLSearchParams(location.search).get("gtt") || "";
-document.getElementById("ttl").textContent = b || "No booking";
-const labels = {"CONSENT":"E-sign consent","HOME-A":"Rental agreement","HOME-B":"Participant release","HOME-OP":"Driver acknowledgment","HOME-C":"Guardian waiver","DOCK-DR":"Wetsuit refusal","DOCK-D":"Safety briefing","DOCK-E":"FWC 313A card"};
-function renderLocal(pack, note){
-  if(!pack.length){
-    document.getElementById("msg").textContent = note || "No signed papers found yet for this booking on this phone.";
-    return;
-  }
-  document.getElementById("msg").textContent = (note?note+" · ":"") + pack.length + " instrument(s) on this phone.";
-  document.getElementById("list").innerHTML = pack.map(r => {
-    const code = r.instrument_code || "";
-    const title = labels[code] || code;
-    const who = (r.who && (r.who.name||r.who.role)) || "";
-    const pdf = r.pdf_url ? '<p><a href="'+r.pdf_url+'">Download PDF</a></p>' : "";
-    const off = r.offline ? '<div class="mut">Saved on this phone · company copy pending</div>' : "";
-    return '<div class="card"><b>'+title+'</b><div class="mut">'+(who?who+" · ":"")+(r.signed_at_utc||"")+' · '+(r.record_id||"")+'</div>'+off+pdf+'</div>';
-  }).join("");
-}
-(async function(){
-  if(!b){
-    document.getElementById("msg").textContent = "Add ?b=GTT000243 to this URL.";
-    return;
-  }
-  const host = (window.JSM_RECORD_API || "").replace(/\/$/,"");
-  if(host){
-    try{
-      const r = await fetch(host + "/api/records?booking=" + encodeURIComponent(b));
-      if(r.status>=500){
-        document.getElementById("msg").innerHTML = '<span class="err">Company copy failed (HTTP '+r.status+'). Showing this phone.</span>';
-      } else if(r.ok){
-        const data = await r.json();
-        if(data.ok && data.items && data.items.length){
-          document.getElementById("msg").textContent = data.items.length + " company record(s).";
-          document.getElementById("list").innerHTML = data.items.map(row => {
-            const title = labels[row.instrument_code] || row.instrument_code;
-            const url = row.pdf_relpath && host ? (host+"/records/"+row.pdf_relpath) : (row.pdf_url||"");
-            const who = (row.who && (row.who.name||row.who.role)) || "";
-            return '<a class="card" href="'+(url||"#")+'"><b>'+title+'</b><div class="mut">'+(who?who+" · ":"")+(row.signed_at_utc||"")+'</div></a>';
-          }).join("");
-          return;
-        }
-      }
-    }catch(e){}
-  }
-  const pack = (window.JSMIssuance && JSMIssuance.readAllLocalPacks(b)) || [];
-  renderLocal(pack, host ? "Company API not reachable" : "");
-})();
-</script>
-</body></html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Guest check-in · Jet Ski Miami 7</title>
+<link rel="canonical" href="https://jet-ski-miami.com/check-in/">
+<meta http-equiv="refresh" content="0;url=/check-in/">
+<script>location.replace('/check-in/'+location.hash);</script>
+<style>body{margin:0;font:16px/1.6 Arial,Helvetica,sans-serif;color:#173b46;background:#f3f6f4}main{max-width:640px;margin:14vh auto;padding:0 24px}h1{font-size:30px;letter-spacing:-1px}a{color:#007f78}</style>
+</head>
+<body><main>
+<h1>Check-in has moved.</h1>
+<p>Sign your rental documents at <a href="/check-in/">jet-ski-miami.com/check-in</a>. Use the personal link from your booking email or text message; our team can send a new one at <a href="mailto:goncharboats@gmail.com">goncharboats@gmail.com</a>.</p>
+<p>Оформление переехало: документы подписываются по ссылке выше. Персональную ссылку пришлём заново по запросу.</p>
+</main></body></html>
