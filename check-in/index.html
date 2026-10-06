@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><meta name="theme-color" content="#10384c"><title>Guest check-in · Jet Ski Miami 7</title><link rel="stylesheet" href="styles.css?v=20260911-3"></head><body><header><a class="brand" href="/" aria-label="Jet Ski Miami 7"><span class="brand-mark" aria-hidden="true"><img src="/assets/logo-jetmiami-Bg1hzFaL.png" width="1024" height="1024" alt=""></span><span class="brand-copy"><strong>Jet Ski Miami 7</strong><span>Guest check-in</span></span></a></header><main><section><h1>Your check-in.</h1><p id="status" role="status" aria-live="polite">Opening your secure check-in…</p><noscript><p>Please enable JavaScript to open your check-in, or contact the team for help.</p></noscript><p><a href="mailto:goncharboats@gmail.com">Need help? Contact our team</a></p></section></main><footer>Gonchar Group LLC</footer><script>'use strict';
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>Guest check-in · Jet Ski Miami 7</title><link rel="preconnect" href="https://referrals-careers-meaningful-twice.trycloudflare.com"><script>'use strict';
 (async()=>{
  const hash=new URLSearchParams(location.hash.slice(1)),token=hash.get('invite'),group=hash.get('join'),booking=hash.get('booking'),team=location.hash==='#team';
  if(token||group||booking||team)history.replaceState(null,'',location.pathname);
@@ -11,6 +11,6 @@
   else if(team)route='/staff';
   else if(booking)route+='?booking='+encodeURIComponent(booking.slice(0,100));
   location.replace(u.origin+route);
- }catch(e){document.querySelector('#status').textContent='Check-in is temporarily unavailable. Please try again or contact our team at goncharboats@gmail.com.';}
+ }catch(e){const show=()=>{document.querySelector('#status').textContent='Check-in is temporarily unavailable. Please try again or contact our team at goncharboats@gmail.com.'};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',show,{once:true});else show();}
 })();
-</script></body></html>
+</script><style>body{margin:0;background:#f7f9fa;color:#153b49;font:16px/1.6 system-ui,sans-serif}main{max-width:480px;margin:15vh auto;padding:28px}h1{font-size:24px;letter-spacing:-.5px}a{color:#087783;font-size:14px}p{color:#647b85}</style></head><body><main><strong>Jet Ski Miami 7</strong><h1>Guest check-in</h1><p id="status" role="status">Opening your secure check-in…</p><noscript>Please enable JavaScript to open your check-in.</noscript><a href="mailto:goncharboats@gmail.com">Contact the team</a></main></body></html>
