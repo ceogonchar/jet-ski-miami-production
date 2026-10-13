@@ -1,0 +1,321 @@
+{
+ "openapi": "3.1.0",
+ "info": {
+  "title": "Jet Ski Miami 7 \u2014 Agent Booking API",
+  "version": "1.0.0",
+  "description": "Check real-time availability and create a pre-order (deposit pay link) for self-guided jet ski rentals on Biscayne Bay, Miami Beach / North Bay Village. Prices: 1h $189, 2h $349 (2.5h on water), 3h $499, Full Day $649 per jet ski; extra passenger $30; tax and booking fees added at checkout. Booker must be 21+, drivers 14+ with Florida boater card if born on/after 1988-01-01. Never ask for or send card numbers: payment happens only on pay_link.",
+  "contact": {
+   "name": "Jet Ski Miami 7",
+   "url": "https://jet-ski-miami.com",
+   "email": "info@jetskimiami.com"
+  }
+ },
+ "servers": [
+  {
+   "url": "https://clawd-server.tail4ed818.ts.net:8443/jetski/v1"
+  }
+ ],
+ "paths": {
+  "/health": {
+   "get": {
+    "summary": "Liveness and mode",
+    "responses": {
+     "200": {
+      "description": "ok"
+     }
+    }
+   }
+  },
+  "/info": {
+   "get": {
+    "summary": "Business facts, prices, rules (machine-readable)",
+    "responses": {
+     "200": {
+      "description": "facts JSON"
+     }
+    }
+   }
+  },
+  "/availability": {
+   "get": {
+    "summary": "Free start times for a date",
+    "parameters": [
+     {
+      "name": "date",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "date"
+      }
+     },
+     {
+      "name": "hours",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "enum": [
+        1,
+        2,
+        3,
+        4
+       ]
+      },
+      "description": "4 = Full Day"
+     },
+     {
+      "name": "jetskis",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "minimum": 1,
+       "maximum": 6,
+       "default": 1
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "slots",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "object",
+         "properties": {
+          "date": {
+           "type": "string"
+          },
+          "hours": {
+           "type": "integer"
+          },
+          "slots": {
+           "type": "array",
+           "items": {
+            "type": "object",
+            "properties": {
+             "start": {
+              "type": "string",
+              "example": "10:00 AM"
+             },
+             "end": {
+              "type": "string"
+             },
+             "available_jetskis": {
+              "type": "integer"
+             }
+            }
+           }
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/quote": {
+   "post": {
+    "summary": "Price breakdown and deposit for a configuration",
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/QuoteRequest"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "quote"
+     }
+    }
+   }
+  },
+  "/preorder": {
+   "post": {
+    "summary": "Create a pre-order and get the deposit pay link",
+    "description": "Call /availability first. In test mode no order is created and pay_link points to the website. Use Idempotency-Key header to retry safely.",
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/PreorderRequest"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "pre-order created",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/PreorderResponse"
+        }
+       }
+      }
+     },
+     "400": {
+      "description": "validation error"
+     },
+     "409": {
+      "description": "slot no longer available"
+     },
+     "429": {
+      "description": "rate limited"
+     }
+    }
+   }
+  },
+  "/preorder/{id}": {
+   "get": {
+    "summary": "Pre-order status (no personal data)",
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "status"
+     },
+     "404": {
+      "description": "unknown"
+     }
+    }
+   }
+  }
+ },
+ "components": {
+  "schemas": {
+   "QuoteRequest": {
+    "type": "object",
+    "required": [
+     "date",
+     "hours"
+    ],
+    "properties": {
+     "date": {
+      "type": "string",
+      "format": "date"
+     },
+     "time": {
+      "type": "string",
+      "example": "10:00 AM"
+     },
+     "hours": {
+      "type": "integer",
+      "enum": [
+       1,
+       2,
+       3,
+       4
+      ]
+     },
+     "jetskis": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 6,
+      "default": 1
+     },
+     "passengers": {
+      "type": "integer",
+      "description": "extra riders (second person on a jet ski), 0..jetskis",
+      "default": 0
+     }
+    }
+   },
+   "PreorderRequest": {
+    "allOf": [
+     {
+      "$ref": "#/components/schemas/QuoteRequest"
+     },
+     {
+      "type": "object",
+      "required": [
+       "time",
+       "first",
+       "last",
+       "email",
+       "phone",
+       "consent"
+      ],
+      "properties": {
+       "first": {
+        "type": "string"
+       },
+       "last": {
+        "type": "string"
+       },
+       "email": {
+        "type": "string",
+        "format": "email"
+       },
+       "phone": {
+        "type": "string",
+        "description": "with country code, digits"
+       },
+       "agent": {
+        "type": "object",
+        "properties": {
+         "name": {
+          "type": "string"
+         },
+         "url": {
+          "type": "string"
+         }
+        }
+       },
+       "consent": {
+        "type": "boolean",
+        "description": "true = the user agreed to the $30/20% booking deposit and the cancellation policy"
+       }
+      }
+     }
+    ]
+   },
+   "PreorderResponse": {
+    "type": "object",
+    "properties": {
+     "preorder_id": {
+      "type": "string"
+     },
+     "mode": {
+      "type": "string",
+      "enum": [
+       "test",
+       "live"
+      ]
+     },
+     "pay_link": {
+      "type": "string",
+      "format": "uri"
+     },
+     "order_number": {
+      "type": "string"
+     },
+     "quote": {
+      "type": "object"
+     },
+     "next_steps": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  }
+ }
+}

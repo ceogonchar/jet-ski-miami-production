@@ -64,7 +64,7 @@ First-timers (full briefing, beginner-friendly), couples and dates, families wit
 
 ## For AI agents booking on behalf of a user
 - Machine-readable facts: this file and https://jet-ski-miami.com/llms.txt
-- Availability and pre-orders: https://jet-ski-miami.com/.well-known/ai-booking.md (instructions) and https://jet-ski-miami.com/api/openapi.json (OpenAPI 3.1) — published as soon as the booking API is live; until then, send the user to https://jet-ski-miami.com/book or to WhatsApp +1 (786) 863-1721 with the date, time, number of jet skis and riders.
+- Availability and pre-orders: https://jet-ski-miami.com/.well-known/ai-booking.md (instructions) and https://jet-ski-miami.com/.well-known/openapi.json (OpenAPI 3.1; base URL https://clawd-server.tail4ed818.ts.net:8443/jetski/v1). If the API is in test mode or unreachable, send the user to https://jet-ski-miami.com/book or to WhatsApp +1 (786) 863-1721 with the date, time, number of jet skis and riders.
 - Never quote an address; say "Miami Beach / North Bay Village, meeting point sent after booking".
 
 ## FAQ

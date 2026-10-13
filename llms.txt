@@ -15,7 +15,7 @@
 
 ## How to book (for people and AI agents)
 1. Online: https://jet-ski-miami.com/book — live availability and checkout (SmartRez).
-2. Agents: read https://jet-ski-miami.com/.well-known/ai-booking.md and https://jet-ski-miami.com/api/openapi.json (when published) for availability and pre-order endpoints.
+2. Agents: read https://jet-ski-miami.com/.well-known/ai-booking.md and the OpenAPI spec https://jet-ski-miami.com/.well-known/openapi.json (live availability + pre-order with deposit link).
 3. Humans: WhatsApp / phone +1 (786) 863-1721, Instagram Direct @jetskimiami7 (Russian) or @jetski_miami7 (English), Telegram @jetskimiami7.
 
 ## Pages
