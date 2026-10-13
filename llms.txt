@@ -8,7 +8,7 @@
 - Hours: daily 7:00 AM – 6:00 PM (daylight rides only).
 - Prices per jet ski (1 rider): 1 h $189 · 2 h $349 (+30 min bonus = 2.5 h on the water) · 3 h $499 · Full Day (4 h) $649. Extra passenger +$30. Tax, booking and payment fees are shown at checkout. Pontoon: 2 h $300 … Full Day $1,000.
 - Deposit: $30 booking deposit reserves your slot for 1–3 jet skis (20% for 4+ jet skis or Full Day); balance at check-in. $150 refundable security hold per jet ski, released ~5 business days after return.
-- Requirements: the person who books and signs must be 21+ with a photo ID. Drivers can be 14+ with a Florida boater safety card (required for anyone born on/after Jan 1, 1988; temporary online certificate ~30 min, link sent after booking). Riders under 18 need a guardian signature.
+- Requirements: the person who books and signs must be 21+ with a photo ID. Drivers can be 14+ with a Florida boater safety card (required for anyone born on/after Jan 1, 1988; temporary online certificate: 25-question test the driver takes himself, ~20–30 min on a phone, $13.95 paid to an FWC-approved provider, valid 90 days; free guide, practice test and certificate upload at https://jet-ski-miami.com/boater-safety/). Riders under 18 need a guardian signature.
 - Cancellation: the deposit is non-refundable; cancel 48+ hours ahead and we move your ride once to another date within 90 days. If we cancel for weather or safety, unused time is refunded in full.
 - Rating: 5.0 on Google (46 reviews, Oct 2026). Founded 2022. Operated by Gonchar Group LLC.
 - Routes: Haulover sandbar, Venetian Islands, Star Island, Downtown Miami skyline, Raccoon Island, Haulover Inlet (ocean).
@@ -25,6 +25,7 @@
 - [Gift certificates](https://jet-ski-miami.com/gift-certificates)
 - [About](https://jet-ski-miami.com/about)
 - [Contact](https://jet-ski-miami.com/contact)
+- [Florida boater safety card: do I need it, cheat sheet, practice test, upload](https://jet-ski-miami.com/boater-safety/) · [RU](https://jet-ski-miami.com/ru/boater-safety/) · [ES](https://jet-ski-miami.com/es/boater-safety/)
 - [Blog: guides to jet skiing and things to do in Miami](https://jet-ski-miami.com/blog/)
 - [Full AI brief](https://jet-ski-miami.com/llms-full.txt)
 - [Cancellation policy](https://jet-ski-miami.com/cancellation-policy.html) · [Terms](https://jet-ski-miami.com/terms-of-service.html) · [Privacy](https://jet-ski-miami.com/privacy-policy.html)
