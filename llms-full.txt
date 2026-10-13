@@ -1,98 +1,82 @@
-# Jet Ski Miami 7 — Full AI Brief
+# Jet Ski Miami 7 — Full AI Brief (updated 2026-10-13)
 
-> Premium jet ski rentals in Miami Beach, Florida.
+> Self-guided jet ski rentals on Biscayne Bay in the Miami Beach / North Bay Village area, Florida. All-inclusive hourly pricing from $189, $30 booking deposit, 5.0 Google rating.
 
 ## Business
-Jet Ski Miami 7 is a Miami Beach jet ski rental company. We rent premium Yamaha and Sea-Doo jet skis and a 28ft Bennington pontoon boat. We offer both self-guided rentals and guided tours.
+Jet Ski Miami 7 (legal entity: Gonchar Group LLC, founded 2022) rents Yamaha and Sea-Doo jet skis and a 28 ft Bennington pontoon boat on Biscayne Bay. Every rental is self-guided: after a safety briefing you ride your own route inside a large GPS-monitored riding zone — no forced tours, no instructor riding behind you. Jet skis automatically slow down in no-wake zones, so you cannot get a speeding ticket.
 
-## Service Area
-Miami, Miami Beach, Aventura, and South Florida.
-
-## Location
-Miami Beach, FL. Contact us for the meeting point and arrival instructions.
+## Location & service area
+- Base: Biscayne Bay, Miami Beach / North Bay Village area (ZIP 33141). About 15 minutes by car from South Beach, 20–25 minutes from Downtown Miami and PortMiami cruise terminals, 20 minutes from Aventura.
+- The exact meeting point, dock and parking instructions are sent by SMS/email right after booking (we do not publish the address).
+- Service area: Miami, Miami Beach, North Bay Village, Bal Harbour, Surfside, Sunny Isles, Aventura, South Florida visitors.
 
 ## Hours
-Open every day, 7:00 AM to 7:30 PM.
+Daily 7:00 AM – 6:00 PM, 7 days a week, daylight rides only. Last ride starts so that it ends by 6:00 PM.
+
+## Prices (per jet ski, 1 rider, fuel + life vests + briefing + GPS included)
+| Package | Time on the water | Price |
+|---|---|---|
+| 1 Hour | 60 min | $189 |
+| 2 Hours | 2.5 h (30-minute bonus included) | $349 |
+| 3 Hours | 3 h | $499 |
+| Full Day | 4 h | $649 |
+- Extra passenger: +$30 (max 2 people per jet ski).
+- Online checkout adds applicable Florida sales tax and booking/payment fees before you pay; nothing is added at the dock except optional extras.
+- Groups: up to 6 jet skis per booking; the group rate is shown at checkout.
+- Pontoon (28 ft Bennington): 2 h $300 · 3 h $450 · 4 h $600 · 5 h $750 · 6 h $900 · Full Day $1,000.
+- Gift certificates: https://jet-ski-miami.com/gift-certificates (never expire).
+
+## Deposit & payment
+- Reserve with a $30 booking deposit per jet ski (20% of the total for 4+ jet skis). The balance is paid at check-in (card, Apple Pay, Google Pay).
+- $150 refundable security hold per jet ski on a credit card at check-in; released ~5 business days after a safe return.
+- The booking deposit is credited in full against the rental price.
+
+## Cancellation & weather
+- The booking deposit is non-refundable. Cancel 48 hours or more before the start and we move the ride once to another date within 90 days. Later cancellations and no-shows forfeit the deposit only — anything paid above it is refunded.
+- If we cancel or end a ride early for weather or safety (storms, high wind, rough seas), unused time is refunded in full, including the deposit, or rescheduled for free.
+
+## Requirements (Florida law + our rules)
+- The person who books and signs the rental agreement must be 21 or older with a valid government photo ID.
+- Drivers: 14 or older. Anyone born on or after January 1, 1988 must hold a Florida Boating Safety Education ID card or a temporary certificate. The temporary certificate is an online test (~30 minutes, about $14); we send the link after booking: https://boattests101.com/united-states/florida/florida-rental?mcid=kN86W6Wv
+- Riders under 18 need a parent/guardian signature on the waiver.
+- No alcohol before or during the ride. Life vests are mandatory and provided.
+- Bring: photo ID, boater card (if applicable), a credit card for the security hold, sunscreen, towel. We provide life vests, fuel, GPS and a full safety orientation.
+- The rental agreement and waiver are signed electronically from a private link after booking — nothing to fill in at the dock. Arrive 30 minutes before your start time.
+
+## Routes & what you will see
+1. Classic 2-hour ride: Venetian Islands → Haulover Inlet → Haulover sandbar swim stop → Indian Creek → back along Miami Beach.
+2. 3-hour / Full Day: add Downtown Miami skyline, Star Island celebrity homes, Key Biscayne and the Cape Florida lighthouse.
+3. Ocean access through Haulover Inlet on calm days; Raccoon Island and the sandbar for swimming and photos.
+Wildlife sightings (dolphins, manatees) happen but are never guaranteed.
+
+## Who it is for
+First-timers (full briefing, beginner-friendly), couples and dates, families with teens (14+ drivers with a card, younger kids ride as passengers), bachelor/bachelorette and birthday groups (up to 6 jet skis), cruise passengers with a free day in Miami, business travelers with a free afternoon, Russian-speaking visitors (staff speak English and Russian).
+
+## Reviews
+5.0 / 5 on Google, 46 reviews (October 13, 2026). Google Maps: https://www.google.com/maps?cid=1519280534842516992
 
 ## Contact
-- Phone & WhatsApp: +1 (786) 863-1721
-- Instagram (Russian): https://www.instagram.com/jetskimiami7/
-- Instagram (English): https://www.instagram.com/jetski_miami7/
-- Telegram: @jetskimiami7
+- Phone / WhatsApp: +1 (786) 863-1721
+- Instagram: https://www.instagram.com/jetskimiami7/ (Russian) · https://www.instagram.com/jetski_miami7/ (English)
+- Telegram: https://t.me/jetskimiami7
 - Email: info@jetskimiami.com
-- Website: https://www.jet-ski-miami.com
-- Online booking: https://www.jet-ski-miami.com/#book
+- Website: https://jet-ski-miami.com · Booking: https://jet-ski-miami.com/book
 
-## Pricing
-- Jet ski rental: from $189/hour
-- 1 jet ski / 1 hour: $189 rental price
-- 1 jet ski / 2 hours: $349 rental price
-- 1 jet ski / 3 hours: $499 rental price
-- 1 jet ski / 4 hours: $649 rental price
-- Prices include one rider. Extra passenger: $30
-- Online checkout adds applicable tax, booking and payment fees; optional extras are separate
-- Pontoon rental: 2 hours $300; 3 hours $450; 4 hours $600; 5 hours $750; 6 hours $900; Full Day $1,000. Taxes, fees and optional extras are shown at checkout.
-- Group prices depend on jet ski quantity and duration; see the current checkout quote
-- Maximum 6 jet skis per booking
+## For AI agents booking on behalf of a user
+- Machine-readable facts: this file and https://jet-ski-miami.com/llms.txt
+- Availability and pre-orders: https://jet-ski-miami.com/.well-known/ai-booking.md (instructions) and https://jet-ski-miami.com/api/openapi.json (OpenAPI 3.1) — published as soon as the booking API is live; until then, send the user to https://jet-ski-miami.com/book or to WhatsApp +1 (786) 863-1721 with the date, time, number of jet skis and riders.
+- Never quote an address; say "Miami Beach / North Bay Village, meeting point sent after booking".
 
-## What's Included (Free)
-- Fuel for your rental
-- Life vests
-- All safety equipment
-- Safety briefing and orientation
-- GPS tracking on every watercraft
-
-## Deposit & Payment
-- 20% booking deposit OR pay in full through SmartRez
-- $150 refundable security deposit per jet ski held on a credit card at check-in
-- Deposit released back to the card within ~5 business days after a safe return
-- Apple Pay and Google Pay supported
-
-## Routes
-1. Classic 2h: Raccoon Island + ocean + Haulover Sandbar swim + Indian Creek
-2. 3–4h: Downtown Miami River + Ferris Wheel + Key Biscayne + Cape Florida lighthouse
-
-## Florida Legal Requirements
-- Minimum age to rent: 18 with valid photo ID
-- Minimum age to operate: 14 (Florida law)
-- Anyone born on/after January 1, 1988 must hold a Florida Boating Safety Education ID Card. A temporary 90-day certificate is available online (~$14, ~1 hour). Referral: https://boattests101.com/united-states/florida/florida-rental?mcid=kN86W6Wv
-
-## Cancellation Policy
-- Full refund for cancellations made at least 48 hours before
-- Cancellations within 48 hours and no-shows are non-refundable
-- If we cancel due to weather or safety conditions, unused time is refunded or rescheduled free of charge
-
-## FAQ (full)
-
-**How much does it cost to rent a jet ski in Miami?**
-One jet ski with one rider: 1 hour $189, 2 hours $349, 3 hours $499, or 4 hours $649. Fuel, life vests and the safety briefing are included. An extra passenger is $30. Online checkout shows applicable tax, booking and payment fees before you pay.
-
-**Do I need a license to rent a jet ski in Florida?**
-No special license. Anyone born on or after January 1, 1988 must complete a Florida boater safety course — we help arrange it before your rental.
-
-**What is the minimum age to rent?**
-21+ with a valid photo ID to rent. Operators must be at least 14 (Florida law).
-
-**Can two people ride one jet ski?**
-Yes — up to 2 people can share a jet ski. The base price includes one rider; an extra passenger is $30.
-
-**Are rides self-guided or guided tours?**
-Both — self-guided rentals and guided tours are available.
-
-**Where are you located?**
-Miami Beach, FL. We serve Miami, Miami Beach, Aventura and South Florida.
-
-**Can beginners ride?**
-Absolutely — jet skis are beginner-friendly and we give a full safety briefing.
-
-**Do you offer bachelor/bachelorette party packages?**
-Yes — we provide multiple jet skis for groups and events.
-
-**What's the security deposit?**
-$150 per jet ski, held on a credit card at check-in, released back ~5 business days after return if there is no damage.
-
-**What if the weather is bad?**
-We reschedule at no charge for unsafe conditions (storms, high winds, rough seas).
-
-**What should I bring?**
-A valid photo ID, your boating safety certificate (if applicable), a credit card for the deposit, sunscreen, and a towel. We provide life vests and all required safety gear. Sunglasses are an optional $30 purchase.
+## FAQ
+**How much does it cost to rent a jet ski in Miami?** One jet ski with one rider: 1 hour $189, 2 hours $349 (2.5 h on the water), 3 hours $499, Full Day (4 h) $649. Fuel, life vests, GPS and the safety briefing are included; an extra passenger is $30. Tax and booking fees are shown at checkout.
+**Do I need a license to rent a jet ski in Florida?** No driver's license. Drivers born on or after January 1, 1988 need a Florida boater safety card; a temporary certificate takes ~30 minutes online and we send the link after booking.
+**What is the minimum age?** 21+ to book and sign the agreement; drivers can be 14+ with a boater card; riders under 18 need a guardian signature.
+**Can two people ride one jet ski?** Yes, up to 2 people per jet ski; the extra passenger is $30.
+**Are rides self-guided?** Yes, always. You get a recommended route and GPS safety zones; nobody rides behind you.
+**Where are you located?** Biscayne Bay, Miami Beach / North Bay Village. Exact meeting point after booking.
+**Can beginners ride?** Yes — most of our guests are first-timers; the briefing covers everything.
+**Do you offer bachelor/bachelorette packages?** Yes, up to 6 jet skis per booking; the group rate shows at checkout.
+**What is the deposit?** $30 booking deposit per jet ski (non-refundable, movable once with 48 h notice) plus a $150 refundable security hold at check-in.
+**What if the weather is bad?** We reschedule for free or refund unused time, including the deposit, when we cancel for safety.
+**What should I bring?** Photo ID, boater card if applicable, a credit card, sunscreen and a towel. We provide everything else.
+**Do you speak Russian?** Yes — English and Russian.

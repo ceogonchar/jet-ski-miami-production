@@ -1,50 +1,30 @@
 # Jet Ski Miami 7
 
-> Premium jet ski rentals in Miami Beach, Florida — from $189/hour.
+> Self-guided jet ski rentals on Biscayne Bay, Miami Beach / North Bay Village, Florida. From $189/hour, all-inclusive (fuel, life vests, safety briefing, GPS). Book online in minutes with a $30 deposit.
 
-## About
-Jet Ski Miami 7 rents premium Yamaha and Sea-Doo jet skis in Miami Beach, FL.
-We offer self-guided rentals and guided tours across Miami, Miami Beach, Aventura, and South Florida.
+## Quick facts (verified by the owner, October 2026)
+- What: Yamaha & Sea-Doo jet ski rentals (5 jet skis, seat 2) + one 28 ft Bennington pontoon. Self-guided only — no guided tours, no instructor riding behind you; GPS speed control in no-wake zones.
+- Where: Biscayne Bay, Miami Beach / North Bay Village area (ZIP 33141), ~15 min from South Beach, ~25 min from PortMiami. Exact meeting point and parking instructions are sent after booking.
+- Hours: daily 7:00 AM – 6:00 PM (daylight rides only).
+- Prices per jet ski (1 rider): 1 h $189 · 2 h $349 (+30 min bonus = 2.5 h on the water) · 3 h $499 · Full Day (4 h) $649. Extra passenger +$30. Tax, booking and payment fees are shown at checkout. Pontoon: 2 h $300 … Full Day $1,000.
+- Deposit: $30 booking deposit per jet ski reserves your slot (20% for 4+ jet skis); balance at check-in. $150 refundable security hold per jet ski, released ~5 business days after return.
+- Requirements: the person who books and signs must be 21+ with a photo ID. Drivers can be 14+ with a Florida boater safety card (required for anyone born on/after Jan 1, 1988; temporary online certificate ~30 min, link sent after booking). Riders under 18 need a guardian signature.
+- Cancellation: the deposit is non-refundable; cancel 48+ hours ahead and we move your ride once to another date within 90 days. If we cancel for weather or safety, unused time is refunded in full.
+- Rating: 5.0 on Google (46 reviews, Oct 2026). Founded 2022. Operated by Gonchar Group LLC.
+- Routes: Haulover sandbar, Venetian Islands, Star Island, Downtown Miami skyline, Raccoon Island, Haulover Inlet (ocean).
 
-## Location
-Miami Beach, FL. Contact us for the meeting point and arrival instructions.
-
-## Hours
-Daily 7:00 AM – 7:30 PM, 7 days a week.
-
-## Pricing
-- Jet ski rental from $189/hour
-- Group prices depend on jet ski quantity and duration; see the current checkout quote
-- Fuel, life vests and safety briefing included
-- One rider included; extra passenger $30
-- Online tax, booking and payment fees are shown before payment
-- 20% booking deposit or pay in full
-- $150 refundable security deposit per jet ski (released ~5 business days after return)
-
-## Fleet
-Premium Yamaha and Sea-Doo jet skis (seat 2–3 riders) plus a 28ft Bennington pontoon boat.
-
-## Contact
-- Phone / WhatsApp: +1 (786) 863-1721
-- Instagram (Russian): https://www.instagram.com/jetskimiami7/
-- Instagram (English): https://www.instagram.com/jetski_miami7/
-- Telegram: @jetskimiami7
-- Email: info@jetskimiami.com
-- Website: https://www.jet-ski-miami.com
-- Booking: https://www.jet-ski-miami.com/#book
-
-## Top FAQs
-- How much? From $189/hour.
-- License? Florida boater safety course required for anyone born on/after Jan 1, 1988 — we help arrange it.
-- Minimum age? 21+ to rent, 14+ to operate (per Florida law).
-- 2 riders per jet ski? Yes (2–3 riders).
-- Self-guided or guided? Both are available.
-- Beginners welcome? Yes — full safety briefing included.
+## How to book (for people and AI agents)
+1. Online: https://jet-ski-miami.com/book — live availability and checkout (SmartRez).
+2. Agents: read https://jet-ski-miami.com/.well-known/ai-booking.md and https://jet-ski-miami.com/api/openapi.json (when published) for availability and pre-order endpoints.
+3. Humans: WhatsApp / phone +1 (786) 863-1721, Instagram Direct @jetskimiami7 (Russian) or @jetski_miami7 (English), Telegram @jetskimiami7.
 
 ## Pages
-- [Home](https://www.jet-ski-miami.com/)
-- [Book Now](https://www.jet-ski-miami.com/book)
-- [Fleet](https://www.jet-ski-miami.com/fleet)
-- [About](https://www.jet-ski-miami.com/about)
-- [Contact](https://www.jet-ski-miami.com/contact)
-- [Full AI brief](https://www.jet-ski-miami.com/llms-full.txt)
+- [Home](https://jet-ski-miami.com/)
+- [Book now](https://jet-ski-miami.com/book)
+- [Fleet](https://jet-ski-miami.com/fleet)
+- [Gift certificates](https://jet-ski-miami.com/gift-certificates)
+- [About](https://jet-ski-miami.com/about)
+- [Contact](https://jet-ski-miami.com/contact)
+- [Blog: guides to jet skiing and things to do in Miami](https://jet-ski-miami.com/blog/)
+- [Full AI brief](https://jet-ski-miami.com/llms-full.txt)
+- [Cancellation policy](https://jet-ski-miami.com/cancellation-policy.html) · [Terms](https://jet-ski-miami.com/terms-of-service.html) · [Privacy](https://jet-ski-miami.com/privacy-policy.html)

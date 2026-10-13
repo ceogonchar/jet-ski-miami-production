@@ -1,5 +1,5 @@
 # Jet Ski Miami 7 — robots.txt
-# https://www.jet-ski-miami.com
+# https://jet-ski-miami.com
 
 User-agent: *
 Allow: /
@@ -64,4 +64,4 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://www.jet-ski-miami.com/sitemap.xml
+Sitemap: https://jet-ski-miami.com/sitemap.xml
