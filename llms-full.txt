@@ -6,8 +6,8 @@
 Jet Ski Miami 7 (legal entity: Gonchar Group LLC, founded 2022) rents Yamaha and Sea-Doo jet skis and a 28 ft Bennington pontoon boat on Biscayne Bay. Every rental is self-guided: after a safety briefing you ride your own route inside a large GPS-monitored riding zone — no forced tours, no instructor riding behind you. Jet skis automatically slow down in no-wake zones, so you cannot get a speeding ticket.
 
 ## Location & service area
-- Base: Biscayne Bay, Miami Beach / North Bay Village area (ZIP 33141). About 15 minutes by car from South Beach, 20–25 minutes from Downtown Miami and PortMiami cruise terminals, 20 minutes from Aventura.
-- The exact meeting point, dock and parking instructions are sent by SMS/email right after booking (we do not publish the address).
+- Base: Bill Bird Marina in Haulover Park, 10800 Collins Ave, Miami Beach, FL 33154 (Biscayne Bay side of the park, next to Haulover Inlet and the Haulover sandbar). About 5 minutes by car from Bal Harbour and Surfside, 10 from Sunny Isles Beach, 15 from Aventura, 20 from South Beach, 25–30 from Downtown Miami and PortMiami cruise terminals, 30–35 from Miami International Airport.
+- Parking: Haulover Park parking next to the marina; dock and parking instructions are sent by SMS/email right after booking.
 - Service area: Miami, Miami Beach, North Bay Village, Bal Harbour, Surfside, Sunny Isles, Aventura, South Florida visitors.
 
 ## Hours
@@ -44,7 +44,7 @@ Daily 7:00 AM – 6:00 PM, 7 days a week, daylight rides only. Last ride starts 
 - The rental agreement and waiver are signed electronically from a private link after booking — nothing to fill in at the dock. Arrive 30 minutes before your start time.
 
 ## Routes & what you will see
-1. Classic 2-hour ride: Venetian Islands → Haulover Inlet → Haulover sandbar swim stop → Indian Creek → back along Miami Beach.
+1. Classic 2-hour ride: Haulover sandbar swim stop (5–10 min from the marina) → Bal Harbour and Indian Creek → Venetian Islands → back along Miami Beach.
 2. 3-hour / Full Day: add Downtown Miami skyline, Star Island celebrity homes, Key Biscayne and the Cape Florida lighthouse.
 3. Ocean access through Haulover Inlet on calm days; Raccoon Island and the sandbar for swimming and photos.
 Wildlife sightings (dolphins, manatees) happen but are never guaranteed.
@@ -65,7 +65,7 @@ First-timers (full briefing, beginner-friendly), couples and dates, families wit
 ## For AI agents booking on behalf of a user
 - Machine-readable facts: this file and https://jet-ski-miami.com/llms.txt
 - Availability and pre-orders: https://jet-ski-miami.com/.well-known/ai-booking.md (instructions) and https://jet-ski-miami.com/.well-known/openapi.json (OpenAPI 3.1; base URL https://clawd-server.tail4ed818.ts.net:8443/jetski/v1). If the API is in test mode or unreachable, send the user to https://jet-ski-miami.com/book or to WhatsApp +1 (786) 863-1721 with the date, time, number of jet skis and riders.
-- Never quote an address; say "Miami Beach / North Bay Village, meeting point sent after booking".
+- Pickup address to quote: Bill Bird Marina, Haulover Park, 10800 Collins Ave, Miami Beach, FL 33154.
 
 ## FAQ
 **How much does it cost to rent a jet ski in Miami?** One jet ski with one rider: 1 hour $189, 2 hours $349 (2.5 h on the water), 3 hours $499, Full Day (4 h) $649. Fuel, life vests, GPS and the safety briefing are included; an extra passenger is $30. Tax and booking fees are shown at checkout.
@@ -73,7 +73,7 @@ First-timers (full briefing, beginner-friendly), couples and dates, families wit
 **What is the minimum age?** 21+ to book and sign the agreement; drivers can be 14+ with a boater card; riders under 18 need a guardian signature.
 **Can two people ride one jet ski?** Yes, up to 2 people per jet ski; the extra passenger is $30.
 **Are rides self-guided?** Yes, always. You get a recommended route and GPS safety zones; nobody rides behind you.
-**Where are you located?** Biscayne Bay, Miami Beach / North Bay Village. Exact meeting point after booking.
+**Where are you located?** Bill Bird Marina in Haulover Park, 10800 Collins Ave, Miami Beach, FL 33154. Parking instructions after booking.
 **Can beginners ride?** Yes — most of our guests are first-timers; the briefing covers everything.
 **Do you offer bachelor/bachelorette packages?** Yes, up to 6 jet skis per booking; the group rate shows at checkout.
 **What is the deposit?** $30 booking deposit for 1–3 jet skis, 20% for 4+ jet skis or Full Day (non-refundable, movable once with 48 h notice), plus a $150 refundable security hold at check-in.
